@@ -106,6 +106,14 @@ if os.path.exists(manifest_path):
         f.write(m_content)
     print("✓ Updated manifest.webmanifest")
 
+# 5.1 Create root asset mirrors for 3D engine (models/, textures/, datas/, envMap/)
+for asset_folder in ["models", "textures", "datas", "envMap"]:
+    src = os.path.join(EXPORT_DIR, "assets", asset_folder)
+    dst = os.path.join(EXPORT_DIR, asset_folder)
+    if os.path.exists(src) and not os.path.exists(dst):
+        shutil.copytree(src, dst)
+print("✓ Created root 3D asset mirrors (models/, textures/, datas/, envMap/)")
+
 # 6. Initialize git and push to gh-pages branch
 print("📤 Pushing to gh-pages branch on GitHub...")
 subprocess.run(["git", "init"], cwd=EXPORT_DIR, check=True)

@@ -10,6 +10,53 @@
 (function () {
   'use strict';
 
+  // Universal Static Asset Resolver for GitHub Pages and Subpath Deployments
+  (function setupUniversalAssetResolver() {
+    const base = (typeof window !== 'undefined' && window.__REPO_BASE__) || 
+                 (typeof window !== 'undefined' && window.location.pathname.startsWith('/Mahmud-Hasan-3D-Portfolio') ? '/Mahmud-Hasan-3D-Portfolio' : '');
+    
+    function resolveAssetUrl(u) {
+      if (typeof u !== 'string') return u;
+      if (u.startsWith('/models/') || u.startsWith('/textures/') || u.startsWith('/datas/') || u.startsWith('/envMap/')) {
+        return base + '/assets' + u;
+      }
+      if (base && !u.startsWith(base) && (u.startsWith('/assets/') || u.startsWith('/draco/') || u.startsWith('/fonts/') || u.startsWith('/images/'))) {
+        return base + u;
+      }
+      return u;
+    }
+
+    if (typeof window !== 'undefined' && window.fetch) {
+      const origFetch = window.fetch;
+      window.fetch = function(input, init) {
+        if (typeof input === 'string') {
+          return origFetch.call(this, resolveAssetUrl(input), init);
+        } else if (input && typeof input.url === 'string') {
+          try {
+            const reqUrl = new URL(input.url, window.location.origin);
+            const rewritten = resolveAssetUrl(reqUrl.pathname);
+            if (rewritten !== reqUrl.pathname) {
+              const newUrl = reqUrl.origin + rewritten + reqUrl.search;
+              return origFetch.call(this, new Request(newUrl, input));
+            }
+          } catch (_) {}
+        }
+        return origFetch.apply(this, arguments);
+      };
+    }
+
+    if (typeof window !== 'undefined' && window.XMLHttpRequest) {
+      const origOpen = window.XMLHttpRequest.prototype.open;
+      window.XMLHttpRequest.prototype.open = function(method, url, ...rest) {
+        if (typeof url === 'string') {
+          url = resolveAssetUrl(url);
+        }
+        return origOpen.call(this, method, url, ...rest);
+      };
+    }
+  })();
+
+
   // Project URLs database
   const PROJECTS_DB = {
     'madrasah ecosystem': {
@@ -874,36 +921,18 @@
 
       if (!targetSection) return;
 
-      let entered = false;
-      const tryEnter = () => {
-        const cta = document.querySelector('button.y9w63G_cta, [class*="y9w63G_cta"], button[data-testid="loader-enter"]');
-        if (cta && !cta.disabled) {
-          cta.click();
-          entered = true;
-          return true;
-        }
-        return false;
-      };
-
-      tryEnter();
-      let pollAttempts = 0;
-      const enterInterval = setInterval(() => {
-        pollAttempts++;
-        if (entered || tryEnter() || pollAttempts > 30) {
-          clearInterval(enterInterval);
-          let scrollAttempts = 0;
-          const scrollInterval = setInterval(() => {
-            scrollAttempts++;
+      // DO NOT auto-enter! Wait for user to deliberately click the Enter button, then scroll to section
+      document.addEventListener('click', function(e) {
+        const cta = e.target.closest('button[data-testid="loader-enter"], .y9w63G_cta');
+        if (cta) {
+          setTimeout(() => {
             const el = document.getElementById(targetSection);
             if (el && el.offsetTop > 0) {
               window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-              clearInterval(scrollInterval);
-            } else if (scrollAttempts > 40) {
-              clearInterval(scrollInterval);
             }
-          }, 100);
+          }, 1100);
         }
-      }, 100);
+      });
     } catch (err) {
       console.warn('Glide handler notice:', err);
     }
@@ -1565,8 +1594,13 @@
     function checkError() {
       const errorRoot = document.querySelector('.mbP0PG_root, [class*="mbP0PG_root"]');
       if (errorRoot) {
+        const loader = document.querySelector('.y9w63G_loaderContainer');
+        const isLoaderActive = loader && !loader.classList.contains('y9w63G_exiting') && loader.style.display !== 'none';
+        if (isLoaderActive) return; // Do not abort if user is still on loader/gate!
+
         console.warn('⚠️ Error screen detected. Auto-recovering to stable view...');
-        const target = (window.innerWidth <= 768) ? '/lite' : '/?variant=full';
+        const base = getRepoBase();
+        const target = (window.innerWidth <= 768) ? (base + '/lite') : (base + '/?variant=full');
         window.location.replace(target);
       }
     }
