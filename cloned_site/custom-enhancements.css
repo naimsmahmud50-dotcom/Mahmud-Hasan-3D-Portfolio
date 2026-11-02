@@ -2641,5 +2641,17 @@ body.is-lite ._rHu7W_nav,
   transform: translateY(-1px) !important;
 }
 
+/* ==========================================================================
+   21. SMOOTH 60 FPS ENTER TRANSITION (ZERO HITCH, ZERO ABRUPT DROP)
+   ========================================================================== */
+.y9w63G_loaderContainer {
+  will-change: opacity !important;
+}
 
-
+.y9w63G_loaderContainer.y9w63G_exiting,
+.y9w63G_loaderContainer[class*="exiting"] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0ms, visibility 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0ms !important;
+  pointer-events: none !important;
+}
