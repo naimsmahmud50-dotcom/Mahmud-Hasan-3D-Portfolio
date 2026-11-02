@@ -56,6 +56,74 @@
     }
   })();
 
+  // Accelerated Kinetic Loader: Drives visual progress counter fluidly from 0% to 100% in 1.4s
+  (function setupAcceleratedKineticLoader() {
+    if (typeof window === 'undefined') return;
+    const startTime = performance.now();
+    const TARGET_DURATION = 1400; // 1.4s total load
+    let isComplete = false;
+
+    function tick() {
+      if (isComplete) return;
+      const loader = document.querySelector('.y9w63G_loaderContainer');
+      if (!loader || loader.classList.contains('y9w63G_exiting') || loader.style.display === 'none') {
+        isComplete = true;
+        return;
+      }
+
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(1, elapsed / TARGET_DURATION);
+      const eased = 1 - Math.pow(1 - progress, 2.2);
+      const currentPercent = Math.round(eased * 100);
+
+      const numSpan = document.querySelector('.y9w63G_bigPercent span');
+      if (numSpan) {
+        const val = parseInt(numSpan.textContent || '0', 10);
+        if (isNaN(val) || val < currentPercent) {
+          numSpan.textContent = String(currentPercent);
+        }
+      }
+
+      const fillBar = document.querySelector('.y9w63G_fill');
+      if (fillBar) {
+        fillBar.style.width = currentPercent + '%';
+      }
+
+      const statusEl = document.querySelector('.y9w63G_status');
+      if (statusEl) {
+        if (currentPercent < 35) {
+          statusEl.textContent = 'Fetching assets';
+        } else if (currentPercent < 70) {
+          statusEl.textContent = 'Optimizing neural shaders';
+        } else if (currentPercent < 100) {
+          statusEl.textContent = 'Warming pipelines';
+        } else {
+          statusEl.textContent = 'Ready';
+        }
+      }
+
+      if (progress >= 1) {
+        isComplete = true;
+        loader.classList.add('y9w63G_gate');
+        const enterBtn = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
+        if (enterBtn) {
+          enterBtn.disabled = false;
+          enterBtn.removeAttribute('disabled');
+          enterBtn.setAttribute('tabindex', '0');
+          enterBtn.setAttribute('aria-hidden', 'false');
+        }
+      } else {
+        requestAnimationFrame(tick);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(tick));
+    } else {
+      requestAnimationFrame(tick);
+    }
+  })();
+
   // Smart WebGPU Enter Guardian: Guarantees user NEVER gets trapped in a black screen
   (function setupSmartEnterGuardian() {
     function getBase() {
