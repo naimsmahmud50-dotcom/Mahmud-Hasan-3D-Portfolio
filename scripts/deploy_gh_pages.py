@@ -29,7 +29,13 @@ for root, _, files in os.walk(EXPORT_DIR):
         if f.endswith(".html") or f in ["about", "contact", "projects", "lite", "legal-notice"]:
             html_files.append(os.path.join(root, f))
 
-base_script = f"""<script>
+import time
+BUILD_TS = int(time.time())
+
+base_script = f"""<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<script>
   window.__REPO_BASE__ = '{BASE_PATH}';
   window.TURBOPACK_CHUNK_BASE_PATH = '{BASE_PATH}/_next/';
 </script>"""
@@ -39,9 +45,16 @@ for fpath in html_files:
         with open(fpath, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Inject base script right after <head>
+        # Inject base script and cache headers right after <head>
         if "<head>" in content and "window.TURBOPACK_CHUNK_BASE_PATH" not in content:
             content = content.replace("<head>", f"<head>\n{base_script}", 1)
+
+        # Cache bust modified scripts to guarantee browsers never serve stale cached code
+        content = re.sub(
+            r"(3-0-2h2vnc5wo\.js|2vs2yctr590c-\.js|402p77n-ks3lc\.js|1ce4v9de-32bk\.js|custom-enhancements\.js)(?:\?v=[^\s'\"]+)?",
+            rf"\1?v={BUILD_TS}",
+            content
+        )
 
         # Replace root references
         replacements = [
@@ -52,7 +65,6 @@ for fpath in html_files:
             ('"/draco/', f'"{BASE_PATH}/draco/'),
             ('"/fonts/', f'"{BASE_PATH}/fonts/'),
             ('"/images/', f'"{BASE_PATH}/images/'),
-            ('"/custom-enhancements.', f'"{BASE_PATH}/custom-enhancements.'),
             ('"/manifest.webmanifest"', f'"{BASE_PATH}/manifest.webmanifest"'),
             ('"/favicon.ico', f'"{BASE_PATH}/favicon.ico'),
             ('"/icon.svg', f'"{BASE_PATH}/icon.svg'),
@@ -73,7 +85,7 @@ for fpath in html_files:
     except Exception as e:
         print(f"Warning processing {fpath}: {e}")
 
-print("✓ Adapted all HTML files with subpath and TURBOPACK_CHUNK_BASE_PATH")
+print(f"✓ Adapted all HTML files with subpath, cache headers, and cache-busted chunks (v={BUILD_TS})")
 
 # 3. Create 404.html (copy of transformed index.html) for SPA fallback
 index_path = os.path.join(EXPORT_DIR, "index.html")
