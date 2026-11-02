@@ -1145,46 +1145,18 @@
       enterObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
     }
 
-    // Audio gesture unlock and failsafe: Click ANYWHERE on gate screen to enter
+    // Audio gesture unlock on deliberate Enter button click
     document.addEventListener('click', function(e) {
-      const loader = document.querySelector('.y9w63G_loaderContainer');
-      const isGate = loader && loader.classList.contains('y9w63G_gate');
-      const btn = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
-      
-      // If clicked on button or clicked anywhere on the gate screen
-      if (loader && isGate && !isEntering && !loader.classList.contains('y9w63G_exiting')) {
+      const targetBtn = e.target.closest('button[data-testid="loader-enter"], .y9w63G_cta');
+      if (targetBtn && !isEntering) {
         isEntering = true;
         try {
           if (window.__aengel_audioEngine && window.__aengel_audioEngine.ctx && window.__aengel_audioEngine.ctx.state === 'suspended') {
             window.__aengel_audioEngine.ctx.resume();
           }
         } catch (_) {}
-        if (btn) btn.click();
       }
     }, false);
-
-    // Auto-enter watchdog: If user waits on the gate screen for 3.5 seconds, auto-enter into the 3D world
-    let gateTimer = null;
-    setInterval(() => {
-      const loader = document.querySelector('.y9w63G_loaderContainer');
-      const isGate = loader && loader.classList.contains('y9w63G_gate');
-      const btn = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
-      if (isGate && !isEntering && !loader.classList.contains('y9w63G_exiting')) {
-        if (!gateTimer) {
-          gateTimer = setTimeout(() => {
-            if (!isEntering && btn) {
-              isEntering = true;
-              btn.click();
-            }
-          }, 800);
-        }
-      } else {
-        if (gateTimer) {
-          clearTimeout(gateTimer);
-          gateTimer = null;
-        }
-      }
-    }, 300);
 
     // Keyboard support: pressing Enter or Space when on the loader screen triggers click
     window.addEventListener('keydown', function(e) {
