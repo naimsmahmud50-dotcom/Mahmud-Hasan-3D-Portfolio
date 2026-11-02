@@ -56,6 +56,85 @@
     }
   })();
 
+  // Smart WebGPU Enter Guardian: Guarantees user NEVER gets trapped in a black screen
+  (function setupSmartEnterGuardian() {
+    function getBase() {
+      return (typeof window !== 'undefined' && window.__REPO_BASE__) || 
+             (typeof window !== 'undefined' && window.location.pathname.startsWith('/Mahmud-Hasan-3D-Portfolio') ? '/Mahmud-Hasan-3D-Portfolio' : '');
+    }
+
+    let isWebGPUSupported = null;
+    if (typeof navigator === 'undefined' || !navigator.gpu) {
+      isWebGPUSupported = false;
+    } else {
+      navigator.gpu.requestAdapter().then(function(adapter) {
+        isWebGPUSupported = !!adapter;
+      }).catch(function() {
+        isWebGPUSupported = false;
+      });
+    }
+
+    function routeToSafeLite(e) {
+      const base = getBase();
+      const currentPath = window.location.pathname;
+      const isRoot = currentPath === base || currentPath === base + '/' || currentPath === '/';
+      if (!isRoot) return;
+
+      if (isWebGPUSupported === false) {
+        if (e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+        console.warn('⚡ WebGPU hardware is not available on this device. Smoothly routing to 60fps Project Slide View (/lite)...');
+        window.location.assign(base + '/lite');
+      }
+    }
+
+    // Intercept click on the Enter button synchronously
+    document.addEventListener('click', function(e) {
+      const enterBtn = e.target.closest('[data-testid="loader-enter"], .y9w63G_cta');
+      if (enterBtn) {
+        routeToSafeLite(e);
+      }
+    }, true);
+
+    // Intercept Enter keypress
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const active = document.activeElement;
+        const isEnterBtn = active && (active.matches?.('[data-testid="loader-enter"], .y9w63G_cta') || active.closest?.('[data-testid="loader-enter"], .y9w63G_cta'));
+        const loader = document.querySelector('.y9w63G_loaderContainer');
+        if (isEnterBtn || (loader && !loader.classList.contains('y9w63G_exiting'))) {
+          routeToSafeLite(e);
+        }
+      }
+    }, true);
+
+    // Watchdog fallback: if user entered root scene and screen stays black (no 3D canvas within 1.8s)
+    let watchdogTimer = null;
+    function checkSceneProgress() {
+      const loader = document.querySelector('.y9w63G_loaderContainer');
+      const isLoaderGone = !loader || loader.classList.contains('y9w63G_exiting') || loader.style.display === 'none';
+      if (!isLoaderGone) return;
+
+      if (!watchdogTimer) {
+        watchdogTimer = setTimeout(function() {
+          const base = getBase();
+          const currentPath = window.location.pathname;
+          if (currentPath.includes('/lite')) return;
+
+          const canvas = document.querySelector('canvas');
+          const isBlack = !canvas || canvas.width === 0 || canvas.height === 0;
+          if (isBlack) {
+            console.warn('⚠️ 3D scene failed to render canvas. Auto-transitioning to /lite view...');
+            window.location.replace(base + '/lite');
+          }
+        }, 1800);
+      }
+    }
+    setInterval(checkSceneProgress, 300);
+  })();
+
 
   // Project URLs database
   const PROJECTS_DB = {
