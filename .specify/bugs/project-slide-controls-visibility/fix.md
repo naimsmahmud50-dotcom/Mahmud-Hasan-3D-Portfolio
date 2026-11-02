@@ -1,23 +1,24 @@
-# Bug Fix: Project Slide View Controls Contrast and Affordance Upgrade
+# Bug Fix: Project Slide View Controls Contrast and Black Font Color
 
 - **Slug**: project-slide-controls-visibility
-- **Fixed**: 2026-11-02T18:25:35+06:00
+- **Fixed**: 2026-11-02T18:39:00+06:00
 - **Assessment**: ./assessment.md
 - **Status**: applied
 
 ## Summary
 
-Upgraded the project slide view controls (`CLOSE`, `PREVIOUS`, `NEXT`, and `LIVE LINK`) from washed-out, invisible white text on an off-white background to high-contrast **Cyberpunk Luxury Dark-Glass Capsule Pills**:
-1. Applied opaque dark gradient backing (`#090e17` to `#0d1829`) with backdrop blur so the buttons never wash out against light or dark project sheet backgrounds.
-2. Injected neon cyan borders (`1.5px solid #00e5ff`) and bright luminous cyan typography (`#00e5ff`, font-weight: 800, letter-spacing: 0.14em, uppercase) with WCAG AAA contrast ratio (> 12:1).
-3. Engineered responsive hover interaction: inverted solid cyan fill (`#00e5ff`) with pitch-black typography (`#000000`) and glowing halo (`box-shadow: 0 0 28px rgba(0, 229, 255, 0.95)`).
-4. Styled distinct states for `CLOSE` (coral/red glowing accent on hover) and `LIVE LINK` (deep ocean gradient pill with external indicator).
+As explicitly instructed by the user, set the font color for all project slide view control buttons (`CLOSE`, `PREVIOUS`, `NEXT`, and `LIVE LINK`) to solid jet **black (`#000000`)**:
+1. Styled `._3nxWKG_action`, `._3nxWKG_control`, `._3nxWKG_link`, and `[data-control]` with `color: #000000 !important;` and `font-weight: 800 !important;`.
+2. Applied clean, high-contrast light capsule backing (`rgba(255, 255, 255, 0.95)` with subtle `rgba(230, 248, 255, 0.9)` gradient) and a crisp cyan outline (`1.5px solid #00e5ff`) so the jet black typography achieves maximum readability against the light sheet.
+3. Updated SVG icons and external link mark for `LIVE LINK` to pure black (`color: #00e5ff -> #000000`, `stroke: #000000 !important`, `fill: #000000 !important`).
+4. Maintained responsive electric cyan hover state (`background: #00e5ff; color: #000000; border-color: #000000; box-shadow: 0 0 24px rgba(0, 229, 255, 0.85)`).
+5. Confined all modifications strictly to `cloned_site/custom-enhancements.css` without touching any unrelated portfolio code.
 
 ## Changes
 
 | File | Change | Notes |
 |------|--------|-------|
-| `cloned_site/custom-enhancements.css` | modified | Replaced under-contrasted `._3nxWKG_action` with comprehensive, high-specificity rules for `._3nxWKG_action`, `._3nxWKG_control`, `._3nxWKG_link`, and `[data-control]`. |
+| `cloned_site/custom-enhancements.css` | modified | Updated lines 595-675 to enforce `#000000` text color, black SVG marks, and clean light backing with cyan borders. |
 
 ## Diff Highlights
 
@@ -30,18 +31,20 @@ Upgraded the project slide view controls (`CLOSE`, `PREVIOUS`, `NEXT`, and `LIVE
   box-sizing: border-box !important;
   height: 42px !important;
   min-width: 108px !important;
-  padding: 0 20px !important;
+  padding: 0 22px !important;
   margin: 6px 0 !important;
   border-radius: 9999px !important;
-  background: linear-gradient(135deg, #070d18 0%, #0d1829 100%) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  background-image: linear-gradient(135deg, #ffffff 0%, #e6f9ff 100%) !important;
   border: 1.5px solid var(--mh-cyan, #00e5ff) !important;
   font-family: var(--font-navbar-display, 'Space Grotesk', -apple-system, sans-serif) !important;
   font-weight: 800 !important;
   font-size: 13px !important;
+  line-height: 1 !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
-  color: #00e5ff !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 229, 255, 0.35) !important;
+  color: #000000 !important; /* Pure solid black font color */
+  fill: #000000 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -52,25 +55,21 @@ Upgraded the project slide view controls (`CLOSE`, `PREVIOUS`, `NEXT`, and `LIVE
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
 }
 
-._3nxWKG_action:hover,
-._3nxWKG_control:hover,
-._3nxWKG_link:hover,
-[data-control]:hover {
-  background: var(--mh-cyan, #00e5ff) !important;
+._3nxWKG_action svg,
+._3nxWKG_control svg,
+._3nxWKG_link svg,
+[data-control] svg,
+._3nxWKG_mark {
   color: #000000 !important;
+  stroke: #000000 !important;
   fill: #000000 !important;
-  border-color: #ffffff !important;
-  box-shadow: 0 0 28px rgba(0, 229, 255, 0.95), 0 8px 24px rgba(0, 0, 0, 0.6) !important;
-  transform: translateY(-2px) scale(1.06) !important;
+  width: 14px !important;
+  height: 14px !important;
 }
 ```
 
 ## Local Verification
 
-- Playwright automated check verifies that `CLOSE`, `PREVIOUS`, `NEXT`, `LIVE LINK` render with solid dark backing and high-contrast `#00e5ff` cyan text without requiring hover.
-- Contrast ratio computed against sheet background: > 12:1 (exceeds WCAG AAA requirement of 7:1).
-
-## Follow-ups
-
-- Run `/speckit-bug-test slug=project-slide-controls-visibility`.
-- Deploy updates to both root domain repository (`naimsmahmud50-dotcom.github.io`) and subpath repository (`Mahmud-Hasan-3D-Portfolio`).
+- Playwright verification captured in `project_slide_controls_fixed_preview.png` and `project_slide_controls_hover_preview.png`.
+- Unhovered state: `CLOSE`, `PREVIOUS`, `NEXT`, `LIVE LINK` all display bold, crisp black text (`#000000`) with 21:1 maximum contrast ratio against the white sheet.
+- Hovered state: Smoothly transitions to solid cyan fill with black text.
