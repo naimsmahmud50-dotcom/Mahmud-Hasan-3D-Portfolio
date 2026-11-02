@@ -11,7 +11,19 @@
     navigator.gpu.requestAdapter().then(function(adapter) {
       if (!adapter) {
         location.replace(base + '/lite');
+        return;
       }
+      return adapter.requestDevice().then(function(device) {
+        try {
+          var s = device.createShaderModule({ code: '@compute @workgroup_size(1) fn main() {}' });
+          var p = device.createComputePipeline({ layout: 'auto', compute: { module: s, entryPoint: 'main' } });
+          device.destroy();
+          if (!p) location.replace(base + '/lite');
+        } catch(e) {
+          device.destroy();
+          location.replace(base + '/lite');
+        }
+      });
     }).catch(function() {
       location.replace(base + '/lite');
     });
