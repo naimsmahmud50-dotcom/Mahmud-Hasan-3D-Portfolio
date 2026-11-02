@@ -1600,7 +1600,7 @@
 
         console.warn('⚠️ Error screen detected. Auto-recovering to stable view...');
         const base = getRepoBase();
-        const target = (window.innerWidth <= 768) ? (base + '/lite') : (base + '/?variant=full');
+        const target = base + '/lite';
         window.location.replace(target);
       }
     }
