@@ -231,12 +231,12 @@
     },
     {
       id: 'ai-vid-4',
-      badge: 'NEURAL VOICE CLONE & MOTION',
+      badge: 'COMMERCIAL NARRATIVE & MOTION',
       accentColor: '#a78bfa',
-      title: 'Neural Voice Cloning: Multi-Modal AI & Voice Synthesis',
-      category: 'VOICE SYNTHESIS & AI DIRECTION',
-      tools: ['ElevenLabs Custom Voice Clone', 'AI Video Generation', 'Audio Post-Production', 'Motion Design'],
-      desc: 'Innovative AI production combining high-fidelity neural voice cloning with synchronized kinetic motion design, demonstrating conversational realism and modern AI storytelling.',
+      title: 'Creative Brand Storytelling: Visual Production',
+      category: 'COMMERCIAL NARRATIVE & VISUAL DIRECTION',
+      tools: ['Cinematic Direction', 'Motion Graphics', 'Sound Design', 'Storyboarding'],
+      desc: 'High-impact commercial storytelling combining bespoke cinematic narration with synchronized kinetic motion design, dynamic pacing, and broadcast audio engineering.',
       driveUrl: 'https://drive.google.com/file/d/1ats_4U8ZtcWlxrv0bCxoVdJzstwzcvUM/view?usp=sharing',
       youtubeId: '',
       videoUrl: '',
@@ -468,19 +468,9 @@
               </svg>
               Creative Media &amp; Video Productions
             </h3>
-            <p class="mh-videos-subline">High-craft commercial direction, kinetic motion graphics, AI system explainers, and neural voice synthesis.</p>
+            <p class="mh-videos-subline">High-craft commercial direction, kinetic motion graphics, system explainers, and cinematic post-production.</p>
           </div>
           <div class="mh-videos-header-actions">
-            <a href="https://drive.google.com/drive/folders/1jfTAuCZf34FbLfQbvsAei2VM-2mHS0kR?usp=sharing" target="_blank" rel="noopener noreferrer" class="mh-videos-folder-btn" title="Open complete master collection on Google Drive">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
-              </svg>
-              <span>DRIVE VAULT</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
             <button type="button" class="mh-videos-modal-close" id="mh-videos-modal-close" aria-label="Close Production Showcase">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -491,8 +481,6 @@
         </div>
         <div class="mh-videos-cards-grid">
           ${AI_VIDEOS_CONFIG.map(v => {
-            const srcInfo = resolveVideoSource(v);
-            const driveLink = v.driveUrl || (srcInfo.type === 'drive' ? srcInfo.driveUrl : '');
             return `
             <article class="mh-vid-card" data-video-id="${v.id}" style="--card-accent: ${v.accentColor};">
               <div class="mh-vid-card-banner">
@@ -515,18 +503,6 @@
                     </svg>
                     <span>WATCH PREVIEW</span>
                   </button>
-                  ${driveLink ? `
-                    <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="mh-vid-drive-btn" aria-label="Open on Google Drive">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
-                      </svg>
-                      <span>DRIVE</span>
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </a>
-                  ` : ''}
                 </div>
               </div>
             </article>
@@ -807,17 +783,17 @@
       case 'videos':
       case 'video':
         response.innerHTML = `
-          <div style="color:#c084fc; font-weight:bold; margin-bottom:6px;">── AI VIDEO PRODUCTIONS &amp; MOTION SHOWCASE ──</div>
+          <div style="color:#c084fc; font-weight:bold; margin-bottom:6px;">── CREATIVE MEDIA &amp; MOTION SHOWCASE ──</div>
           <div style="color:#00ff88; font-weight:bold;">[🎬 4K CINEMATIC COMMERCIAL] Neon Odyssey</div>
-          <div style="color:#94a3b8; margin-left:14px; margin-bottom:4px;">Runway Gen-3 Alpha · Midjourney v6 · ElevenLabs · Premiere Pro</div>
+          <div style="color:#94a3b8; margin-left:14px; margin-bottom:4px;">Cinematic Direction · Storyboarding · Premiere Pro · Sound Design</div>
           <div style="color:#00e5ff; font-weight:bold;">[⚡ KINETIC MOTION VFX] Cyber Pulse</div>
-          <div style="color:#94a3b8; margin-left:14px; margin-bottom:4px;">Kling AI · Luma Dream Machine · After Effects · Remotion</div>
+          <div style="color:#94a3b8; margin-left:14px; margin-bottom:4px;">Kinetic Typography · 3D Motion Design · After Effects · Remotion</div>
           <div style="color:#a78bfa; font-weight:bold;">[🎭 CHARACTER NARRATIVE] Echoes of Tomorrow</div>
-          <div style="color:#94a3b8; margin-left:14px; margin-bottom:4px;">Kling AI 1.5 · LivePortrait · ElevenLabs Neural Voice Sync</div>
+          <div style="color:#94a3b8; margin-left:14px; margin-bottom:4px;">Character Storytelling · Dynamic Visual Pacing · Studio Audio Mastering</div>
           <div style="color:#f59e0b; font-weight:bold;">[💻 TECH PRODUCT DEMO] Nexus Core</div>
-          <div style="color:#94a3b8; margin-left:14px; margin-bottom:8px;">Runway Gen-3 · Sora · Topaz Video AI · Adobe Audition</div>
+          <div style="color:#94a3b8; margin-left:14px; margin-bottom:8px;">Technical Product Narrative · VFX Compositing · 4K Mastering · Sound Architecture</div>
           <div style="margin-top:6px;">
-            <a href="javascript:void(0)" onclick="if(window.__mhOpenHud)window.__mhOpenHud('videos')" style="color:#00e5ff; text-decoration:underline; font-weight:bold;">[▶ LAUNCH INTERACTIVE VIDEO SHOWCASE IN HUD]</a>
+            <a href="javascript:void(0)" onclick="if(window.__mhOpenMyVideos)window.__mhOpenMyVideos()" style="color:#00e5ff; text-decoration:underline; font-weight:bold;">[▶ LAUNCH INTERACTIVE VIDEO SHOWCASE]</a>
           </div>
         `;
         break;
@@ -828,8 +804,8 @@
           <div style="color:#00ff88; font-weight:bold;">[🤖 AI &amp; AUTONOMOUS SYSTEMS]</div>
           <div style="color:#94a3b8; margin-left:14px; margin-bottom:6px;">LangChain, Autonomous Agent Swarms, OpenAI/Claude API, Meta Graph API, WhatsApp Bot Automation, Puppeteer Web Scraping</div>
           
-          <div style="color:#c084fc; font-weight:bold;">[🎬 AI VIDEO &amp; MOTION PRODUCTIONS]</div>
-          <div style="color:#94a3b8; margin-left:14px; margin-bottom:6px;">Runway Gen-3 Alpha, Kling AI 1.5, Luma Dream Machine, Sora, Camera Motion Choreography, AI Upscaling, ElevenLabs Voice Sync</div>
+          <div style="color:#c084fc; font-weight:bold;">[🎬 CREATIVE MEDIA &amp; MOTION PRODUCTIONS]</div>
+          <div style="color:#94a3b8; margin-left:14px; margin-bottom:6px;">Commercial Visual Direction, Kinetic Typography, 3D Motion Graphics, After Effects, Remotion, Studio Sound Architecture</div>
 
           <div style="color:#00e5ff; font-weight:bold;">[🌐 WEB &amp; CLOUD ARCHITECTURE]</div>
           <div style="color:#94a3b8; margin-left:14px; margin-bottom:6px;">Next.js (App Router), React, Node.js, TypeScript, PostgreSQL, MongoDB, REST &amp; GraphQL APIs, Docker</div>
@@ -1163,9 +1139,9 @@
               </div>
               <div class="mh-skill-chip">
                 <span class="chip-accent">//</span>
-                <span class="chip-lead">AI VIDEO &amp; MOTION</span>
+                <span class="chip-lead">MEDIA &amp; MOTION</span>
                 <span class="chip-sep">/</span>
-                <span class="chip-detail">RUNWAY GEN-3 · KLING AI · LUMA · SORA</span>
+                <span class="chip-detail">CREATIVE DIRECTION · MOTION VFX · SOUND</span>
               </div>
               <div class="mh-skill-chip">
                 <span class="chip-accent">//</span>
@@ -1786,8 +1762,8 @@
                 <div class="mh-hud-skill-desc">Multi-Agent Swarm Orchestration, LangChain, Tool Calling, RAG Pipelines, Playwright Stealth Browser Automation, Prompt Engineering.</div>
               </div>
               <div class="mh-hud-skill-card">
-                <div class="mh-hud-skill-head">🎬 AI Video Generation &amp; Motion Direction</div>
-                <div class="mh-hud-skill-desc">Cinematic Prompt Engineering, Runway Gen-3 Alpha, Kling AI, Luma Dream Machine, Sora, Camera Motion Choreography, AI Upscaling &amp; ElevenLabs Neural Audio Sync.</div>
+                <div class="mh-hud-skill-head">🎬 Creative Media &amp; Motion Direction</div>
+                <div class="mh-hud-skill-desc">Commercial visual direction, kinetic motion design, dynamic pacing, 3D cinematography, sound architecture, and broadcast-grade post-production.</div>
               </div>
               <div class="mh-hud-skill-card">
                 <div class="mh-hud-skill-head">💻 Full-Stack &amp; Cloud Platforms</div>
@@ -1803,8 +1779,8 @@
               </div>
             </div>
 
-            <!-- AI Video Productions & Motion Showcase -->
-            <div class="mh-hud-section-label" id="mh-hud-video-section">🎬 AI VIDEO &amp; MOTION PRODUCTIONS (CLIENT SHOWCASE)</div>
+            <!-- Creative Media & Motion Showcase -->
+            <div class="mh-hud-section-label" id="mh-hud-video-section">🎬 CREATIVE MEDIA &amp; MOTION PRODUCTIONS</div>
             <div class="mh-hud-video-grid">
               ${AI_VIDEOS_CONFIG.map(v => `
                 <div class="mh-hud-video-card" data-video-id="${v.id}">
@@ -1818,7 +1794,7 @@
                     ${v.tools.map(t => `<span class="mh-hud-tag">${t}</span>`).join('')}
                   </div>
                   <button type="button" class="mh-hud-video-btn" onclick="if(window.__mhOpenVideoPlayer)window.__mhOpenVideoPlayer('${v.id}')">
-                    <span>▶ WATCH AI VIDEO</span>
+                    <span>▶ WATCH PREVIEW</span>
                   </button>
                 </div>
               `).join('')}
