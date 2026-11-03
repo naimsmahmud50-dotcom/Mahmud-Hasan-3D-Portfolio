@@ -1481,6 +1481,29 @@
 
   function setupMenuLabelSync() {
     function applySync() {
+      // 1. Hide 3-dot menu button
+      const menuBtn = document.querySelector('button._rHu7W_menu, button[aria-label="Menu"]');
+      if (menuBtn) {
+        menuBtn.style.setProperty('display', 'none', 'important');
+      }
+
+      // 2. Unclip and keep menuPanel links permanently visible and clickable
+      const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+      if (menuPanel) {
+        menuPanel.setAttribute('aria-hidden', 'false');
+        menuPanel.querySelectorAll('li._rHu7W_linkItem, li[class*="_rHu7W_linkItem"]').forEach(li => {
+          li.style.setProperty('clip-path', 'none', 'important');
+          li.style.setProperty('-webkit-clip-path', 'none', 'important');
+          li.style.setProperty('opacity', '1', 'important');
+          li.style.setProperty('visibility', 'visible', 'important');
+          li.style.setProperty('transform', 'none', 'important');
+        });
+        menuPanel.querySelectorAll('a._rHu7W_link, a[class*="_rHu7W_link"]').forEach(a => {
+          a.setAttribute('tabindex', '0');
+          a.style.setProperty('pointer-events', 'auto', 'important');
+        });
+      }
+
       const menuLinks = document.querySelectorAll('a._rHu7W_link, [class*="_rHu7W_menuPanel"] a');
       menuLinks.forEach(link => {
         const labelSpan = link.querySelector('._rHu7W_linkLabel') || link;
@@ -1517,12 +1540,6 @@
             e.preventDefault();
             e.stopPropagation();
 
-            const menuToggle = document.querySelector('button._rHu7W_menu, button[aria-label="Menu"]');
-            const menuPanel = document.querySelector('._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-            if (menuPanel && menuPanel.getAttribute('aria-hidden') === 'false' && menuToggle) {
-              menuToggle.click();
-            }
-
             if (typeof window.__mhOpenMyVideos === 'function') {
               window.__mhOpenMyVideos();
             }
@@ -1530,7 +1547,7 @@
         }
       });
 
-      // Fallback: If React didn't render EXTRA SKILLS, inject into 3-dots menu panel
+      // Fallback: If React didn't render EXTRA SKILLS, inject into menu links
       const linksContainer = document.querySelector('ul._rHu7W_links, [class*="_rHu7W_links"]');
       const hasExtraSkill = document.querySelector('a[href="#extra-skills"], #mh-menu-item-extra-skills');
       if (linksContainer && !hasExtraSkill) {
@@ -1538,7 +1555,7 @@
         extraLi.className = '_rHu7W_linkItem';
         extraLi.id = 'mh-menu-item-extra-skills';
         extraLi.innerHTML = `
-          <a href="#extra-skills" class="_rHu7W_link" tabindex="-1" id="mh-menu-link-extra-skills">
+          <a href="#extra-skills" class="_rHu7W_link" tabindex="0" id="mh-menu-link-extra-skills">
             <span class="_rHu7W_linkLabel">EXTRA SKILLS</span>
             <svg width="64" height="64" viewBox="96 96 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="_rHu7W_linkHoverDot" aria-hidden="true"><circle cx="128" cy="128" r="32"></circle></svg>
           </a>
@@ -1565,12 +1582,6 @@
             e.preventDefault();
             e.stopPropagation();
 
-            const menuToggle = document.querySelector('button._rHu7W_menu, button[aria-label="Menu"]');
-            const menuPanel = document.querySelector('._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-            if (menuPanel && menuPanel.getAttribute('aria-hidden') === 'false' && menuToggle) {
-              menuToggle.click();
-            }
-
             if (typeof window.__mhOpenMyVideos === 'function') {
               window.__mhOpenMyVideos();
             }
@@ -1591,12 +1602,11 @@
     }
 
     applySync();
+    setInterval(applySync, 120);
 
     document.addEventListener('click', (e) => {
-      if (e.target.closest('button._rHu7W_iconButton, [class*="_rHu7W_iconButton"]')) {
-        setTimeout(applySync, 10);
-        setTimeout(applySync, 60);
-      }
+      setTimeout(applySync, 10);
+      setTimeout(applySync, 60);
     }, true);
 
     const observer = new MutationObserver(() => {
