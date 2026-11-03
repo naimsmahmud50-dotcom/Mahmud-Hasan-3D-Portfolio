@@ -181,9 +181,9 @@
   ];
 
   // =========================================================================
-  // EXTRA SKILLS: AI VIDEO PRODUCTIONS & GOOGLE DRIVE SHOWCASE
+  // EXTRA SKILLS: CREATIVE MEDIA & VIDEO PRODUCTIONS SHOWCASE
   // Instructions: To add your own videos:
-  // 1. Google Drive: Paste your shareable drive link in 'driveUrl':
+  // 1. Video Source: Paste file ID or share link in 'driveUrl':
   //    e.g. driveUrl: 'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=sharing'
   // 2. YouTube: Paste your YouTube video ID or link in 'youtubeId':
   //    e.g. youtubeId: 'L_LUpnjgPso'
@@ -286,7 +286,6 @@
         return {
           type: 'drive',
           embedUrl: `https://drive.google.com/file/d/${fileId}/preview`,
-          driveUrl: `https://drive.google.com/file/d/${fileId}/view?usp=sharing`,
           fileId: fileId
         };
       }
