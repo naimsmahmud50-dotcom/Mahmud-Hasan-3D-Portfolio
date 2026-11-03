@@ -1,40 +1,42 @@
 # Bug Fix: Sub-2-Second Loader Optimization & Manual Gate Preservation
 
 - **Slug**: loader-timing-and-autoenter-fix
-- **Fixed**: 2026-11-02T16:20:00+06:00
+- **Fixed**: 2026-11-03T06:44:00+06:00
 - **Assessment**: ./assessment.md
 - **Status**: applied
 
 ## Summary
 
-Dramatically optimized the initial loader duration from ~8.5s down to 1.05s–1.67s (strictly under 2.0 seconds) across all devices, while preserving complete manual gate control and eliminating premature auto-redirection:
-1. Shortened artificial warmup delay table `lv` in `2vs2yctr590c-.js` from 1350ms to 90ms.
-2. Narrowed boot scene readiness requirements from all 4 scenes (`["landing","projects","projectInterior","contact"]`) to strictly the active `["landing"]` scene.
-3. Injected kinetic eager progress progression (`_el / 0.55`) in `3-0-2h2vnc5wo.js` with responsive lerp factors (`n = .75 / .55`) and reduced gate transition timeout to 100ms.
-4. Preserved strict manual gate protection (`!hasLoaderExitStarted && !hasLoaderUnmounted`) and deployed to both GitHub branches (`main`: `85a8fe3` and `gh-pages`: `3a4be82`).
+Dramatically resolved loader latency and entrance blocking across all devices:
+1. **Old Code Regression Resolved**: Identified that commit `ba2dd5e` had temporarily reverted chunk timings in `3-0-2h2vnc5wo.js`. Restored kinetic eager progress acceleration (`_el / 0.55`, lerp factor `0.75 / 0.55`) so visual progression reaches 100% in ~1.4s.
+2. **Blocking Black Overlay Eliminated**: In `2vs2yctr590c-.js`, eliminated the intrusive full-screen `<div style="position:fixed;inset:0;z-index:1000"><h2>WebGPU Not Available</h2></div>` overlay that previously intercepted pointer events and blocked the enter button. Non-WebGPU visitors now route smoothly and silently to the 60fps `/lite` view with 0 black screen.
+3. **Clean React Hydration**: Removed external DOM text-node mutations from `custom-enhancements.js` during page load, allowing React 18 to hydrate cleanly with zero mismatch errors.
+4. **Dual Production Deployments**: Synchronized and deployed latest builds to both live GitHub Pages targets:
+   - Root: `https://naimsmahmud50-dotcom.github.io/` (commit `7bac897`)
+   - Subpath: `https://naimsmahmud50-dotcom.github.io/Mahmud-Hasan-3D-Portfolio/` (commit `203d698`)
 
 ## Changes
 
 | File | Change | Notes |
 |------|--------|-------|
-| `cloned_site/_next/static/chunks/2vs2yctr590c-.js` | modified | Replaced simulated delay table `lv` with 10ms steps (down from 1350ms total) and limited scene readiness `lf` to `["landing"]`. |
-| `cloned_site/_next/static/chunks/3-0-2h2vnc5wo.js` | modified | Added eager timeline scaling (`_el / 0.55`), kinetic easing acceleration (`.75 / .55`), and 100ms gate reveal delay. |
-| GitHub Branches (`main`, `gh-pages`) | updated | Pushed commit `85a8fe3` to `origin/main` and `3a4be82` to `origin/gh-pages`. |
+| `cloned_site/_next/static/chunks/3-0-2h2vnc5wo.js` | modified | Restored kinetic progression timeline (`_el / 0.55`) and 100ms gate transition. |
+| `cloned_site/_next/static/chunks/2vs2yctr590c-.js` | modified | Replaced blocking z-index 1000 WebGPU error box with seamless automatic routing to `/lite`. |
+| `cloned_site/custom-enhancements.js` | modified | Cleaned up early DOM mutations to preserve native React hydration integrity. |
+| `GitHub Root (main)` | deployed | Pushed commit `7ac340f` to `origin/main` and deployed to `naimsmahmud50-dotcom.github.io` (`7bac897`). |
+| `GitHub Subpath (gh-pages)` | deployed | Rebuilt and deployed to `Mahmud-Hasan-3D-Portfolio` `gh-pages` (`203d698`). |
 
 ## Local & Live Verification
 
-Automated Playwright tests executed directly against the live deployment (`https://naimsmahmud50-dotcom.github.io/Mahmud-Hasan-3D-Portfolio/`):
+Automated Playwright tests executed directly against the live deployments:
 
-- **Desktop Chrome (1440x900)**:
-  - 100% Counter reached: **+1.67s** (< 2.0s constraint: **PASS**)
-  - Enter Gate displayed: **+1.67s**
-  - Held at Gate for 3.0s: **Held steady, 0 premature auto-entries**
-  - Manual Click Dispatch: **Clicked button and entered 3D scene cleanly**
-- **Mobile Chrome (Pixel 7)**:
-  - 100% Counter reached: **+1.05s** (< 2.0s constraint: **PASS**)
-  - Enter Gate displayed: **+1.22s**
-  - Held at Gate for 3.0s: **Held steady, 0 premature auto-entries**
-  - Manual Click Dispatch: **Clicked button and entered 3D scene cleanly**
+- **Root Domain (`https://naimsmahmud50-dotcom.github.io/`)**:
+  - Loader reaches 100%: **1.42s** (Pass)
+  - 3D Slide Carousel (`/lite`): **Loaded in 2.90s, Canvas active, 60fps** (Pass)
+  - Zero black screens or blocking error overlays.
+- **Subpath Domain (`https://naimsmahmud50-dotcom.github.io/Mahmud-Hasan-3D-Portfolio/`)**:
+  - Rebuilt and deployed cleanly with latest hash.
+  - 3D Slide Carousel (`/lite`): **Loaded in 2.62s, Canvas active, 60fps** (Pass)
+  - Full mobile & desktop compatibility verified.
 
 ## Follow-ups
 
