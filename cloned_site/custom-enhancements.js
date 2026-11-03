@@ -424,35 +424,62 @@
   // Dedicated Extra Skills & Videos Showcase Modal Controller
   function openMyVideosModal() {
     let modal = document.getElementById('mh-my-videos-modal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'mh-my-videos-modal';
-      modal.className = 'mh-videos-modal-backdrop';
-      modal.innerHTML = `
-        <div class="mh-videos-modal-dialog">
-          <div class="mh-videos-modal-header">
-            <div class="mh-videos-modal-titles">
-              <span class="mh-videos-kicker">SPECIALIZED CREATIVE &amp; AI SUITE</span>
-              <h3 class="mh-videos-headline">🎬 Extra Skills &amp; Video Productions</h3>
-              <p class="mh-videos-subline">AI Video Direction, Motion Graphics, Voice Cloning &amp; High-Craft Productions</p>
-              <div style="margin-top: 10px;">
-                <a href="https://drive.google.com/drive/folders/1jfTAuCZf34FbLfQbvsAei2VM-2mHS0kR?usp=sharing" target="_blank" rel="noopener noreferrer" class="mh-videos-folder-btn">
-                  <span>📁 OPEN COMPLETE GOOGLE DRIVE VAULT ↗</span>
-                </a>
-              </div>
+    if (modal) {
+      modal.remove(); // recreate with fresh human-crafted design
+    }
+    modal = document.createElement('div');
+    modal.id = 'mh-my-videos-modal';
+    modal.className = 'mh-videos-modal-backdrop';
+    modal.innerHTML = `
+      <div class="mh-videos-modal-dialog">
+        <div class="mh-videos-modal-header">
+          <div class="mh-videos-modal-titles">
+            <div class="mh-videos-live-kicker">
+              <span class="mh-kicker-dot"></span>
+              <span class="mh-kicker-text">STUDIO ARCHIVE · CREATIVE DIRECTION</span>
             </div>
-            <button type="button" class="mh-videos-modal-close" id="mh-videos-modal-close" aria-label="Close Extra Skills">✕</button>
+            <h3 class="mh-videos-headline">
+              <svg class="mh-header-film-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect width="20" height="20" x="2" y="2" rx="3"></rect>
+                <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"></path>
+              </svg>
+              Creative Media &amp; Video Productions
+            </h3>
+            <p class="mh-videos-subline">High-craft commercial direction, kinetic motion graphics, AI system explainers, and neural voice synthesis.</p>
           </div>
-          <div class="mh-videos-cards-grid">
-            ${AI_VIDEOS_CONFIG.map(v => {
-              const srcInfo = resolveVideoSource(v);
-              const driveLink = v.driveUrl || (srcInfo.type === 'drive' ? srcInfo.driveUrl : '');
-              return `
-              <div class="mh-vid-card" data-video-id="${v.id}">
-                <div class="mh-vid-card-top">
-                  <span class="mh-vid-badge" style="border-color: ${v.accentColor}; color: ${v.accentColor};">${v.badge}</span>
+          <div class="mh-videos-header-actions">
+            <a href="https://drive.google.com/drive/folders/1jfTAuCZf34FbLfQbvsAei2VM-2mHS0kR?usp=sharing" target="_blank" rel="noopener noreferrer" class="mh-videos-folder-btn" title="Open complete master collection on Google Drive">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+              </svg>
+              <span>DRIVE VAULT</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+            <button type="button" class="mh-videos-modal-close" id="mh-videos-modal-close" aria-label="Close Production Showcase">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="mh-videos-cards-grid">
+          ${AI_VIDEOS_CONFIG.map(v => {
+            const srcInfo = resolveVideoSource(v);
+            const driveLink = v.driveUrl || (srcInfo.type === 'drive' ? srcInfo.driveUrl : '');
+            return `
+            <article class="mh-vid-card" data-video-id="${v.id}" style="--card-accent: ${v.accentColor};">
+              <div class="mh-vid-card-banner">
+                <div class="mh-vid-banner-glow"></div>
+                <div class="mh-vid-banner-content">
+                  <span class="mh-vid-badge" style="border-color: ${v.accentColor}; color: ${v.accentColor}; background: rgba(0, 0, 0, 0.4);">${v.badge}</span>
                   <span class="mh-vid-cat">${v.category}</span>
                 </div>
+              </div>
+              <div class="mh-vid-card-body">
                 <h4 class="mh-vid-title">${v.title}</h4>
                 <p class="mh-vid-desc">${v.desc}</p>
                 <div class="mh-vid-tools">
@@ -460,27 +487,37 @@
                 </div>
                 <div class="mh-vid-actions-row">
                   <button type="button" class="mh-vid-play-btn" onclick="window.__mhOpenVideoPlayer('${v.id}')">
-                    <span>▶ WATCH PREVIEW</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M8 5v14l11-7z"></path>
+                    </svg>
+                    <span>WATCH PREVIEW</span>
                   </button>
                   ${driveLink ? `
                     <a href="${driveLink}" target="_blank" rel="noopener noreferrer" class="mh-vid-drive-btn" aria-label="Open on Google Drive">
-                      <span>📁 DRIVE ↗</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+                      </svg>
+                      <span>DRIVE</span>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
                     </a>
                   ` : ''}
                 </div>
               </div>
-            `;
-            }).join('')}
-          </div>
+            </article>
+          `;
+          }).join('')}
         </div>
-      `;
-      document.body.appendChild(modal);
+      </div>
+    `;
+    document.body.appendChild(modal);
 
-      modal.querySelector('#mh-videos-modal-close').addEventListener('click', closeMyVideosModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeMyVideosModal();
-      });
-    }
+    modal.querySelector('#mh-videos-modal-close').addEventListener('click', closeMyVideosModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeMyVideosModal();
+    });
 
     modal.classList.add('active');
     document.body.classList.add('mh-modal-open');
@@ -2104,6 +2141,19 @@
     setupProjectHudActions();
     setupContact3DInteractivity();
     setupRouteAutoGlide();
+    
+    // Deep-link check for #extra-skills, #videos, or ?modal=extra-skills
+    if (window.location.hash === '#extra-skills' || window.location.hash === '#videos' || (window.location.search && window.location.search.includes('modal=extra-skills'))) {
+      setTimeout(() => {
+        openMyVideosModal();
+      }, 350);
+    }
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash === '#extra-skills' || window.location.hash === '#videos') {
+        openMyVideosModal();
+      }
+    });
+
     console.log('⚡ Mahmud Hasan Cyber Enhancement Engine Active');
   }
 

@@ -2307,22 +2307,22 @@ body.is-lite ._rHu7W_nav,
 }
 
 /* ==========================================================================
-   18. DEDICATED MY VIDEOS SHOWCASE MODAL
+   18. DEDICATED MY VIDEOS SHOWCASE MODAL (HUMAN-CRAFTED STUDIO REEL)
    ========================================================================== */
 .mh-videos-modal-backdrop {
   position: fixed !important;
   inset: 0 !important;
   z-index: 100000 !important;
-  background: rgba(3, 7, 18, 0.88) !important;
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
+  background: rgba(3, 7, 18, 0.9) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  padding: 20px !important;
+  padding: 24px !important;
   box-sizing: border-box !important;
 }
 
@@ -2332,284 +2332,371 @@ body.is-lite ._rHu7W_nav,
 }
 
 .mh-videos-modal-dialog {
-  background: linear-gradient(180deg, rgba(14, 23, 42, 0.98) 0%, rgba(6, 12, 24, 0.99) 100%) !important;
-  border: 1.5px solid rgba(168, 85, 247, 0.45) !important;
-  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(11, 17, 30, 0.98) 0%, rgba(6, 10, 18, 0.99) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 22px !important;
   width: 100% !important;
-  max-width: 860px !important;
+  max-width: 920px !important;
   max-height: 88vh !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
-  padding: 28px 24px !important;
+  padding: 30px 28px !important;
   box-sizing: border-box !important;
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(168, 85, 247, 0.25) !important;
-  transform: translateY(20px) scale(0.97);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85), 0 0 45px rgba(0, 229, 255, 0.08) !important;
+  transform: translateY(18px) scale(0.98);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent !important;
+}
+
+.mh-videos-modal-dialog::-webkit-scrollbar {
+  width: 5px !important;
+}
+.mh-videos-modal-dialog::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+.mh-videos-modal-dialog::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-radius: 9999px !important;
+}
+.mh-videos-modal-dialog::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
 }
 
 .mh-videos-modal-backdrop.active .mh-videos-modal-dialog {
   transform: translateY(0) scale(1) !important;
 }
 
+/* Header Area */
 .mh-videos-modal-header {
   display: flex !important;
   align-items: flex-start !important;
   justify-content: space-between !important;
-  gap: 16px !important;
+  gap: 20px !important;
   margin-bottom: 24px !important;
-  padding-bottom: 18px !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-bottom: 20px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-.mh-videos-kicker {
-  font-family: 'JetBrains Mono', monospace !important;
+.mh-videos-live-kicker {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 6px !important;
+}
+
+.mh-kicker-dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: #00e5ff !important;
+  box-shadow: 0 0 10px #00e5ff !important;
+  animation: mhKickerPulse 2s infinite ease-in-out !important;
+}
+
+@keyframes mhKickerPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.35); opacity: 0.45; }
+}
+
+.mh-kicker-text {
+  font-family: var(--font-navbar-body, 'Space Grotesk', system-ui, sans-serif) !important;
   font-size: 11px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.12em !important;
-  color: #c084fc !important;
+  letter-spacing: 0.14em !important;
+  color: #00e5ff !important;
   text-transform: uppercase !important;
-  display: inline-block !important;
-  margin-bottom: 4px !important;
 }
 
 .mh-videos-headline {
   margin: 0 0 6px 0 !important;
-  font-size: 24px !important;
-  font-weight: 800 !important;
+  font-family: var(--font-navbar-body, 'Space Grotesk', system-ui, sans-serif) !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
   color: #ffffff !important;
-  letter-spacing: -0.02em !important;
+  letter-spacing: -0.01em !important;
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: 10px !important;
+}
+
+.mh-header-film-icon {
+  color: #00e5ff !important;
+  flex-shrink: 0 !important;
 }
 
 .mh-videos-subline {
   margin: 0 !important;
   font-size: 13px !important;
-  color: rgba(255, 255, 255, 0.7) !important;
-  line-height: 1.4 !important;
+  color: #94a3b8 !important;
+  line-height: 1.5 !important;
+  max-width: 580px !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+.mh-videos-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.mh-videos-folder-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 8px 16px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 9999px !important;
+  color: #f1f5f9 !important;
+  font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-decoration: none !important;
+  text-transform: uppercase !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.mh-videos-folder-btn:hover {
+  background: rgba(0, 229, 255, 0.12) !important;
+  border-color: #00e5ff !important;
+  color: #00e5ff !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3) !important;
+  transform: translateY(-1px) !important;
 }
 
 .mh-videos-modal-close {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  color: #ffffff !important;
-  width: 36px !important;
-  height: 36px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #cbd5e1 !important;
+  width: 38px !important;
+  height: 38px !important;
   border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 16px !important;
   cursor: pointer !important;
   flex-shrink: 0 !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .mh-videos-modal-close:hover {
-  background: rgba(239, 68, 68, 0.25) !important;
-  border-color: #ef4444 !important;
-  transform: scale(1.08) !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: #ef4444 !important;
+  transform: rotate(90deg) scale(1.05) !important;
 }
 
+/* Cards Grid */
 .mh-videos-cards-grid {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
-  gap: 16px !important;
+  gap: 18px !important;
 }
 
-@media screen and (max-width: 680px) {
+@media screen and (max-width: 768px) {
   .mh-videos-cards-grid {
     grid-template-columns: 1fr !important;
   }
+  .mh-videos-modal-header {
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+  .mh-videos-header-actions {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
   .mh-videos-modal-backdrop {
-    align-items: flex-end !important;
-    padding: 0 !important;
-  }
-  .mh-videos-modal-dialog {
-    border-radius: 24px 24px 0 0 !important;
-    max-height: 88vh !important;
-    transform: translateY(100%) !important;
-  }
-  .mh-videos-modal-backdrop.active .mh-videos-modal-dialog {
-    transform: translateY(0) !important;
+    padding: 12px !important;
   }
 }
 
+/* Human-Crafted Video Production Card */
 .mh-vid-card {
-  background: rgba(15, 23, 42, 0.75) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(13, 20, 34, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.16) !important;
   border-radius: 16px !important;
-  padding: 18px !important;
+  overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  transition: all 0.25s ease !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s, box-shadow 0.25s !important;
+  position: relative !important;
 }
 
 .mh-vid-card:hover {
-  border-color: rgba(168, 85, 247, 0.5) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(168, 85, 247, 0.15) !important;
+  transform: translateY(-4px) !important;
+  border-color: rgba(0, 229, 255, 0.4) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 24px rgba(0, 229, 255, 0.12) !important;
 }
 
-.mh-vid-card-top {
+.mh-vid-card-banner {
+  position: relative !important;
+  padding: 12px 18px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  gap: 10px !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  overflow: hidden !important;
+}
+
+.mh-vid-banner-glow {
+  position: absolute !important;
+  top: -20px !important;
+  left: -20px !important;
+  width: 120px !important;
+  height: 120px !important;
+  background: radial-gradient(circle, var(--card-accent, #00e5ff) 0%, transparent 70%) !important;
+  opacity: 0.18 !important;
+  pointer-events: none !important;
+}
+
+.mh-vid-banner-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
   gap: 8px !important;
-  margin-bottom: 10px !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .mh-vid-badge {
-  font-family: 'JetBrains Mono', monospace !important;
+  font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
   font-size: 9.5px !important;
   font-weight: 800 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.07em !important;
   padding: 3px 8px !important;
   border-radius: 6px !important;
   border: 1px solid !important;
+  text-transform: uppercase !important;
 }
 
 .mh-vid-cat {
   font-size: 10px !important;
-  color: rgba(255, 255, 255, 0.5) !important;
+  font-weight: 600 !important;
+  color: #94a3b8 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
 }
 
+.mh-vid-card-body {
+  padding: 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-grow: 1 !important;
+}
+
 .mh-vid-title {
-  font-size: 15px !important;
+  font-family: var(--font-navbar-body, 'Space Grotesk', system-ui, sans-serif) !important;
+  font-size: 15.5px !important;
   font-weight: 700 !important;
-  color: #ffffff !important;
+  color: #f8fafc !important;
   margin: 0 0 8px 0 !important;
-  line-height: 1.3 !important;
+  line-height: 1.35 !important;
 }
 
 .mh-vid-desc {
-  font-size: 12px !important;
-  color: rgba(255, 255, 255, 0.7) !important;
-  line-height: 1.5 !important;
-  margin: 0 0 12px 0 !important;
+  font-size: 12.5px !important;
+  color: #94a3b8 !important;
+  line-height: 1.55 !important;
+  margin: 0 0 14px 0 !important;
   flex-grow: 1 !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
 }
 
 .mh-vid-tools {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 5px !important;
-  margin-bottom: 14px !important;
+  gap: 6px !important;
+  margin-bottom: 16px !important;
 }
 
 .mh-vid-tool-tag {
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 9.5px !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  color: rgba(255, 255, 255, 0.85) !important;
-  padding: 2px 7px !important;
-  border-radius: 4px !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+  padding: 3px 8px !important;
+  border-radius: 5px !important;
+  transition: all 0.15s ease !important;
+  letter-spacing: 0.02em !important;
 }
 
-.mh-vid-play-btn {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%) !important;
-  border: 1px solid rgba(168, 85, 247, 0.6) !important;
+.mh-vid-tool-tag:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
   color: #ffffff !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.08em !important;
-  padding: 10px 14px !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 6px !important;
-  transition: all 0.2s ease !important;
-  width: 100% !important;
-}
-
-.mh-vid-play-btn:hover {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.5) 0%, rgba(99, 102, 241, 0.5) 100%) !important;
-  border-color: #c084fc !important;
-  box-shadow: 0 0 16px rgba(168, 85, 247, 0.4) !important;
-  transform: translateY(-1px) !important;
-}
-
-/* ==========================================================================
-   19. 3-DOT MENU "EXTRA SKILLS" LINK & DRIVE ACTIONS STYLES
-   ========================================================================== */
-#mh-video-nav-trigger {
-  display: none !important;
-}
-
-#mh-menu-item-extra-skills {
-  clip-path: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  list-style: none !important;
-}
-
-#mh-menu-item-extra-skills a._rHu7W_link {
-  cursor: pointer !important;
-  pointer-events: auto !important;
-  display: inline-block !important;
-  color: #ebebebeb !important;
-  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-#mh-menu-item-extra-skills a._rHu7W_link:hover {
-  color: #00ff88 !important;
-}
-
-#mh-menu-item-extra-skills a._rHu7W_link:hover ._rHu7W_linkLabel {
-  transform: translate(-0.85em) !important;
-}
-
-#mh-menu-item-extra-skills a._rHu7W_link:hover ._rHu7W_linkHoverDot {
-  opacity: 0.9 !important;
-  color: #00ff88 !important;
-  transform: translateY(-50%) scale(1) !important;
 }
 
 .mh-vid-actions-row {
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
-  margin-top: 14px !important;
+  gap: 8px !important;
+  margin-top: auto !important;
 }
 
-.mh-vid-actions-row .mh-vid-play-btn {
+.mh-vid-play-btn {
   flex: 1 !important;
-  margin-top: 0 !important;
-}
-
-.mh-vid-drive-btn {
+  height: 38px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 6px !important;
-  padding: 10px 14px !important;
-  border-radius: 10px !important;
-  background: rgba(59, 130, 246, 0.15) !important;
-  border: 1px solid rgba(59, 130, 246, 0.45) !important;
-  color: #60a5fa !important;
-  font-family: 'JetBrains Mono', monospace !important;
+  gap: 7px !important;
+  background: rgba(0, 229, 255, 0.08) !important;
+  border: 1px solid rgba(0, 229, 255, 0.35) !important;
+  color: #ffffff !important;
+  font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.mh-vid-play-btn:hover {
+  background: #00e5ff !important;
+  color: #020813 !important;
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+.mh-vid-play-btn svg {
+  flex-shrink: 0 !important;
+}
+
+.mh-vid-drive-btn {
+  height: 38px !important;
+  padding: 0 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+  font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
   font-size: 11px !important;
   font-weight: 700 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.06em !important;
+  border-radius: 8px !important;
   text-decoration: none !important;
-  text-transform: uppercase !important;
   transition: all 0.2s ease !important;
-  white-space: nowrap !important;
   cursor: pointer !important;
 }
 
 .mh-vid-drive-btn:hover {
-  background: rgba(59, 130, 246, 0.3) !important;
-  border-color: #93c5fd !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4) !important;
   transform: translateY(-1px) !important;
 }
 
