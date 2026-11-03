@@ -1,0 +1,61 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0B0E14"/>
+  <circle cx="850" cy="350" r="320" fill="#8B5CF6" fill-opacity="0.12" filter="blur(140px)"/>
+  <circle cx="300" cy="550" r="260" fill="#F59E0B" fill-opacity="0.08" filter="blur(120px)"/>
+  
+  <path d="M0 200H1200M0 400H1200M0 600H1200M300 0V800M600 0V800M900 0V800" stroke="#FFFFFF" stroke-opacity="0.03" stroke-width="1"/>
+  
+  <!-- Autonomous Agent Workflow Visual -->
+  <g transform="translate(620, 160)">
+    <rect width="480" height="480" rx="20" fill="#111620" stroke="#232C3E" stroke-width="2"/>
+    <rect width="480" height="40" rx="20" fill="#171E2C"/>
+    <text x="240" y="25" fill="#8B5CF6" font-family="monospace" font-size="12" text-anchor="middle">Agent_Swarm_Orchestrator v2.4</text>
+    
+    <!-- Swarm Node 1 -->
+    <rect x="30" y="70" width="180" height="70" rx="12" fill="#1A2232" stroke="#8B5CF6" stroke-opacity="0.4"/>
+    <text x="50" y="100" fill="#F1F5F9" font-family="sans-serif" font-weight="bold" font-size="13">Prospect Scout</text>
+    <text x="50" y="122" fill="#A78BFA" font-family="monospace" font-size="11">Playwright Scraping</text>
+    
+    <!-- Connector Arrow -->
+    <path d="M210 105 H270" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="4 4"/>
+    
+    <!-- Swarm Node 2 -->
+    <rect x="270" y="70" width="180" height="70" rx="12" fill="#1A2232" stroke="#10B981" stroke-opacity="0.4"/>
+    <text x="290" y="100" fill="#F1F5F9" font-family="sans-serif" font-weight="bold" font-size="13">Intent Reasoner</text>
+    <text x="290" y="122" fill="#34D399" font-family="monospace" font-size="11">Claude / GPT-4o RAG</text>
+    
+    <!-- Down Arrow -->
+    <path d="M360 140 V200" stroke="#10B981" stroke-width="2" stroke-dasharray="4 4"/>
+    
+    <!-- Swarm Node 3 -->
+    <rect x="270" y="200" width="180" height="70" rx="12" fill="#1A2232" stroke="#F59E0B" stroke-opacity="0.4"/>
+    <text x="290" y="230" fill="#F1F5F9" font-family="sans-serif" font-weight="bold" font-size="13">Syntax &amp; Deliverability</text>
+    <text x="290" y="252" fill="#FBBF24" font-family="monospace" font-size="11">MX / SMTP Validator</text>
+    
+    <!-- Telemetry Log -->
+    <rect x="30" y="300" width="420" height="150" rx="12" fill="#0C1017" stroke="#1E293B"/>
+    <text x="50" y="330" fill="#8B5CF6" font-family="monospace" font-size="11">&gt; Autonomous agent swarm active: 4 workers</text>
+    <text x="50" y="355" fill="#94A3B8" font-family="monospace" font-size="11">&gt; 8,240 verified enterprise leads generated</text>
+    <text x="50" y="380" fill="#10B981" font-family="monospace" font-size="11">&gt; Average outbound positive reply: 4.8x benchmark</text>
+    <text x="50" y="405" fill="#F59E0B" font-family="monospace" font-size="11">&gt; Human-in-loop approval queue: 0 pending</text>
+  </g>
+
+  <!-- Editorial Info -->
+  <g transform="translate(100, 200)">
+    <rect x="0" y="0" width="150" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.15" stroke="#8B5CF6" stroke-opacity="0.4"/>
+    <text x="75" y="21" fill="#A78BFA" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">PYTHON · LANGCHAIN</text>
+    
+    <text x="0" y="100" fill="#FFFFFF" font-family="sans-serif" font-size="44" font-weight="800" letter-spacing="-1">AI Outbound Agent</text>
+    <text x="0" y="145" fill="#94A3B8" font-family="sans-serif" font-size="20" font-weight="400">Autonomous Prospecting &amp; Synthesis Swarm</text>
+    
+    <g transform="translate(0, 220)">
+      <rect x="0" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="24" y="36" fill="#A78BFA" font-family="sans-serif" font-size="24" font-weight="bold">8,000+</text>
+      <text x="24" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Targets Enriched</text>
+      
+      <rect x="180" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="204" y="36" fill="#10B981" font-family="sans-serif" font-size="24" font-weight="bold">4.8x</text>
+      <text x="204" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Reply Multiplier</text>
+    </g>
+  </g>
+</svg>

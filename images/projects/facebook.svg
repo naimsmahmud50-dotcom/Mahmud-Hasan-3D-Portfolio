@@ -1,0 +1,72 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0C0F14"/>
+  <circle cx="850" cy="350" r="300" fill="#1877F2" fill-opacity="0.14" filter="blur(140px)"/>
+  <circle cx="200" cy="550" r="260" fill="#10B981" fill-opacity="0.08" filter="blur(120px)"/>
+  
+  <path d="M0 200H1200M0 400H1200M0 600H1200M300 0V800M600 0V800M900 0V800" stroke="#FFFFFF" stroke-opacity="0.03" stroke-width="1"/>
+  
+  <!-- Automation Pipeline Flow Visual -->
+  <g transform="translate(600, 150)">
+    <rect width="500" height="500" rx="16" fill="#131822" stroke="#202A3C" stroke-width="2"/>
+    <rect width="500" height="36" rx="16" fill="#192230"/>
+    <text x="250" y="23" fill="#60A5FA" font-family="monospace" font-size="12" text-anchor="middle">Meta_Webhook_Queue_Worker [RUNNING]</text>
+    
+    <!-- Incoming Event Stream -->
+    <rect x="24" y="60" width="452" height="70" rx="10" fill="#182232" stroke="#1877F2" stroke-opacity="0.4"/>
+    <circle cx="54" cy="95" r="16" fill="#1877F2" fill-opacity="0.2"/>
+    <text x="54" y="100" fill="#60A5FA" font-size="12" font-weight="bold" text-anchor="middle">f</text>
+    <text x="86" y="88" fill="#F1F5F9" font-family="sans-serif" font-weight="bold" font-size="13">Inbound Comment Webhook</text>
+    <text x="86" y="110" fill="#94A3B8" font-family="monospace" font-size="11">feed_comment_add (post_id: 9481029)</text>
+    
+    <!-- Arrow -->
+    <path d="M250 130 V165" stroke="#60A5FA" stroke-width="2" stroke-dasharray="3 3"/>
+    
+    <!-- NLP Intent Filter -->
+    <rect x="24" y="165" width="452" height="70" rx="10" fill="#182232" stroke="#10B981" stroke-opacity="0.4"/>
+    <circle cx="54" cy="200" r="16" fill="#10B981" fill-opacity="0.2"/>
+    <text x="54" y="205" fill="#34D399" font-size="12" font-weight="bold" text-anchor="middle">⚡</text>
+    <text x="86" y="193" fill="#F1F5F9" font-family="sans-serif" font-weight="bold" font-size="13">Intent: Purchase Inquiry (98.4% Confidence)</text>
+    <text x="86" y="215" fill="#34D399" font-family="monospace" font-size="11">Keyword: "Price please" → routed to VIP queue</text>
+    
+    <!-- Arrow -->
+    <path d="M250 235 V270" stroke="#34D399" stroke-width="2" stroke-dasharray="3 3"/>
+    
+    <!-- Dual Action: Public Reply + Private DM + CRM Sync -->
+    <g transform="translate(24, 270)">
+      <rect width="216" height="90" rx="10" fill="#1A2536"/>
+      <text x="16" y="28" fill="#F59E0B" font-family="monospace" font-size="10">PUBLIC REPLY</text>
+      <text x="16" y="52" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="12">Natural Variance Delay</text>
+      <text x="16" y="74" fill="#94A3B8" font-family="monospace" font-size="11">Sent in 4.2s (Zero Ban)</text>
+      
+      <rect x="236" width="216" height="90" rx="10" fill="#1A2536"/>
+      <text x="252" y="28" fill="#60A5FA" font-family="monospace" font-size="10">PRIVATE DM &amp; CRM</text>
+      <text x="252" y="52" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="12">Direct Catalog Card</text>
+      <text x="252" y="74" fill="#10B981" font-family="monospace" font-size="11">Lead Synced to Sheet</text>
+    </g>
+    
+    <!-- Telemetry -->
+    <rect x="24" y="380" width="452" height="90" rx="10" fill="#0E131C" stroke="#253248"/>
+    <text x="44" y="410" fill="#94A3B8" font-family="monospace" font-size="11">Throughput: 25,000+ interactions processed</text>
+    <text x="44" y="432" fill="#10B981" font-family="monospace" font-size="11">Response Time: Mean 12.4s (Down from 2.5 hours)</text>
+    <text x="44" y="454" fill="#38BDF8" font-family="monospace" font-size="11">Account Health: 100% (No rate limit penalties)</text>
+  </g>
+
+  <!-- Editorial Info -->
+  <g transform="translate(100, 200)">
+    <rect x="0" y="0" width="160" height="32" rx="16" fill="#1877F2" fill-opacity="0.15" stroke="#1877F2" stroke-opacity="0.4"/>
+    <text x="80" y="21" fill="#60A5FA" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">NODE.JS · META GRAPH API</text>
+    
+    <text x="0" y="100" fill="#FFFFFF" font-family="sans-serif" font-size="44" font-weight="800" letter-spacing="-1">Facebook Automation</text>
+    <text x="0" y="145" fill="#94A3B8" font-family="sans-serif" font-size="20" font-weight="400">Social Commerce &amp; Lead Attribution Engine</text>
+    
+    <g transform="translate(0, 220)">
+      <rect x="0" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="24" y="36" fill="#60A5FA" font-family="sans-serif" font-size="24" font-weight="bold">25k+</text>
+      <text x="24" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Inquiries Handled</text>
+      
+      <rect x="180" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="204" y="36" fill="#10B981" font-family="sans-serif" font-size="24" font-weight="bold">&lt;15s</text>
+      <text x="204" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Mean Response Time</text>
+    </g>
+  </g>
+</svg>

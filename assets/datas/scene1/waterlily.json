@@ -1,0 +1,78 @@
+{
+  "WaterLily1": {
+    "waterlilyType": 1,
+    "scale": 0.06,
+    "position": { "x": -1.7, "y": -0.07, "z": 1.1379 },
+    "rotation": { "x": 0, "y": 0.2, "z": 0.3 }
+  },
+  "WaterLily2": {
+    "waterlilyType": 2,
+    "scale": 0.03,
+    "position": { "x": -1.7, "y": -0.03, "z": 1.2379 },
+    "rotation": { "x": 0.2, "y": 0.2, "z": 0.3 }
+  },
+  "WaterLily3": {
+    "waterlilyType": 2,
+    "scale": 0.045,
+    "position": { "x": -1.6, "y": -0.04, "z": 1.2379 },
+    "rotation": { "x": 0.3, "y": 0.2, "z": -0.1 }
+  },
+
+  "WaterLily4": {
+    "waterlilyType": 2,
+    "scale": 0.085,
+    "position": { "x": 1.6, "y": -0.04, "z": 1.2379 },
+    "rotation": { "x": 0.3, "y": 0.5, "z": 0.2 }
+  },
+  "WaterLily5": {
+    "waterlilyType": 1,
+    "scale": 0.13,
+    "position": { "x": 1.45, "y": -0.04, "z": 1.0379 },
+    "rotation": { "x": -0.1, "y": 0.7, "z": 0.2 }
+  },
+  "WaterLily6": {
+    "waterlilyType": 1,
+    "scale": 0.053,
+    "position": { "x": 1.48, "y": -0.04, "z": 1.1379 },
+    "rotation": { "x": 0.3, "y": 0.1, "z": 0.4 }
+  },
+
+  "WaterLily7": {
+    "waterlilyType": 1,
+    "scale": 0.04,
+    "position": { "x": -1.6, "y": 0.14, "z": 4.0379 },
+    "rotation": { "x": 0.3, "y": 0.1, "z": 0.4 }
+  },
+  "WaterLily8": {
+    "waterlilyType": 2,
+    "scale": 0.02,
+    "position": { "x": -1.78, "y": 0.17, "z": 4.1879 },
+    "rotation": { "x": 0.3, "y": 0.1, "z": 0.4 }
+  },
+
+  "WaterLily9": {
+    "waterlilyType": 2,
+    "scale": 0.05,
+    "position": { "x": 7.2, "y": 0.061, "z": 0.4 },
+    "rotation": { "x": 0.3, "y": 0.1, "z": 0.4 }
+  },
+  "WaterLily10": {
+    "waterlilyType": 1,
+    "scale": 0.09,
+    "position": { "x": 8.21, "y": 0.061, "z": -0.25 },
+    "rotation": { "x": 0.1, "y": 0.1, "z": 0.2 }
+  },
+
+  "WaterLily11": {
+    "waterlilyType": 1,
+    "scale": 0.09,
+    "position": { "x": -4.4, "y": 0.061, "z": -4 },
+    "rotation": { "x": 0.1, "y": 0.1, "z": 0.2 }
+  },
+  "WaterLily12": {
+    "waterlilyType": 2,
+    "scale": 0.06,
+    "position": { "x": -4.25, "y": -0.061, "z": -3.8 },
+    "rotation": { "x": 0.2, "y": 0.1, "z": -0.2 }
+  }
+}

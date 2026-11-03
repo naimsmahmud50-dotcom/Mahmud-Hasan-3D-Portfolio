@@ -1,0 +1,58 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0E1217"/>
+  <!-- Decorative Grid & Mesh -->
+  <circle cx="950" cy="250" r="300" fill="#10B981" fill-opacity="0.12" filter="blur(120px)"/>
+  <circle cx="250" cy="600" r="250" fill="#F59E0B" fill-opacity="0.08" filter="blur(100px)"/>
+  
+  <!-- Subtle Grid Lines -->
+  <path d="M0 200H1200M0 400H1200M0 600H1200M300 0V800M600 0V800M900 0V800" stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1"/>
+  
+  <!-- Mobile Device Frame Mockup -->
+  <g transform="translate(680, 100)">
+    <!-- Phone Body -->
+    <rect x="0" y="0" width="360" height="640" rx="44" fill="#141922" stroke="#252D3D" stroke-width="6"/>
+    <!-- Screen Notch/Island -->
+    <rect x="120" y="14" width="120" height="24" rx="12" fill="#0A0D12"/>
+    <!-- App UI Mockup -->
+    <rect x="24" y="56" width="312" height="100" rx="18" fill="#1C2433"/>
+    <rect x="44" y="74" width="140" height="14" rx="4" fill="#10B981"/>
+    <rect x="44" y="98" width="220" height="10" rx="3" fill="#64748B"/>
+    <rect x="44" y="118" width="180" height="10" rx="3" fill="#475569"/>
+    
+    <!-- Quran Tracker Tile -->
+    <rect x="24" y="174" width="312" height="140" rx="18" fill="#18202D" stroke="#10B981" stroke-opacity="0.3"/>
+    <circle cx="64" cy="214" r="22" fill="#10B981" fill-opacity="0.2"/>
+    <text x="64" y="220" fill="#10B981" font-family="sans-serif" font-weight="bold" font-size="16" text-anchor="middle">📖</text>
+    <rect x="104" y="200" width="160" height="14" rx="4" fill="#F1F5F9"/>
+    <rect x="104" y="224" width="120" height="10" rx="3" fill="#10B981"/>
+    <!-- Progress Bar -->
+    <rect x="44" y="274" width="272" height="8" rx="4" fill="#252D3D"/>
+    <rect x="44" y="274" width="210" height="8" rx="4" fill="#10B981"/>
+    
+    <!-- WhatsApp Alert Card -->
+    <rect x="24" y="332" width="312" height="110" rx="18" fill="#1C2433"/>
+    <circle cx="60" cy="372" r="18" fill="#22C55E" fill-opacity="0.2"/>
+    <text x="60" y="377" fill="#22C55E" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">✓</text>
+    <rect x="96" y="362" width="170" height="12" rx="3" fill="#F1F5F9"/>
+    <rect x="96" y="384" width="130" height="10" rx="3" fill="#64748B"/>
+  </g>
+
+  <!-- Editorial Typographic Info Card -->
+  <g transform="translate(100, 180)">
+    <rect x="0" y="0" width="120" height="32" rx="16" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-opacity="0.4"/>
+    <text x="60" y="21" fill="#10B981" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">FLUTTER &amp; NESTJS</text>
+    
+    <text x="0" y="100" fill="#FFFFFF" font-family="sans-serif" font-size="44" font-weight="800" letter-spacing="-1">Madrasah Ecosystem</text>
+    <text x="0" y="145" fill="#94A3B8" font-family="sans-serif" font-size="20" font-weight="400">Mobile Hifz Tracker &amp; Web Console</text>
+    
+    <g transform="translate(0, 220)">
+      <rect x="0" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="24" y="36" fill="#10B981" font-family="sans-serif" font-size="24" font-weight="bold">15+</text>
+      <text x="24" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Institutions</text>
+      
+      <rect x="180" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="204" y="36" fill="#F59E0B" font-family="sans-serif" font-size="24" font-weight="bold">3,500+</text>
+      <text x="204" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Active Students</text>
+    </g>
+  </g>
+</svg>
