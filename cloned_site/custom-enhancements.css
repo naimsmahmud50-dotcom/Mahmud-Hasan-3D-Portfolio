@@ -232,14 +232,8 @@ html[data-route*="lite"] .y9w63G_loaderContainer,
    1.1 3D PROJECT CYLINDER HUD EXIT BUTTON (BACK TO HOME / PROJECTS)
    ========================================================================== */
 #mh-interior-exit-hud {
-  position: fixed;
-  top: 26px;
-  left: 28px;
-  z-index: 99999;
-  pointer-events: auto;
-  opacity: 1;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: mhExitHudDrop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: none !important;
+  pointer-events: none !important;
 }
 
 @keyframes mhExitHudDrop {

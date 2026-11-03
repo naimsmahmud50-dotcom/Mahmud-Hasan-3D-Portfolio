@@ -1268,34 +1268,10 @@
     }
 
     function syncExitHudState() {
-      let isInterior = false;
-      try {
-        if (window.__mhProjectStore && typeof window.__mhProjectStore.getState === 'function') {
-          const s = window.__mhProjectStore.getState().interiorStatus;
-          isInterior = s === 'interior' || s === 'entering';
-        }
-      } catch (e) {}
-
-      let hud = document.getElementById('mh-interior-exit-hud');
-      if (isInterior) {
-        if (!hud) {
-          hud = document.createElement('div');
-          hud.id = 'mh-interior-exit-hud';
-          hud.innerHTML = `
-            <button id="mh-interior-exit-btn" class="mh-interior-exit-btn" aria-label="Close Project View">
-              <span class="mh-exit-icon">✕</span>
-              <span class="mh-exit-label">CLOSE</span>
-              <span class="mh-exit-badge">ESC</span>
-            </button>
-          `;
-          document.body.appendChild(hud);
-          hud.querySelector('#mh-interior-exit-btn').addEventListener('click', exitCurrentInterior);
-        }
-        hud.style.display = 'block';
-      } else {
-        if (hud) {
-          hud.style.display = 'none';
-        }
+      // Remove any DOM overlay exit button (relying exclusively on the 3D scene mesh close button)
+      const hud = document.getElementById('mh-interior-exit-hud');
+      if (hud) {
+        hud.remove();
       }
       // Also decorate any 2D slide view CLOSE buttons with X icon
       document.querySelectorAll('button._3nxWKG_control, a._3nxWKG_control, [data-control]').forEach(btn => {
