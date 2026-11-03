@@ -1282,9 +1282,9 @@
           hud = document.createElement('div');
           hud.id = 'mh-interior-exit-hud';
           hud.innerHTML = `
-            <button id="mh-interior-exit-btn" class="mh-interior-exit-btn" aria-label="Exit Project View">
-              <span class="mh-exit-arrow">←</span>
-              <span class="mh-exit-label">BACK TO PROJECTS</span>
+            <button id="mh-interior-exit-btn" class="mh-interior-exit-btn" aria-label="Close Project View">
+              <span class="mh-exit-icon">✕</span>
+              <span class="mh-exit-label">CLOSE</span>
               <span class="mh-exit-badge">ESC</span>
             </button>
           `;
@@ -1297,6 +1297,12 @@
           hud.style.display = 'none';
         }
       }
+      // Also decorate any 2D slide view CLOSE buttons with X icon
+      document.querySelectorAll('button._3nxWKG_control, a._3nxWKG_control, [data-control]').forEach(btn => {
+        if (btn.textContent.trim() === 'CLOSE' && !btn.querySelector('.mh-ctrl-icon')) {
+          btn.innerHTML = `<span class="mh-ctrl-icon" style="color:var(--mh-cyan, #00e5ff);font-weight:900;margin-right:6px;font-size:14px">✕</span>CLOSE`;
+        }
+      });
     }
 
     setInterval(syncExitHudState, 200);
