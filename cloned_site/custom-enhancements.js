@@ -415,6 +415,26 @@
     if (e.key === 'Escape') {
       closeVideoPlayer();
       closeMyVideosModal();
+      return;
+    }
+    const modal = document.getElementById('mh-my-videos-modal');
+    if (modal && modal.classList.contains('active')) {
+      const dialog = modal.querySelector('.mh-videos-modal-dialog');
+      if (dialog) {
+        if (e.key === 'ArrowDown') {
+          dialog.scrollTop += 60;
+          e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+          dialog.scrollTop -= 60;
+          e.preventDefault();
+        } else if (e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) {
+          dialog.scrollTop += dialog.clientHeight * 0.8;
+          e.preventDefault();
+        } else if (e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) {
+          dialog.scrollTop -= dialog.clientHeight * 0.8;
+          e.preventDefault();
+        }
+      }
     }
   });
 
@@ -430,8 +450,11 @@
     modal = document.createElement('div');
     modal.id = 'mh-my-videos-modal';
     modal.className = 'mh-videos-modal-backdrop';
+    modal.setAttribute('data-lenis-prevent', 'true');
+    modal.setAttribute('data-lenis-prevent-wheel', 'true');
+    modal.setAttribute('data-lenis-prevent-touch', 'true');
     modal.innerHTML = `
-      <div class="mh-videos-modal-dialog">
+      <div class="mh-videos-modal-dialog" data-lenis-prevent="true" data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true" tabindex="-1">
         <div class="mh-videos-modal-header">
           <div class="mh-videos-modal-titles">
             <div class="mh-videos-live-kicker">
@@ -514,6 +537,36 @@
     `;
     document.body.appendChild(modal);
 
+    const dialogEl = modal.querySelector('.mh-videos-modal-dialog');
+
+    // Universal wheel scrolling: scroll dialog whether cursor is on card, header, or backdrop margin
+    modal.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+      if (dialogEl && !dialogEl.contains(e.target)) {
+        dialogEl.scrollTop += e.deltaY;
+        if (e.cancelable) e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Touch scroll support for trackpads and touchscreens
+    let touchStartY = 0;
+    modal.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    modal.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchStartY - touchY;
+        touchStartY = touchY;
+        if (dialogEl && !dialogEl.contains(e.target)) {
+          dialogEl.scrollTop += deltaY;
+        }
+      }
+    }, { passive: true });
+
     modal.querySelector('#mh-videos-modal-close').addEventListener('click', closeMyVideosModal);
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeMyVideosModal();
@@ -521,6 +574,11 @@
 
     modal.classList.add('active');
     document.body.classList.add('mh-modal-open');
+    if (dialogEl) {
+      setTimeout(() => {
+        try { dialogEl.focus(); } catch (_) {}
+      }, 100);
+    }
   }
 
   function closeMyVideosModal() {

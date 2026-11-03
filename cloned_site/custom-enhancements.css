@@ -2313,17 +2313,37 @@ body.is-lite ._rHu7W_nav,
   position: fixed !important;
   inset: 0 !important;
   z-index: 100000 !important;
-  background: rgba(3, 7, 18, 0.9) !important;
+  background: rgba(3, 7, 18, 0.92) !important;
   backdrop-filter: blur(28px) !important;
   -webkit-backdrop-filter: blur(28px) !important;
   display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
-  justify-content: center !important;
+  justify-content: flex-start !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  padding: 24px !important;
+  padding: 36px 20px !important;
   box-sizing: border-box !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(0, 229, 255, 0.3) transparent !important;
+}
+
+.mh-videos-modal-backdrop::-webkit-scrollbar {
+  width: 6px !important;
+}
+.mh-videos-modal-backdrop::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+.mh-videos-modal-backdrop::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 9999px !important;
+}
+.mh-videos-modal-backdrop::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff !important;
 }
 
 .mh-videos-modal-backdrop.active {
@@ -2339,29 +2359,35 @@ body.is-lite ._rHu7W_nav,
   width: 100% !important;
   max-width: 920px !important;
   max-height: 88vh !important;
+  margin: auto !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
   padding: 30px 28px !important;
   box-sizing: border-box !important;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85), 0 0 45px rgba(0, 229, 255, 0.08) !important;
   transform: translateY(18px) scale(0.98);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(255, 255, 255, 0.18) transparent !important;
+  scrollbar-color: rgba(0, 229, 255, 0.35) rgba(255, 255, 255, 0.03) !important;
 }
 
 .mh-videos-modal-dialog::-webkit-scrollbar {
-  width: 5px !important;
+  width: 7px !important;
 }
 .mh-videos-modal-dialog::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-.mh-videos-modal-dialog::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
   border-radius: 9999px !important;
 }
+.mh-videos-modal-dialog::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
 .mh-videos-modal-dialog::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35) !important;
+  background: #00e5ff !important;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5) !important;
 }
 
 .mh-videos-modal-backdrop.active .mh-videos-modal-dialog {
