@@ -1,105 +1,136 @@
-#  Mahmud Hasan — Next-Gen 3D WebGPU Portfolio
+# Mahmud Hasan - 3D Interactive Portfolio
 
-[![Live Portfolio](https://img.shields.io/badge/LIVE_PORTFOLIO-naimsmahmud50--dotcom.github.io-success?style=for-the-badge&logo=githubpages&logoColor=white)](https://naimsmahmud50-dotcom.github.io/)
+An interactive 3D WebGL developer portfolio built with Three.js, Next.js, and TypeScript. The application showcases full-stack engineering, AI automation systems, and software security projects through real-time 3D graphics, procedural audio, and a lightweight mobile fallback.
 
-[![Three.js](https://img.shields.io/badge/Three.js-r173-black?logo=three.js)]()
-[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)]()
-[![WebGPU](https://img.shields.io/badge/WebGPU-Enabled-blue.svg)]()
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)]()
-
-> **🌐 Live Production Website:** [https://naimsmahmud50-dotcom.github.io/](https://naimsmahmud50-dotcom.github.io/)
-
-An award-winning, agency-grade immersive 3D developer portfolio and experiential showcase engineered with **Three.js**, **WebGPU**, **Next.js**, **GSAP**, and custom cybersecurity terminal enhancements.
+Live deployments:
+- Desktop 3D Version: https://naimsmahmud50-dotcom.github.io/
+- Mobile Lite Version: https://naimsmahmud50-dotcom.github.io/lite
 
 ---
 
-## 🌟 Key Highlights & Engineering Features
+## Overview
 
-* **🌌 3D Interactive Cylinder Carousel**: Seamless 3D project showcase rendered with Three.js / WebGPU shaders, realistic lighting, and smooth inertial camera glides.
-* **⚡ Cyber Entrance Gate**: High-craft kinetic typography (`League Spartan`), zero-delay click responsiveness, and gradual slow-motion portal transition.
-* **🎵 Ambient Audio & Spatial SFX Engine**: Web Audio API integration with reactive sound beds, entrance stings, and hover clicks.
-* **🖥️ Interactive AI Terminal**: Built-in HUD terminal (`>_ AI TERMINAL`) providing interactive cyber commands, system diagnostics, and background architecture inspection.
-* **📱 Dual Mode Architecture (3D & 2D Lite)**:
-  * Full 3D WebGPU experience for modern desktop browsers (`/` and `/?variant=full`).
-  * High-performance responsive 2D Lite experience for mobile devices and non-WebGPU environments (`/lite`), with instant bidirectional 3-dot navigation bridge.
-* **🔒 Enterprise Security & Clean Craft**: Hardened against race conditions, hydration glitches, and pointer event collisions.
+This repository contains the source code, 3D asset pipeline, and deployment configurations for Mahmud Hasan's personal portfolio. 
+
+The site uses a dual-architecture design:
+- 3D Experience (Desktop): Built on WebGL and WebGPU using Three.js. Includes interactive project carousel navigation, custom post-processing, and spatial audio feedback.
+- Lite Mode (Mobile / Low-Power Devices): A clean, fast 2D layout optimized for low data usage, touch navigation, and smooth performance on mobile browsers without requiring a dedicated GPU.
 
 ---
 
-## 📂 Featured Case Studies & Demos
+## Technical Features
 
-1. **Madrasah Ecosystem**: Enterprise cloud architecture uniting academic records, biometric attendance, and automated WhatsApp notifications.
-   - [GitHub Source](https://github.com/naimsmahmud50-dotcom/Madrasha-Managemant-Softaware)
-2. **Secure My PC**: Low-level Windows security daemon with active memory defense.
-   - [GitHub Source](https://github.com/naimsmahmud50-dotcom/MindPulse)
-3. **MAIJRUN Tech Store**: Enterprise-grade headless tech & hardware e-commerce platform built with Next.js 15, Medusa v1.20, PostgreSQL & Redis. Features Custom PC Builder compatibility engine, bKash/Nagad/SSLCommerz payments, and live Steadfast/Pathao courier tracking.
-   - [GitHub Source](https://github.com/naimsmahmud50-dotcom/Maijrun-Teach)
-4. **Travel with Maijrun**: Luxury travel & tour booking agency with real-time itinerary booking.
-   - [Live Web App](https://travel-w-ith-maijrun-alpha.vercel.app)
-5. **Arabic Language & Cultural Club**: Digital language academy and cultural learning platform.
-   - [Live Web App](https://arabic-langualge-and-cultural-club.vercel.app)
-6. **Student Life Circle**: Campus networking & student resource ecosystem.
-   - [GitHub Source](https://github.com/naimsmahmud50-dotcom/Student-Life-Circle)
-7. **Facebook Automation**: High-throughput social media intelligence and automation bot.
-   - [GitHub Source](https://github.com/naimsmahmud50-dotcom/Facebook-Automation-)
+- 3D Project Carousel: Built with Three.js r173, utilizing Draco geometry compression and custom shader materials for fluid project inspection.
+- Interactive Command Terminal: Built-in interface allowing visitors to run diagnostics, view background architecture, and inspect system details.
+- Procedural Audio: Interactive UI sound cues driven by the Web Audio API with a persistent mute toggle.
+- Responsive Routing: Seamless switching between the 3D desktop view and the 2D lite view based on screen size or user preference.
+- Production Optimization: Compressed KTX2/WebP assets, preloaded critical font weights, and static caching for sub-second page loads.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-* **Rendering Engine**: Three.js (r173), WebGPU / WebGL2 backend, custom GLSL/TSL shaders, KTX2 textures.
-* **Framework**: Next.js 14, React 18, TypeScript, Tailwind CSS.
-* **Motion & Kinematics**: GSAP (GreenSock), Lenis Smooth Scroll.
-* **Sound**: Web Audio API with Web Audio Nodes & custom audio mixer.
-* **Production Server**: Node.js HTTP/2 range server (`server_hubuhu.js`).
+- 3D & Graphics: Three.js (r173), WebGL2, WebGPU, Draco Decompressor
+- Frontend Framework: Next.js 14, React 18, TypeScript
+- Styling & Layout: Tailwind CSS, CSS Modules
+- Animation: GSAP (GreenSock)
+- Audio: Web Audio API
+- Hosting & Delivery: GitHub Pages, Vercel
 
 ---
 
-## Getting Started
+## Project Structure
+
+```text
+.
+├── cloned_site/       # Production static build deployed to GitHub Pages
+│   ├── assets/        # Optimized 3D models (.glb), textures, and audio files
+│   ├── index.html     # Primary 3D desktop entry point
+│   ├── lite.html      # Responsive 2D entry point for mobile devices
+│   ├── custom-enhancements.js   # Client-side interactions and routing
+│   └── custom-enhancements.css  # Component styles and UI transitions
+├── app/               # Next.js App Router source directory
+├── components/        # Reusable React components (3D canvas, navigation, HUD)
+├── lib/               # Utility functions, sound controllers, and data definitions
+├── presentation/      # Standalone 16:9 interactive presentation deck
+├── scripts/           # Deployment automation and verification scripts
+└── specs/             # Spec Kit engineering specifications and design records
+```
+
+---
+
+## Featured Projects
+
+1. Madrasah Management System
+   - Cloud management platform for institutional academic records, attendance tracking, and administrative workflows.
+   - Repository: https://github.com/naimsmahmud50-dotcom/Madrasha-Managemant-Softaware
+
+2. MindPulse (Secure My PC)
+   - Windows security utility focused on process inspection, memory verification, and system defense.
+   - Repository: https://github.com/naimsmahmud50-dotcom/MindPulse
+
+3. MAIJRUN Tech Store
+   - E-commerce platform for computer hardware and custom PC builds, featuring real-time payment gateway integration and courier tracking.
+   - Repository: https://github.com/naimsmahmud50-dotcom/Maijrun-Teach
+
+4. Travel with Maijrun
+   - Tour booking and travel management web application with dynamic itinerary handling.
+   - Repository: https://github.com/naimsmahmud50-dotcom/Travel-WIth-Maijrun
+
+5. Arabic Language & Cultural Club
+   - Educational platform for language learning curriculum, resources, and event updates.
+   - Repository: https://github.com/naimsmahmud50-dotcom/Arabic-Langualge-and-Cultural-Club
+
+6. Student Life Circle
+   - Academic community portal for campus resources and student collaboration.
+   - Repository: https://github.com/naimsmahmud50-dotcom/Student-Life-Circle
+
+7. Social Automation Tools
+   - Automated workflow scripts and data utilities for web-based productivity.
+   - Repository: https://github.com/naimsmahmud50-dotcom/Facebook-Automation-
+
+---
+
+## Local Development
 
 ### Prerequisites
 
-* Node.js 18+ or 20+
-* pnpm, npm, or yarn
+- Node.js (version 18 or later recommended)
+- npm, pnpm, or yarn
 
 ### Installation
 
+Clone the repository and install dependencies:
+
 ```bash
-# Clone the repository
 git clone https://github.com/naimsmahmud50-dotcom/Mahmud-Hasan-3D-Portfolio.git
 cd Mahmud-Hasan-3D-Portfolio
-
-# Install dependencies
-pnpm install
-# or
 npm install
 ```
 
-### Running Locally
+### Running the Local Server
+
+To run the local production server:
 
 ```bash
-# Start the full-fidelity production server
-npm run serve
-# or directly with Node:
 node server_hubuhu.js
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser (Google Chrome or Microsoft Edge recommended for native WebGPU hardware acceleration).
-
-For the mobile-optimized responsive version, visit [http://localhost:3000/lite](http://localhost:3000/lite).
-
----
-
-## 👤 Author
-
-**Mahmud Hasan**
-* **Role**: AI Automation Architect, Full-Stack Web & Android Developer, Certified Web Security Engineer.
-* **Email**: [mahmudhasan.infodev@gmail.com](mailto:mahmudhasan.infodev@gmail.com)
-* **GitHub**: [@naimsmahmud50-dotcom](https://github.com/naimsmahmud50-dotcom)
-* **LinkedIn**: [Mahmud Hasan](https://www.linkedin.com/in/mahmud-hasan-687908269)
+The application will be accessible at:
+- Full 3D version: http://localhost:3000
+- Mobile lite version: http://localhost:3000/lite
 
 ---
 
-## 📄 License
+## Contact
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Author: Mahmud Hasan
+- GitHub: https://github.com/naimsmahmud50-dotcom
+- LinkedIn: https://www.linkedin.com/in/mahmud-hasan-687908269
+- Email: mahmudhasan.infodev@gmail.com
+
+---
+
+## License
+
+This project is open-source and available under the MIT License.
