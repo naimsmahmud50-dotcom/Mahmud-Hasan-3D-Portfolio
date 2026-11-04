@@ -9,6 +9,7 @@ out/
 # Backups & Archives
 backup-original/
 backup_cloned_site*/
+archive/
 *.bak
 
 # Temporary frame captures and test scripts at root
