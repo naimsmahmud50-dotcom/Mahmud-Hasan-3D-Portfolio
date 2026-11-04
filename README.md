@@ -1,4 +1,4 @@
-# 🚀 Mahmud Hasan — Next-Gen 3D WebGPU Portfolio
+#  Mahmud Hasan — Next-Gen 3D WebGPU Portfolio
 
 [![Live Portfolio](https://img.shields.io/badge/LIVE_PORTFOLIO-naimsmahmud50--dotcom.github.io-success?style=for-the-badge&logo=githubpages&logoColor=white)](https://naimsmahmud50-dotcom.github.io/)
 
@@ -55,7 +55,7 @@ An award-winning, agency-grade immersive 3D developer portfolio and experiential
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
