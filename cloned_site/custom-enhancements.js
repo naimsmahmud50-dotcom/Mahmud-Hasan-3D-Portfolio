@@ -113,16 +113,16 @@
     },
     'maijrun store': {
       title: 'MAIJRUN Tech Store',
-      demo: 'https://github.com/naimsmahmud50-dotcom/Maijrun-Teach',
+      demo: 'https://naimsmahmud50-dotcom.github.io/Maijrun-Teach/',
       github: 'https://github.com/naimsmahmud50-dotcom/Maijrun-Teach',
-      isLive: false,
+      isLive: true,
       category: 'Enterprise E-Commerce & PC Builder'
     },
     'maijrun tech': {
       title: 'MAIJRUN Tech Store',
-      demo: 'https://github.com/naimsmahmud50-dotcom/Maijrun-Teach',
+      demo: 'https://naimsmahmud50-dotcom.github.io/Maijrun-Teach/',
       github: 'https://github.com/naimsmahmud50-dotcom/Maijrun-Teach',
-      isLive: false,
+      isLive: true,
       category: 'Enterprise E-Commerce & PC Builder'
     },
     'autonomous ai agent': {
