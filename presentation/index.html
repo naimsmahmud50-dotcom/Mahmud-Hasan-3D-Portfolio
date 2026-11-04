@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahmud Hasan · 3D Portfolio Presentation & Tech Stack Breakdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=League+Spartan:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070b12;
+      --bg-card: rgba(13, 21, 37, 0.82);
+      --bg-card-border: rgba(0, 229, 255, 0.18);
+      --accent-green: #00ff88;
+      --accent-cyan: #00e5ff;
+      --accent-purple: #a78bfa;
+      --accent-amber: #f59e0b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --font-display: 'League Spartan', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 229, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 255, 136, 0.06) 0%, transparent 45%);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* 16:9 Slide Deck Container */
+    .deck-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .slide-deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: calc((100vh - 48px) * 16 / 9);
+      max-height: calc((100vw - 48px) * 9 / 16);
+      background: radial-gradient(120% 120% at 50% 10%, #0d1527 0%, #060911 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 229, 255, 0.05);
+      overflow: hidden;
+    }
+
+    /* Top Navigation Bar */
+    .deck-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      z-index: 10;
+      background: rgba(7, 11, 18, 0.6);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-pill {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(0, 255, 136, 0.2));
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .brand-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      background: rgba(0, 229, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.4);
+      color: #fff;
+    }
+
+    .control-btn.active {
+      background: rgba(0, 255, 136, 0.15);
+      border-color: rgba(0, 255, 136, 0.5);
+      color: var(--accent-green);
+    }
+
+    /* Slide Elements */
+    .slide {
+      position: absolute;
+      inset: 58px 0 54px 0;
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(30px) scale(0.98);
+      transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+    }
+
+    .slide-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+    }
+
+    .slide-kicker::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .slide-heading {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      margin-bottom: 14px;
+      color: #ffffff;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .slide-subheading {
+      font-size: clamp(14px, 1.25vw, 17px);
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 900px;
+      margin-bottom: 28px;
+    }
+
+    /* Content Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 229, 255, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .card-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    /* Tech Tags */
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+    }
+
+    .tag.cyan {
+      border-color: rgba(0, 229, 255, 0.35);
+      background: rgba(0, 229, 255, 0.08);
+      color: var(--accent-cyan);
+    }
+
+    .tag.green {
+      border-color: rgba(0, 255, 136, 0.35);
+      background: rgba(0, 255, 136, 0.08);
+      color: var(--accent-green);
+    }
+
+    .tag.purple {
+      border-color: rgba(167, 139, 250, 0.35);
+      background: rgba(167, 139, 250, 0.08);
+      color: var(--accent-purple);
+    }
+
+    .tag.amber {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.08);
+      color: var(--accent-amber);
+    }
+
+    /* Code Block */
+    .code-box {
+      background: rgba(5, 8, 15, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .code-token-kw { color: #f43f5e; font-weight: 600; }
+    .code-token-fn { color: #38bdf8; }
+    .code-token-str { color: #4ade80; }
+    .code-token-cm { color: #64748b; font-style: italic; }
+
+    /* Bottom Status & Pagination */
+    .deck-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 54px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(7, 11, 18, 0.6);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+
+    .slide-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .progress-bar-bg {
+      width: 140px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+      width: 8.33%;
+      transition: width 0.3s ease;
+    }
+
+    .nav-arrow-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .arrow-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .arrow-btn:hover:not(:disabled) {
+      background: rgba(0, 229, 255, 0.2);
+      border-color: rgba(0, 229, 255, 0.5);
+    }
+
+    .arrow-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Speaker Notes Drawer (Toggled with N or Notes Button) */
+    .notes-drawer {
+      position: absolute;
+      bottom: 54px;
+      left: 0;
+      right: 0;
+      background: rgba(10, 15, 26, 0.96);
+      border-top: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 24px 32px;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+      max-height: 48%;
+      overflow-y: auto;
+    }
+
+    .notes-drawer.open {
+      transform: translateY(0);
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .notes-title {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .note-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .note-lang-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .note-text {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .key-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-wrapper">
+    <div class="slide-deck" id="deckContainer">
+
+      <!-- Header Bar -->
+      <header class="deck-header">
+        <div class="brand-wrap">
+          <span class="brand-logo-pill">MH · 2026</span>
+          <span class="brand-title">Full Stack &amp; AI Architect · 3D Portfolio Presentation</span>
+        </div>
+        <div class="deck-controls">
+          <button class="control-btn" id="notesToggleBtn" title="Toggle Speaker Notes (Press N)">
+            <span>📝 Speaker Notes</span>
+            <span class="key-badge">N</span>
+          </button>
+          <button class="control-btn" id="fullscreenBtn" title="Toggle Fullscreen (Press F)">
+            <span>⛶ Fullscreen</span>
+            <span class="key-badge">F</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 1: Title & Hero -->
+      <!-- =================================================================== -->
+      <section class="slide active" data-slide="1">
+        <div class="slide-kicker">TECHNICAL PORTFOLIO PRESENTATION · 2026</div>
+        <h1 class="slide-heading" style="font-size: clamp(34px, 4.4vw, 56px);">
+          Architecting the Unseen:<br>
+          <span style="background: linear-gradient(90deg, #00e5ff 0%, #00ff88 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Next-Gen 3D WebGPU &amp; Autonomous Systems</span>
+        </h1>
+        <p class="slide-subheading">
+          A high-performance technical presentation breaking down the architecture, programming languages, custom shaders, and full-stack engineering behind Mahmud Hasan’s interactive 3D web experience.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">👨‍💻 Presenter &amp; Role</div>
+            <p class="card-desc">
+              <strong>Mahmud Hasan</strong><br>
+              Full Stack Developer &amp; Autonomous AI Systems Architect.<br>
+              Specializing in real-time WebGL/WebGPU graphics, scalable multi-tenant platforms, and deterministic AI agent workflows.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Dhaka, Bangladesh</span>
+              <span class="tag green">Production Ready</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">⚡ Portfolio Core Tech</div>
+            <p class="card-desc">
+              Engineered with <strong>Three.js</strong>, <strong>GLSL Custom Shaders</strong>, <strong>Next.js 14</strong>, <strong>React 18</strong>, and <strong>GSAP ScrollTrigger</strong> for 60 FPS real-time rendering.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Three.js</span>
+              <span class="tag green">WebGPU / WebGL</span>
+              <span class="tag purple">GLSL Shaders</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">🌐 Live Deployment</div>
+            <p class="card-desc">
+              Hosted globally via GitHub Pages with zero latency, client-side cache busting, and automatic adaptive fallbacks for mobile and desktop screens.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">GitHub Pages</span>
+              <span class="tag amber">Dual Engine</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 2: Executive Vision -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="2">
+        <div class="slide-kicker">EXECUTIVE ARCHITECTURE VISION</div>
+        <h2 class="slide-heading">Why a 3D WebGPU Portfolio in 2026?</h2>
+        <p class="slide-subheading">
+          Traditional portfolios rely on flat, static templates. This project demonstrates high-tier systems engineering by transforming standard web development into an interactive 3D spatial experience.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">1. Spatial Immersion</div>
+            <p class="card-desc">
+              Instead of ordinary scrolling, the visitor travels through a dynamic 3D world with procedural rock formations, volumetric lighting, and camera paths choreographed to their scroll wheel.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Spatial Audio</span>
+              <span class="tag cyan">Volumetric Depth</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">2. Engineering Proof</div>
+            <p class="card-desc">
+              Proves advanced mastery over browser internals: GPU memory management, Web Workers, vector math, quaternions, and asset optimization under strict budget constraints.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">60 FPS Locked</span>
+              <span class="tag green">Hardware Accelerated</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">3. Deterministic Fallback</div>
+            <p class="card-desc">
+              Features an intelligent dual-engine architecture: machines with low GPU power or mobile touchscreens effortlessly run the optimized "Project Slide View" with zero lag.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Zero Compromise</span>
+              <span class="tag amber">Inclusive UX</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 3: Tech Stack Matrix (Languages & Tools) -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="3">
+        <div class="slide-kicker">EXACT LANGUAGE &amp; TOOL BREAKDOWN</div>
+        <h2 class="slide-heading">Where Which Language &amp; Tool is Used</h2>
+        <p class="slide-subheading">
+          A definitive, file-level map of every language, library, and framework powering Mahmud Hasan's portfolio.
+        </p>
+
+        <div class="grid-4">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🎨 Graphics &amp; Shaders</div>
+            <p class="card-desc">
+              <strong>Languages:</strong> GLSL, WGSL<br>
+              <strong>Libraries:</strong> Three.js v0.173, WebGL2<br>
+              <strong>Usage:</strong> Procedural mesh deformation, noise shaders, lighting, 3D camera matrices.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">GLSL Shaders</span>
+              <span class="tag cyan">Three.js</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">⚛️ Frontend &amp; UI</div>
+            <p class="card-desc">
+              <strong>Languages:</strong> JavaScript ES6+, TypeScript<br>
+              <strong>Frameworks:</strong> Next.js 14, React 18<br>
+              <strong>Usage:</strong> Component routing, DOM hydration, layout structures, and project state stores.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">JavaScript</span>
+              <span class="tag green">Next.js 14</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">🪄 Styling &amp; Motion</div>
+            <p class="card-desc">
+              <strong>Languages:</strong> CSS3, Custom Properties<br>
+              <strong>Libraries:</strong> GSAP 3, Lenis, Tailwind<br>
+              <strong>Usage:</strong> Glassmorphism blur, keyframe glows, inertial scroll dampening, responsive UI.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">CSS3</span>
+              <span class="tag purple">GSAP 3</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);"></div>
+            <div class="card-title">⚙️ Backend &amp; DevOps</div>
+            <p class="card-desc">
+              <strong>Languages:</strong> Node.js, Python 3, Bash<br>
+              <strong>Hosting:</strong> GitHub Pages CDN<br>
+              <strong>Usage:</strong> Local test server (`server_hubuhu.js`), deploy scripts, and automated cache busting.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag amber">Node.js</span>
+              <span class="tag amber">Python 3</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 4: 3D Graphics Engine & Shaders -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="4">
+        <div class="slide-kicker">DEEP-DIVE: THREE.JS &amp; GLSL SHADERS</div>
+        <h2 class="slide-heading">The 3D Real-Time Rendering Pipeline</h2>
+        <p class="slide-subheading">
+          How Three.js, GPU pipelines, and custom GLSL vertex/fragment shaders create a cinematic environment at 60 frames per second.
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">Pipeline Architecture</div>
+            <p class="card-desc">
+              • <strong>Scene Graphs:</strong> Multiple layered scenes (`landing`, `projects`, `projectInterior`, `about`, `contact`).<br>
+              • <strong>Camera Choreography:</strong> Perspective cameras interpolated via cubic hermite spline curves.<br>
+              • <strong>Mesh Compression:</strong> Draco geometry reduces 3D polygon file sizes by 85%.<br>
+              • <strong>Texture Streaming:</strong> KTX2 GPU texture compression bypasses CPU decompression.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Draco Compression</span>
+              <span class="tag green">KTX2 Textures</span>
+              <span class="tag cyan">Hermite Curves</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">GLSL Fragment Shader Logic</div>
+            <p class="card-desc" style="margin-bottom: 6px;">Custom fragment shader calculation for volumetric fog and procedural stone displacement:</p>
+            <div class="code-box">
+<span class="code-token-kw">precision</span> highp float;
+<span class="code-token-kw">varying</span> vec2 vUv;
+<span class="code-token-kw">uniform</span> float uTime;
+<span class="code-token-kw">uniform</span> sampler2D uTexture;
+
+<span class="code-token-kw">void</span> <span class="code-token-fn">main</span>() {
+  vec4 color = <span class="code-token-fn">texture2D</span>(uTexture, vUv);
+  float noise = <span class="code-token-fn">sin</span>(vUv.x * 20.0 + uTime * 1.5) * 0.05;
+  gl_FragColor = vec4(color.rgb + noise, color.a);
+}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 5: Frontend & State Architecture -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="5">
+        <div class="slide-kicker">FRONTEND &amp; STATE MANAGEMENT</div>
+        <h2 class="slide-heading">Next.js 14, React 18 &amp; Reactive State</h2>
+        <p class="slide-subheading">
+          High-performance component architecture engineered for instantaneous routing, SEO optimization, and decoupled 3D-to-DOM communication.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">⚡ SSG &amp; Static Export</div>
+            <p class="card-desc">
+              Built with Next.js Static Site Generation (SSG). HTML pages (`about`, `contact`, `projects`, `lite`) are pre-rendered into static chunks for zero server overhead and lightning-fast TTFB (Time to First Byte).
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Next.js SSG</span>
+              <span class="tag cyan">Turbopack</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">🔄 Reactive Store Bridge</div>
+            <p class="card-desc">
+              A custom lightweight pub/sub store bridge (`window.__mhProjectStore`) connects React UI buttons with the Three.js 3D camera without triggering unnecessary React re-renders.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Pub/Sub Store</span>
+              <span class="tag green">Decoupled Architecture</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">🧩 Web Audio Synthesizer</div>
+            <p class="card-desc">
+              Instead of bulky audio files, sound effects (clicks, glitches, hums) are synthesized dynamically in real-time using browser native Web Audio API oscillators and gain nodes.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Web Audio API</span>
+              <span class="tag purple">Procedural SFX</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 6: Motion Physics & Animation System -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="6">
+        <div class="slide-kicker">MOTION DESIGN &amp; KINEMATICS</div>
+        <h2 class="slide-heading">GSAP ScrollTrigger &amp; Lenis Physics</h2>
+        <p class="slide-subheading">
+          Choreographing camera movement, 3D model transforms, and UI element reveals into a single unified kinetic timeline.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">📜 Scroll-Driven Cameras</div>
+            <p class="card-desc">
+              GSAP ScrollTrigger binds the user's scrollbar directly to Three.js camera position vectors `(x, y, z)`. Scrolling down flies through the rock archway, into projects, and lands at the contact zone.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">ScrollTrigger</span>
+              <span class="tag cyan">Camera Paths</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">🌊 Lenis Kinetic Inertia</div>
+            <p class="card-desc">
+              Eliminates jarring mouse-wheel jumps. Lenis creates fluid mathematical momentum, providing that high-craft, luxury website feel across all operating systems.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Inertial Dampening</span>
+              <span class="tag green">Lerp Math</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">🛡️ Event Isolation</div>
+            <p class="card-desc">
+              Custom wheel and touch event interception ensures that when modals (like the Extra Skills studio) are opened, background 3D canvas scrolling is locked, while modal content scrolls smoothly.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Event Delegation</span>
+              <span class="tag purple">Modal Isolation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 7: Dual-Engine Architecture -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="7">
+        <div class="slide-kicker">ADAPTIVE UX ARCHITECTURE</div>
+        <h2 class="slide-heading">Desktop 3D vs. Mobile "Lite" Engine</h2>
+        <p class="slide-subheading">
+          Ensuring zero users are left behind. Automatic device probing serves the optimal experience for high-end PCs, low-spec laptops, and smartphones.
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🖥️ Desktop Mode (Full 3D WebGPU)</div>
+            <p class="card-desc">
+              • Target: Desktop devices with dedicated or modern integrated GPUs.<br>
+              • Features: Real-time Three.js scene, floating 3D phone model, spatial audio, particle dynamics, and immersive perspective cameras.<br>
+              • Performance: Target 60 FPS with adaptive resolution scaling if GPU frame time exceeds 16.6ms.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">WebGPU</span>
+              <span class="tag cyan">Spatial World</span>
+              <span class="tag cyan">60 FPS</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">📱 Mobile / Lite Mode ("Project Slide View")</div>
+            <p class="card-desc">
+              • Target: Smartphones, tablets, or devices without WebGPU support.<br>
+              • Features: Clean horizontal slide deck, high-contrast typography, direct Chrome links, and zero GPU battery drain.<br>
+              • Innovation: 100% feature parity without heavy WebGL overhead.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Zero Lag</span>
+              <span class="tag green">Battery Friendly</span>
+              <span class="tag green">Mobile Optimized</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 8: Project 1 - Madrasah Ecosystem -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="8">
+        <div class="slide-kicker">FEATURED FULL STACK PROJECT · 01</div>
+        <h2 class="slide-heading">Madrasah Ecosystem: Multi-Tenant ERP</h2>
+        <p class="slide-subheading">
+          A production-grade, enterprise-scale management platform designed to automate educational operations, Quranic Hifz tracking, and guardian communications.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🏢 Core Architecture</div>
+            <p class="card-desc">
+              Multi-tenant architecture allowing hundreds of independent institutions to manage admissions, teachers, payroll, exams, and student databases securely in segregated schemas.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Next.js 14</span>
+              <span class="tag cyan">PostgreSQL</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">📱 Cross-Platform App</div>
+            <p class="card-desc">
+              Built with <strong>Flutter</strong> for seamless Android and iOS mobile app experiences for parents and administrators with real-time biometric attendance alerts.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Flutter</span>
+              <span class="tag green">Dart</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">💬 WhatsApp Cloud API</div>
+            <p class="card-desc">
+              Direct webhook integration with Meta's WhatsApp Cloud API for automated notifications: student daily presence, report cards, fee receipts, and milestone alerts.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">WhatsApp API</span>
+              <span class="tag amber">Cloud Webhooks</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 9: Project 2 - MAIJRUN Tech Store -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="9">
+        <div class="slide-kicker">FEATURED FULL STACK PROJECT · 02</div>
+        <h2 class="slide-heading">MAIJRUN Tech Store: Headless E-Commerce</h2>
+        <p class="slide-subheading">
+          Production-grade PC hardware e-commerce platform featuring an interactive custom PC builder, hardware compatibility validation, and automated payment gateways.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🛍️ Headless Backend</div>
+            <p class="card-desc">
+              Powered by <strong>Medusa.js v1.20</strong> on Node.js and PostgreSQL. Offers decoupled commerce logic, custom promotions, inventory locks, and automated order workflows.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Medusa.js</span>
+              <span class="tag cyan">Node.js</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">🖥️ Interactive PC Builder</div>
+            <p class="card-desc">
+              Client-side compatibility engine verifying CPU sockets (AM5/LGA1700), RAM types (DDR5/DDR4), and Power Supply wattage headroom in real time before checkout.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Next.js 15</span>
+              <span class="tag green">TypeScript</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">💳 Payment Gateway &amp; Cache</div>
+            <p class="card-desc">
+              Integrated with bKash, Nagad, and SSLCommerz APIs with Redis caching for sub-second catalog queries and OWASP ASVS Level 2 security compliance.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Redis</span>
+              <span class="tag amber">bKash / Nagad</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 10: Creative Media & Extra Skills -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="10">
+        <div class="slide-kicker">MULTIDISCIPLINARY EXPERTISE</div>
+        <h2 class="slide-heading">Creative Media, Motion &amp; AI Direction</h2>
+        <p class="slide-subheading">
+          Bridging technical engineering with high-craft aesthetic direction, video post-production, kinetic typography, and bespoke sound architecture.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🎬 Cinematic Direction</div>
+            <p class="card-desc">
+              Flagship promotional brand films engineered for brands like As-Sunnah Foundation and royal Islamic visual showcases featuring 4K color grading and broadcast polish.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Premiere Pro</span>
+              <span class="tag cyan">4K Color Grading</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">✨ Kinetic Motion Design</div>
+            <p class="card-desc">
+              Visual explainers and kinetic typography breakdowns communicating complex software engineering concepts (e.g. Vibe Coding vs. Agentic Systems) with precision pacing.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">After Effects</span>
+              <span class="tag green">Kinetic Type</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">🎧 Sound Architecture</div>
+            <p class="card-desc">
+              Bespoke audio post-production, studio mastering, dynamic audio sync, and voice narrative engineering to evoke deep emotional connection.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Studio Mastering</span>
+              <span class="tag amber">Audio Post</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 11: Optimization, DevOps & Deployment -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="11">
+        <div class="slide-kicker">PRODUCTION DEPLOYMENT &amp; CI/CD</div>
+        <h2 class="slide-heading">Optimization, Cache Invalidation &amp; DevOps</h2>
+        <p class="slide-subheading">
+          How the portfolio achieves zero downtime, automated asset invalidation, and sub-second loading worldwide on GitHub Pages.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🚀 Dual Deployment Pipeline</div>
+            <p class="card-desc">
+              Custom Python deployment scripts push clean builds simultaneously to both the root domain (`naimsmahmud50-dotcom.github.io/`) and the project subpath repository.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Python 3</span>
+              <span class="tag cyan">GitHub Pages</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">🔒 Automated Cache Busting</div>
+            <p class="card-desc">
+              Every deployment automatically timestamps JS and CSS assets (`?v=BUILD_TS`) and injects `.nojekyll` and `no-cache` headers, ensuring visitors never see stale cached code.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Cache Busting</span>
+              <span class="tag green">Zero Stale State</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">🛡️ Strict Privacy Sanitization</div>
+            <p class="card-desc">
+              Client-facing UI cleanly strips raw external storage links and third-party AI generator labels, showcasing bespoke creative direction and secure in-modal iframe previews.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Zero Leaks</span>
+              <span class="tag amber">Enterprise Polish</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- SLIDE 12: Summary & Q&A -->
+      <!-- =================================================================== -->
+      <section class="slide" data-slide="12">
+        <div class="slide-kicker">CONCLUSION &amp; LIVE DEMO</div>
+        <h2 class="slide-heading">Summary &amp; Open for Discussion</h2>
+        <p class="slide-subheading">
+          Mahmud Hasan — Ready to engineer scalable digital systems, real-time 3D web platforms, and deterministic autonomous software.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-glow"></div>
+            <div class="card-title">🎯 Key Takeaways</div>
+            <p class="card-desc">
+              • Full-stack mastery spanning WebGPU 3D graphics to scalable backends.<br>
+              • Production-ready projects: ERPs, Headless E-commerce, Mobile apps.<br>
+              • Proven ability to architect, optimize, and deploy high-craft web systems.
+            </p>
+            <div class="tag-cloud">
+              <span class="tag cyan">Full Stack</span>
+              <span class="tag green">AI Architect</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-green), transparent);"></div>
+            <div class="card-title">🌐 Live Portfolio Links</div>
+            <p class="card-desc">
+              • <strong>Root Domain:</strong><br>
+              <a href="https://naimsmahmud50-dotcom.github.io/" target="_blank" style="color:var(--accent-green); text-decoration:none;">naimsmahmud50-dotcom.github.io</a><br><br>
+              • <strong>Subpath Domain:</strong><br>
+              <a href="https://naimsmahmud50-dotcom.github.io/Mahmud-Hasan-3D-Portfolio/" target="_blank" style="color:var(--accent-cyan); text-decoration:none;">Mahmud-Hasan-3D-Portfolio</a>
+            </p>
+            <div class="tag-cloud">
+              <span class="tag green">Live on GitHub Pages</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-glow" style="background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);"></div>
+            <div class="card-title">📬 Get In Touch</div>
+            <p class="card-desc">
+              • <strong>Email:</strong> mahmudhasan.infodev@gmail.com<br>
+              • <strong>WhatsApp:</strong> +8801767850859<br>
+              • <strong>GitHub:</strong> github.com/naimsmahmud50-dotcom<br>
+              • <strong>LinkedIn:</strong> linkedin.com/in/mahmud-hasan-687908269
+            </p>
+            <div class="tag-cloud">
+              <span class="tag purple">Available for Hire</span>
+              <span class="tag amber">Open for Q&amp;A</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Control Bar -->
+      <footer class="deck-footer">
+        <div class="slide-progress-wrap">
+          <span class="slide-counter" id="slideIndicator">01 / 12</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+        </div>
+
+        <div style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+          <span>Use</span>
+          <span class="key-badge">←</span>
+          <span class="key-badge">→</span>
+          <span>or Spacebar to navigate</span>
+        </div>
+
+        <div class="nav-arrow-btns">
+          <button class="arrow-btn" id="prevBtn" title="Previous Slide (←)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="arrow-btn" id="nextBtn" title="Next Slide (→)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </footer>
+
+      <!-- Speaker Notes Drawer (Toggled) -->
+      <aside class="notes-drawer" id="notesDrawer">
+        <div class="notes-header">
+          <div class="notes-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>SPEAKER NOTES &amp; TALKING SCRIPT · SLIDE <span id="notesSlideNum">01</span></span>
+          </div>
+          <button class="control-btn" id="notesCloseBtn" style="padding: 4px 10px; font-size: 11px;">✕ Close</button>
+        </div>
+        <div class="notes-grid">
+          <div class="note-box">
+            <div class="note-lang-label">🇧🇩 বক্তব্যের স্ক্রিপ্ট (বাংলা গাইড)</div>
+            <p class="note-text" id="noteBanglaText">
+              "আসসালামু আলাইকুম এবং সবাইকে স্বাগতম। আজকে আমি আমার তৈরি করা থ্রি-ডি ওয়েব পোর্টফোলিও এবং এর পেছনে ব্যবহৃত টেকনোলজি স্ট্যাক বিস্তারিত তুলে ধরব। এটি কোনো সাধারণ স্ট্যাটিক সাইট নয়, বরং আধুনিক WebGPU, Three.js এবং Next.js-এর সমন্বয়ে তৈরি একটি ইন্টারঅ্যাক্টিভ ডিজিটাল অভিজ্ঞতা।"
+            </p>
+          </div>
+          <div class="note-box">
+            <div class="note-lang-label">🇬🇧 English Narration Script</div>
+            <p class="note-text" id="noteEnglishText">
+              "Hello everyone, and welcome. Today, I am excited to present my interactive 3D WebGPU portfolio and break down the complete engineering architecture behind it. This project bridges spatial WebGL/WebGPU graphics with scalable Next.js and full-stack engineering."
+            </p>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+    // Speaker Notes Data for All 12 Slides
+    const SPEAKER_NOTES = {
+      1: {
+        bn: "আসসালামু আলাইকুম সবাইকে। আজকে আমি আমার তৈরি করা থ্রি-ডি ওয়েব পোর্টফোলিও এবং এর আর্কিটেকচার তুলে ধরছি। এই পোর্টফোলিওটির লক্ষ্য কেবল কাজ প্রদর্শন করা নয়, বরং ব্রাউজারের ভেতর আধুনিক থ্রি-ডি গ্রাফিক্স ও ফুল-স্ট্যাক সিস্টেমের জটিল ইঞ্জিনিয়ারিং প্রমাণ করা।",
+        en: "Hello and welcome everyone. Today I am presenting my interactive 3D WebGPU portfolio. This project was engineered not just to display projects, but to demonstrate high-level spatial graphics, shader programming, and scalable web architecture in the modern browser."
+      },
+      2: {
+        bn: "এই স্লাইডে আমি তুলে ধরেছি কেন ২০২৬ সালে সাধারণ টু-ডি ফ্ল্যাট পোর্টফোলিওর বদলে আমি একটি থ্রি-ডি স্পেশিয়াল সাইট তৈরি করেছি। এটি ভিজিটরকে সাধারণ পেজ স্ক্রলিংয়ের বদলে একটি বাস্তবসম্মত ৩ডি ভার্চুয়াল স্পেসে নিয়ে যায়, এবং প্রুফ করে যে ব্রাউজারে মেমরি ও জিপিইউ হ্যান্ডলিং কীভাবে দক্ষতার সাথে করা যায়।",
+        en: "In this slide, I explain why I chose a 3D spatial experience over traditional flat resumes. It immerses visitors into a procedural 3D world with real-time camera physics, showcasing deep mastery over GPU memory, shaders, and browser rendering internals."
+      },
+      3: {
+        bn: "এখানে রয়েছে পোর্টফোলিওর সম্পূর্ণ টেক স্ট্যাক ম্যাট্রিক্স। গ্রাফিক্সের জন্য ব্যবহার করা হয়েছে Three.js ও GLSL কাস্টম শেডার। ফ্রন্টএন্ডে Next.js 14 ও React 18। অ্যানিমেশন ও ফিজিক্সে GSAP ScrollTrigger এবং Lenis স্মুথ স্ক্রলিং। আর লোকাল সার্ভার ও অটোমেশনে Node.js ও Python স্ক্রিপ্ট।",
+        en: "Here is the exact tech stack matrix across the portfolio. For 3D graphics: Three.js and custom GLSL shaders. For frontend: Next.js 14 and React 18. For kinetic motion: GSAP ScrollTrigger and Lenis inertial scrolling. For DevOps: Node.js and Python automated pipelines."
+      },
+      4: {
+        bn: "আমাদের ৩ডি রেন্ডারিং পাইপলাইনে কীভাবে ৬০ এফপিএস লক রাখা হয়েছে তা এখানে দেখানো হয়েছে। ড্রাকো কম্প্রেশন দিয়ে ৩ডি অবজেক্টের সাইজ ৮৫% কমানো হয়েছে এবং KTX2 টেক্সচার সরাসরি জিপিইউতে ডিকম্প্রেস ছাড়াই পাঠানো হয়। সাথে রয়েছে কাস্টম GLSL শেডার যা বাস্তবসম্মত ফগ ও লাইট তৈরি করে।",
+        en: "This slide dives into our real-time rendering engine. We lock 60 FPS performance by compressing 3D geometries with Draco (reducing size by 85%) and streaming GPU-native KTX2 textures. Custom GLSL shaders calculate volumetric fog and lighting directly on the GPU."
+      },
+      5: {
+        bn: "ফ্রন্টএন্ডে আমরা Next.js-এর স্ট্যাটিক সাইট জেনারেশন (SSG) ব্যবহার করেছি যাতে সার্ভার ছাড়া যেকোনো সিডিএন থেকে ইনস্ট্যান্ট পেজ লোড হয়। ৩ডি ক্যানভাস এবং সাধারণ এইচটিএমএল বাটনের মাঝে আমরা একটি কাস্টম পাব-সাব স্টোর বানিয়েছি, যা রি-রেন্ডার ছাড়া যোগাযোগ বজায় রাখে। সাউন্ডের জন্য ব্যবহার করেছি ওয়েব অডিও এপিআই।",
+        en: "On the frontend, Next.js SSG pre-renders static chunks for near-instant page loads. We implemented a decoupled pub/sub store bridge between Three.js and the DOM, avoiding unnecessary React re-renders. Real-time audio is synthesized procedurally via the Web Audio API."
+      },
+      6: {
+        bn: "মোশন ফিজিক্সে আমরা ব্যবহার করেছি GSAP ScrollTrigger এবং Lenis। মাউস বা টাচ স্ক্রল করার সাথে সাথে ৩ডি ক্যামেরা স্মুথলি উড়ে যায় এবং কোনো ঝাঁকুনি বা ল্যাগ হয় না। মডাল ওপেন হলে ব্যাকগ্রাউন্ড স্ক্রল লক করার জন্য আমরা কাস্টম টাচ ফরোয়ার্ডিং লজিক যুক্ত করেছি।",
+        en: "For motion physics, GSAP ScrollTrigger coordinates camera positions along 3D spline curves directly linked to user scroll input. Lenis provides buttery inertial dampening. Custom event forwarding locks background 3D canvas scrolling when modals are open."
+      },
+      7: {
+        bn: "আমাদের আর্কিটেকচারের সবচেয়ে চমৎকার বৈশিষ্ট্য হলো অ্যাডাপটিভ ডুয়াল-ইঞ্জিন। কোনো ক্লায়েন্ট যদি পাওয়ারফুল পিসিতে থাকে তবে সে ফুল থ্রি-ডি ওয়ার্ল্ড দেখতে পাবে। আর যদি মোবাইল বা দুর্বল ল্যাপটপ হয়, তবে কোনো ল্যাগ ছাড়া লাইট প্রজেক্ট স্লাইড ভিউ ওপেন হবে। কোনো ভিজিটরই বাদ পড়বে না।",
+        en: "Our adaptive dual-engine architecture guarantees zero dropped visitors. High-end desktops enjoy the full 3D WebGPU world with spatial depth. Mobile devices and low-spec machines seamlessly receive the lightweight 'Project Slide View' with zero lag or battery drain."
+      },
+      8: {
+        bn: "আমার ১ম মূল প্রজেক্ট: 'মাদ্রাসা ইকোসিস্টেম ইআরপি'। এটি একটি মাল্টি-টেন্যান্ট প্রতিষ্ঠান ম্যানেজমেন্ট সফটওয়্যার। ব্যাকএন্ডে Next.js ও PostgreSQL। মোবাইলে Flutter দিয়ে অ্যান্ড্রয়েড ও আইওএস অ্যাপ তৈরি। এবং মেটার অফিসিয়াল WhatsApp Cloud API দিয়ে গার্ডিয়ানদের কাছে রিয়েল-টাইম রিপোর্ট ও নোটিফিকেশন পাঠানো হয়।",
+        en: "My first flagship project is the Madrasah Ecosystem ERP—a production-grade multi-tenant platform for educational institutions. Architected with Next.js and PostgreSQL, a cross-platform mobile app built in Flutter, and integrated with Meta's WhatsApp Cloud API for automated parent alerts."
+      },
+      9: {
+        bn: "আমার ২য় মূল প্রজেক্ট: 'মাইজরুন টেক স্টোর'। এটি একটি হেডলেস ই-কমার্স প্ল্যাটফর্ম। Medusa.js v1.20 এবং Next.js 15 দিয়ে তৈরি। এতে রয়েছে রিয়েল-টাইম কাস্টম পিসি বিল্ডার যা প্রসেসর, র‍্যাম এবং পাওয়ার সাপ্লাইয়ের কমপ্যাটিবিলিটি চেক করে। পেমেন্টে যুক্ত রয়েছে বিকাশ, নগদ এবং এসএসএলকমার্জ।",
+        en: "My second flagship project is the MAIJRUN Tech Store—a headless e-commerce system built with Medusa.js v1.20 and Next.js 15. It features an interactive PC Builder algorithm verifying socket and power compatibility in real time, integrated with bKash, Nagad, and Redis caching."
+      },
+      10: {
+        bn: "প্রোগ্রামিংয়ের পাশাপাশি আমার ক্রিয়েটিভ মিডিয়া ডিরেকশন ও মোশন ডিজাইনের অভিজ্ঞতা রয়েছে। আস-সুন্নাহ ফাউন্ডেশনের প্রমোশনাল ফিল্ম, বাণিজ্যিক ভিডিও ডিরেকশন, আফটার ইফেক্টসে কাইনেটিক টাইপোগ্রাফি এবং স্টুডিও অডিও মাস্টারিংয়ের মাধ্যমে জটিল প্রযুক্তিকে আকর্ষণীয় ভিডিওতে রূপান্তর করি।",
+        en: "Beyond core code, I bring high-craft creative direction, motion graphics, and audio engineering. From directing high-impact promotional films for As-Sunnah Foundation to crafting kinetic typography explainers in After Effects and professional audio mastering."
+      },
+      11: {
+        bn: "ডেভঅপস ও ডেপ্লয়মেন্টে আমরা পাইথন স্ক্রিপ্ট ব্যবহার করে গিটহাব পেজেসে লাইভ করেছি। প্রতিটি ডেপ্লয়মেন্টে স্বয়ংক্রিয়ভাবে ক্যাশ বাস্টিং (BUILD_TS) কোড যুক্ত হয়, যাতে ব্রাউজার সবসময় নতুন কোড পায়। একইসাথে সব বাহ্যিক ড্রাইভ লিংক সিকিউর ও স্যানিটাইজ করা হয়েছে যাতে প্রাইভেসি ১০০% বজায় থাকে।",
+        en: "For DevOps, automated Python deployment pipelines publish to GitHub Pages. Every build dynamically timestamps assets for cache-busting, guaranteeing zero stale caches. Strict sanitization keeps client data private while maintaining smooth in-modal iframe previews."
+      },
+      12: {
+        bn: "উপসংহারে, আমি ফুল-স্ট্যাক ওয়েব অ্যাপ্লিকেশন, থ্রি-ডি ইন্টারঅ্যাক্টিভ ইন্টারফেস এবং অটোনোমাস এআই সফটওয়্যার আর্কিটেক্ট হিসেবে যেকোনো জটিল প্রজেক্টের দায়িত্ব নিতে প্রস্তুত। আপনারা সরাসরি আমার লাইভ লিংকটি ভিজিট করে দেখতে পারেন। এখন আপনাদের কোনো প্রশ্ন থাকলে আমি আনন্দের সাথে উত্তর দেব। ধন্যবাদ!",
+        en: "In conclusion, I specialize in engineering resilient full-stack platforms, 3D spatial web experiences, and deterministic autonomous systems. Feel free to explore the live link at naimsmahmud50-dotcom.github.io. I am now open for any questions. Thank you!"
+      }
+    };
+
+    // Slide Engine Logic
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    const slides = document.querySelectorAll('.slide');
+    const slideIndicator = document.getElementById('slideIndicator');
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const notesDrawer = document.getElementById('notesDrawer');
+    const notesToggleBtn = document.getElementById('notesToggleBtn');
+    const notesCloseBtn = document.getElementById('notesCloseBtn');
+    const notesSlideNum = document.getElementById('notesSlideNum');
+    const noteBanglaText = document.getElementById('noteBanglaText');
+    const noteEnglishText = document.getElementById('noteEnglishText');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    function updateSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      slides.forEach(slide => {
+        const sIndex = parseInt(slide.getAttribute('data-slide'), 10);
+        slide.classList.toggle('active', sIndex === currentSlide);
+      });
+
+      // Update counters & progress
+      const padNum = currentSlide < 10 ? '0' + currentSlide : currentSlide;
+      slideIndicator.textContent = `${padNum} / ${totalSlides}`;
+      progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      // Update arrow states
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+
+      // Update speaker notes
+      notesSlideNum.textContent = padNum;
+      if (SPEAKER_NOTES[currentSlide]) {
+        noteBanglaText.textContent = SPEAKER_NOTES[currentSlide].bn;
+        noteEnglishText.textContent = SPEAKER_NOTES[currentSlide].en;
+      }
+    }
+
+    // Navigation events
+    prevBtn.addEventListener('click', () => updateSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => updateSlide(currentSlide + 1));
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        updateSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        updateSlide(currentSlide - 1);
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        toggleNotes();
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        updateSlide(1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        updateSlide(totalSlides);
+      }
+    });
+
+    // Notes toggle
+    function toggleNotes() {
+      const isOpen = notesDrawer.classList.toggle('open');
+      notesToggleBtn.classList.toggle('active', isOpen);
+    }
+
+    notesToggleBtn.addEventListener('click', toggleNotes);
+    notesCloseBtn.addEventListener('click', toggleNotes);
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        fullscreenBtn.classList.add('active');
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+          fullscreenBtn.classList.remove('active');
+        }
+      }
+    }
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Touch swipe support for tablet/mobile presentation
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 50) {
+        if (diff < 0) updateSlide(currentSlide + 1);
+        else updateSlide(currentSlide - 1);
+      }
+    }, { passive: true });
+
+    // Initialize
+    updateSlide(1);
+  </script>
+</body>
+</html>
