@@ -10,6 +10,32 @@
 (function () {
   'use strict';
 
+  // Early Direct-Glide Shield & Scroll Lock (Zero Home Page Landing Flash)
+  (function initEarlyDirectGlide() {
+    if (typeof window === 'undefined') return;
+    try {
+      const params = new URLSearchParams(window.location.search || '');
+      const glide = params.get('glide') || '';
+      const path = window.location.pathname || '';
+      const isGlide = Boolean(glide || path.endsWith('/about') || path.endsWith('/about.html') || path.endsWith('/contact') || path.endsWith('/contact.html') || path.endsWith('/projects') || path.endsWith('/projects.html'));
+      if (isGlide) {
+        document.documentElement.setAttribute('data-mh-glide', glide || 'direct');
+        const shield = document.createElement('div');
+        shield.id = 'mh-direct-glide-shield';
+        shield.style.cssText = 'position:fixed;inset:0;background:#141414;z-index:999999;pointer-events:auto;';
+        if (document.body) {
+          document.body.appendChild(shield);
+        } else {
+          document.addEventListener('DOMContentLoaded', () => {
+            if (!document.getElementById('mh-direct-glide-shield')) {
+              document.body.appendChild(shield);
+            }
+          });
+        }
+      }
+    } catch (_) {}
+  })();
+
   // Universal Static Asset Resolver for GitHub Pages and Subpath Deployments
   (function setupUniversalAssetResolver() {
     const base = (typeof window !== 'undefined' && window.__REPO_BASE__) || 
@@ -1014,7 +1040,7 @@
     return '';
   };
 
-    // 6.1 Initial Direct Route Auto-Glide
+    // 6.1 Initial Direct Route Auto-Glide & Instant Positioning
   function setupRouteAutoGlide() {
     try {
       const base = getRepoBase();
@@ -1029,32 +1055,64 @@
 
       if (!targetSection) return;
 
-      const triggerGlide = () => {
+      document.documentElement.setAttribute('data-mh-glide', glide || targetSection);
+
+      const getTargetY = () => {
         const el = document.getElementById(targetSection);
-        if (el && el.offsetTop > 0) {
-          window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+        if (el && el.offsetTop > 0) return el.offsetTop;
+        const h = window.innerHeight || 800;
+        if (targetSection === 'sceneAbout') return Math.round(h * 11.9);
+        if (targetSection === 'sceneContactReveal') return Math.round(h * 28.56);
+        if (targetSection === 'scene1') return Math.round(h * 1.0);
+        return 0;
+      };
+
+      const instantJump = () => {
+        const y = getTargetY();
+        if (y > 0) {
+          window.scrollTo({ top: y, behavior: 'instant' });
           return true;
         }
         return false;
       };
 
-      // Periodic check in case canvas / spacers finish mounting
+      // Perform instant jump immediately
+      instantJump();
+
+      // Keep locking scroll position and auto-dismissing loader gate
       let attempts = 0;
       const interval = setInterval(() => {
         attempts++;
-        if (triggerGlide() || attempts > 25) {
-          clearInterval(interval);
-        }
-      }, 300);
+        instantJump();
 
-      // Also listen for enter button click if gate is active
-      document.addEventListener('click', function(e) {
-        const cta = e.target.closest('button[data-testid="loader-enter"], .y9w63G_cta');
+        // Auto click loader-enter as soon as it exists so 3D scene/audio unlocks immediately
+        const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
         if (cta) {
-          setTimeout(triggerGlide, 900);
-          setTimeout(triggerGlide, 1600);
+          cta.disabled = false;
+          cta.click();
         }
-      });
+
+        const loader = document.querySelector('.y9w63G_loaderContainer');
+        const isExiting = loader && (loader.classList.contains('y9w63G_exiting') || window.getComputedStyle(loader).display === 'none');
+
+        if (isExiting || attempts >= 50) {
+          instantJump();
+          const shield = document.getElementById('mh-direct-glide-shield');
+          if (shield && shield.style.opacity !== '0') {
+            shield.style.transition = 'opacity 0.25s ease-out';
+            shield.style.opacity = '0';
+            shield.style.pointerEvents = 'none';
+            setTimeout(() => {
+              try { shield.remove(); } catch (_) {}
+            }, 300);
+          }
+        }
+
+        if (attempts >= 80) {
+          clearInterval(interval);
+          instantJump();
+        }
+      }, 50);
     } catch (err) {
       console.warn('Glide handler notice:', err);
     }
@@ -1442,9 +1500,13 @@
           }
 
           const closeMenu = () => {
-            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"]');
-            if (menuToggle && menuToggle.getAttribute('aria-expanded') === 'true') {
-              menuToggle.click();
+            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"], button[aria-label="Menu"]');
+            if (menuToggle) {
+              menuToggle.setAttribute('aria-expanded', 'false');
+            }
+            const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+            if (menuPanel) {
+              menuPanel.setAttribute('aria-hidden', 'true');
             }
           };
 
@@ -1545,9 +1607,13 @@
           const label = (navLink.innerText || navLink.textContent || '').trim().toUpperCase();
 
           const closeMenu = () => {
-            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"]');
-            if (menuToggle && menuToggle.getAttribute('aria-expanded') === 'true') {
-              menuToggle.click();
+            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"], button[aria-label="Menu"]');
+            if (menuToggle) {
+              menuToggle.setAttribute('aria-expanded', 'false');
+            }
+            const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+            if (menuPanel) {
+              menuPanel.setAttribute('aria-hidden', 'true');
             }
           };
 
@@ -1631,16 +1697,17 @@
 
   function setupMenuLabelSync() {
     function applySync() {
-      // 1. Hide 3-dot menu button
+      // 1. Ensure 3-dot menu button is visible and active
       const menuBtn = document.querySelector('button._rHu7W_menu, button[aria-label="Menu"]');
       if (menuBtn) {
-        menuBtn.style.setProperty('display', 'none', 'important');
+        menuBtn.style.removeProperty('display');
+        menuBtn.style.setProperty('visibility', 'visible', 'important');
+        menuBtn.style.setProperty('pointer-events', 'auto', 'important');
       }
 
-      // 2. Unclip and keep menuPanel links permanently visible and clickable
+      // 2. When menuPanel is open (aria-hidden="false"), ensure links are unclipped and clickable
       const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-      if (menuPanel) {
-        menuPanel.setAttribute('aria-hidden', 'false');
+      if (menuPanel && menuPanel.getAttribute('aria-hidden') === 'false') {
         menuPanel.querySelectorAll('li._rHu7W_linkItem, li[class*="_rHu7W_linkItem"]').forEach(li => {
           li.style.setProperty('clip-path', 'none', 'important');
           li.style.setProperty('-webkit-clip-path', 'none', 'important');
@@ -1754,6 +1821,37 @@
     applySync();
     setInterval(applySync, 120);
 
+    // Toggle 3-dot menu button open / close
+    document.addEventListener('click', (e) => {
+      const menuBtn = e.target.closest('button._rHu7W_menu, button[aria-label="Menu"]');
+      if (menuBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+        const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+        const nextState = !isExpanded;
+        menuBtn.setAttribute('aria-expanded', String(nextState));
+        if (menuPanel) {
+          menuPanel.setAttribute('aria-hidden', String(!nextState));
+          if (nextState) {
+            applySync();
+          }
+        }
+        return;
+      }
+
+      // Close menu when clicking outside
+      const insidePanel = e.target.closest('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+      if (!insidePanel) {
+        const openBtn = document.querySelector('button._rHu7W_menu[aria-expanded="true"], button[aria-label="Menu"][aria-expanded="true"]');
+        if (openBtn) {
+          openBtn.setAttribute('aria-expanded', 'false');
+          const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+          if (menuPanel) menuPanel.setAttribute('aria-hidden', 'true');
+        }
+      }
+    }, true);
+
     document.addEventListener('click', (e) => {
       setTimeout(applySync, 10);
       setTimeout(applySync, 60);
@@ -1776,6 +1874,8 @@
         const loader = document.querySelector('.y9w63G_loaderContainer');
         const isLoaderActive = loader && !loader.classList.contains('y9w63G_exiting') && loader.style.display !== 'none';
         if (isLoaderActive) return; // Do not abort if user is still on loader/gate!
+        const shield = document.getElementById('mh-direct-glide-shield');
+        if (shield) return; // Do not abort while direct-gliding!
 
         console.warn('⚠️ Error screen detected. Auto-recovering to stable view...');
         const base = getRepoBase();
