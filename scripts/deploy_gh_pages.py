@@ -51,7 +51,7 @@ for fpath in html_files:
 
         # Cache bust modified scripts to guarantee browsers never serve stale cached code
         content = re.sub(
-            r"(3-0-2h2vnc5wo\.js|2vs2yctr590c-\.js|402p77n-ks3lc\.js|1ce4v9de-32bk\.js|custom-enhancements\.js)(?:\?v=[^\s'\"]+)?",
+            r"(3-0-2h2vnc5wo\.js|2vs2yctr590c[^\s'\"]*\.js|402p77n-ks3lc\.js|1ce4v9de-32bk\.js|custom-enhancements\.js|custom-enhancements\.css)(?:\?v=[^\s'\"]+)?",
             rf"\1?v={BUILD_TS}",
             content
         )

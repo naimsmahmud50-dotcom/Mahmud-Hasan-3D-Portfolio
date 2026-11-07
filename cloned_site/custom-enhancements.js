@@ -71,6 +71,7 @@
       const base = getBase();
       const currentPath = window.location.pathname;
       if (currentPath.includes('/lite')) return;
+      if (window.location.search.includes('variant=full')) return;
 
       const loader = document.querySelector('.y9w63G_loaderContainer');
       const isExiting = loader && loader.classList.contains('y9w63G_exiting');
@@ -414,8 +415,7 @@
     if (e.key === 'Escape') {
       closeVideoPlayer();
       closeMyVideosModal();
-      if (typeof window.__mhCloseAllDrawers === 'function') window.__mhCloseAllDrawers();
-      return;
+            return;
     }
     const modal = document.getElementById('mh-my-videos-modal');
     if (modal && modal.classList.contains('active')) {
@@ -1014,7 +1014,7 @@
     return '';
   };
 
-  // 6.1 Initial Direct Route Auto-Glide
+    // 6.1 Initial Direct Route Auto-Glide
   function setupRouteAutoGlide() {
     try {
       const base = getRepoBase();
@@ -1023,22 +1023,36 @@
       const params = new URLSearchParams(window.location.search || '');
       const glide = params.get('glide') || '';
 
-      const targetSection = (path === '/about' || glide === 'about') ? 'sceneAbout' :
-                            (path === '/contact' || glide === 'contact') ? 'sceneContactReveal' :
-                            (path === '/projects' || glide === 'projects') ? 'scene1' : null;
+      const targetSection = (path === '/about' || path === '/about.html' || glide === 'about') ? 'sceneAbout' :
+                            (path === '/contact' || path === '/contact.html' || glide === 'contact') ? 'sceneContactReveal' :
+                            (path === '/projects' || path === '/projects.html' || glide === 'projects') ? 'scene1' : null;
 
       if (!targetSection) return;
 
-      // DO NOT auto-enter! Wait for user to deliberately click the Enter button, then scroll to section
+      const triggerGlide = () => {
+        const el = document.getElementById(targetSection);
+        if (el && el.offsetTop > 0) {
+          window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+          return true;
+        }
+        return false;
+      };
+
+      // Periodic check in case canvas / spacers finish mounting
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (triggerGlide() || attempts > 25) {
+          clearInterval(interval);
+        }
+      }, 300);
+
+      // Also listen for enter button click if gate is active
       document.addEventListener('click', function(e) {
         const cta = e.target.closest('button[data-testid="loader-enter"], .y9w63G_cta');
         if (cta) {
-          setTimeout(() => {
-            const el = document.getElementById(targetSection);
-            if (el && el.offsetTop > 0) {
-              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-            }
-          }, 1100);
+          setTimeout(triggerGlide, 900);
+          setTimeout(triggerGlide, 1600);
         }
       });
     } catch (err) {
@@ -1406,13 +1420,12 @@
       // 2. Navigation when on Lite page: 3-dot menu buttons, logo, and footer links
       const onLitePage = currentPath.startsWith('/lite') || window.location.pathname.includes('/lite');
       if (onLitePage) {
-        // Logo click on Lite -> go to Home
+        // Logo click on Lite -> go to 3D Home
         const logoBtn = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
         if (logoBtn) {
           e.preventDefault();
           e.stopPropagation();
-          const target = (window.innerWidth > 768) ? (base + '/?variant=full') : (base + '/');
-          window.location.assign(target);
+          window.location.assign(base + '/?variant=full');
           return;
         }
 
@@ -1439,45 +1452,33 @@
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
-            const target = (window.innerWidth > 768) ? (base + '/?variant=full') : (base + '/');
-            window.location.assign(target);
+            window.location.assign(base + '/?variant=full');
             return;
           }
 
-          if (label === 'PROJECTS' || href === '/projects') {
+          if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
             e.preventDefault();
             e.stopPropagation();
-            if (window.__mhLiteController && window.__mhLiteController.eM) {
-              window.__mhLiteController.eM.setScrollValue(0);
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
             closeMenu();
+            window.location.assign(base + '/?variant=full&glide=projects');
             return;
           }
 
-          if (label === 'ABOUT' || href === '/about') {
+          if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
-            if (typeof window.__mhOpenAboutDrawer === 'function') {
-              window.__mhOpenAboutDrawer();
-            } else if (typeof window.__mhOpenHud === 'function') {
-              window.__mhOpenHud();
-            } else {
-              showToast('Mahmud Hasan — Full Stack Developer & AI Automation Expert');
-            }
+            // Navigate directly to the 3D About version
+            window.location.assign(base + '/?variant=full&glide=about');
             return;
           }
 
-          if (label === 'CONTACT' || href === '/contact') {
+          if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
-            if (typeof window.__mhOpenContactDrawer === 'function') {
-              window.__mhOpenContactDrawer();
-            } else {
-              window.open('https://wa.me/8801767850859?text=Hi%20Mahmud,%20I%20saw%20your%20portfolio!', '_blank');
-            }
+            // Navigate directly to the 3D Contact version
+            window.location.assign(base + '/?variant=full&glide=contact');
             return;
           }
 
@@ -1536,8 +1537,80 @@
           }
         }
       } else {
-        // When in full 3D experience, do NOT intercept menu links.
-        // Let Next.js native router handle 3D camera transitions for HOME, PROJECTS, ABOUT, CONTACT, etc.
+        // When in full 3D experience: smooth-glide navbar clicks to 3D scenes
+        const navLink = e.target.closest('a._rHu7W_link, [class*="_rHu7W_menuPanel"] a, [class*="_rHu7W_link"]');
+        if (navLink) {
+          const rawHref = navLink.getAttribute('href') || '';
+          const href = (base && rawHref.startsWith(base)) ? (rawHref.slice(base.length) || '/') : rawHref;
+          const label = (navLink.innerText || navLink.textContent || '').trim().toUpperCase();
+
+          const closeMenu = () => {
+            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"]');
+            if (menuToggle && menuToggle.getAttribute('aria-expanded') === 'true') {
+              menuToggle.click();
+            }
+          };
+
+          if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
+            const el = document.getElementById('sceneAbout');
+            if (el && el.offsetTop > 0) {
+              e.preventDefault();
+              e.stopPropagation();
+              closeMenu();
+              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+              return;
+            }
+          }
+
+          if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
+            const el = document.getElementById('sceneContactReveal');
+            if (el && el.offsetTop > 0) {
+              e.preventDefault();
+              e.stopPropagation();
+              closeMenu();
+              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+              return;
+            }
+          }
+
+          if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
+            const el = document.getElementById('scene1');
+            if (el && el.offsetTop > 0) {
+              e.preventDefault();
+              e.stopPropagation();
+              closeMenu();
+              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+              return;
+            }
+          }
+
+          if (label === 'HOME' || href === '/' || href === '') {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+          }
+
+          if (label === 'MY VIDEOS' || label === 'AI VIDEOS' || label === 'VIDEOS' || label === 'EXTRA SKILLS' || href === '#extra-skills') {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+            if (typeof window.__mhOpenMyVideos === 'function') {
+              window.__mhOpenMyVideos();
+            }
+            return;
+          }
+
+          if (label === 'PROJECT SLIDE VIEW' || label === 'LITE VERSION' || href === '/lite') {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+            window.location.assign(base + '/lite');
+            return;
+          }
+        }
+
         // Only handle logo/home click when inside project interior to cleanly exit interior.
         const homeTrigger = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
         if (homeTrigger) {
@@ -1713,489 +1786,7 @@
     setInterval(checkError, 400);
   }
 
-  // 12. Modular Portfolio Drawers Engine (About, Contact, & Projects Switcher)
-  function setupPortfolioDrawers() {
-    const PORTFOLIO_PROJECTS_LIST = [
-      {
-        idxStr: '01 / 08',
-        year: '2026',
-        category: 'ENTERPRISE ERP & MOBILE',
-        title: 'Madrasah Ecosystem',
-        desc: 'Multi-tenant ERP with real-time Hifz milestones, exams, biometric attendance & parent WhatsApp Cloud alerts.',
-        tags: ['Next.js', 'Flutter', 'PostgreSQL', 'WhatsApp API'],
-        url: 'https://github.com/naimsmahmud50-dotcom/Madrasha-Managemant-Softaware',
-        label: '⚡ GITHUB'
-      },
-      {
-        idxStr: '02 / 08',
-        year: '2025',
-        category: 'ENDPOINT CYBER DEFENSE',
-        title: 'Secure My PC',
-        desc: 'Advanced Windows endpoint protection with real-time behavioral heuristics & kernel process interception.',
-        tags: ['C++', 'Python', 'Win32 API', 'Cyber Security'],
-        url: 'https://github.com/naimsmahmud50-dotcom',
-        label: '🛡️ GITHUB'
-      },
-      {
-        idxStr: '03 / 08',
-        year: '2026',
-        category: 'HEADLESS E-COMMERCE',
-        title: 'MAIJRUN Tech Store',
-        desc: 'Production hardware marketplace with live PC Builder compatibility engine, BDT gateways & courier webhooks.',
-        tags: ['Next.js 15', 'TypeScript', 'Medusa', 'Tailwind CSS'],
-        url: 'https://github.com/naimsmahmud50-dotcom/Maijrun-Teach',
-        label: '⚡ GITHUB'
-      },
-      {
-        idxStr: '04 / 08',
-        year: '2025',
-        category: 'LUXURY TRAVEL PORTAL',
-        title: 'Travel with Maijrun',
-        desc: 'Live high-performance travel portal with dynamic itineraries, booking inquiry dispatchers & 60fps animations.',
-        tags: ['Next.js', 'TypeScript', 'Tailwind', 'Node.js'],
-        url: 'https://travel-w-ith-maijrun-alpha.vercel.app',
-        label: '🚀 LIVE DEMO'
-      },
-      {
-        idxStr: '05 / 08',
-        year: '2024',
-        category: 'EDTECH COMMUNITY',
-        title: 'Arabic Language & Cultural Club',
-        desc: 'Interactive learning hub featuring bidirectional RTL layout engine, synchronized recitation audio & study forums.',
-        tags: ['React', 'Next.js', 'RTL Engine', 'Audio Sync'],
-        url: 'https://arabic-langualge-and-cultural-club.vercel.app',
-        label: '🚀 LIVE DEMO'
-      },
-      {
-        idxStr: '06 / 08',
-        year: '2025',
-        category: 'CAMPUS NETWORKING',
-        title: 'Student Life Circle',
-        desc: 'Comprehensive national exam-prep portal and student community with timed quizzes & past-paper archive.',
-        tags: ['Next.js', 'Express', 'MongoDB', 'Redis'],
-        url: 'https://naimsmahmud50-dotcom.github.io/Student-Life-Circle/',
-        label: '🚀 LIVE DEMO'
-      },
-      {
-        idxStr: '07 / 08',
-        year: '2026',
-        category: 'META GRAPH AUTOMATION',
-        title: 'Facebook Automation',
-        desc: 'High-throughput page management bot with automated cross-posting, intelligent auto-replies & lead pipelines.',
-        tags: ['Node.js', 'Meta Graph API', 'Puppeteer', 'Redis'],
-        url: 'https://github.com/naimsmahmud50-dotcom/Facebook-Automation-',
-        label: '⚡ GITHUB'
-      },
-      {
-        idxStr: '08 / 08',
-        year: '2026',
-        category: 'AI LEAD ENGINE',
-        title: 'LinkedIn Automation',
-        desc: 'Autonomous lead generation engine with Telegram bot remote control, Gemini AI synthesis & anti-ban stealth.',
-        tags: ['Python 3.12', 'Playwright', 'Gemini AI', 'Telegram Bot'],
-        url: 'https://github.com/naimsmahmud50-dotcom/Linkdin-Automation-',
-        label: '⚡ GITHUB'
-      }
-    ];
-
-    function injectDrawers() {
-      // 1. Clean legacy HUD modal if present
-      const oldHud = document.getElementById('mh-mobile-hud-modal');
-      if (oldHud) oldHud.remove();
-
-      // 2. Inject About Drawer
-      if (!document.getElementById('mh-about-drawer')) {
-        const aboutModal = document.createElement('div');
-        aboutModal.id = 'mh-about-drawer';
-        aboutModal.className = 'mh-drawer-backdrop';
-        aboutModal.setAttribute('aria-hidden', 'true');
-        aboutModal.setAttribute('role', 'dialog');
-        aboutModal.setAttribute('aria-label', 'About Mahmud Hasan');
-        aboutModal.innerHTML = `
-          <div class="mh-drawer-sheet mh-about-sheet">
-            <div class="mh-drawer-drag-handle"></div>
-            <button type="button" class="mh-drawer-close-btn" id="mh-about-close" aria-label="Close dialog">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-
-            <div class="mh-drawer-profile-row">
-              <img src="/assets/mahmud.jpg" alt="Mahmud Hasan" class="mh-drawer-avatar" onerror="this.src='/apple-icon.png'" />
-              <div>
-                <div class="mh-drawer-kicker">ENGINEERING PROFILE</div>
-                <h3 class="mh-drawer-title">MAHMUD HASAN</h3>
-                <p class="mh-drawer-role">Lead AI Architect &amp; Systems Engineer</p>
-                <div class="mh-drawer-status-pill">
-                  <span class="mh-status-dot"></span>
-                  <span>DHAKA // 23.8103°N · AVAILABLE FOR CONTRACTS</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mh-drawer-bio-card">
-              Senior Full-Stack &amp; AI Systems Engineer transforming complex engineering challenges into secure, scalable digital products. Specializing in autonomous multi-agent pipelines, enterprise web platforms (Next.js 15, PostgreSQL), cross-platform mobile systems (Flutter), and hyper-visual WebGPU/Three.js interfaces. Certified Web Security Engineer.
-            </div>
-
-            <div class="mh-drawer-highlights-row">
-              <div class="mh-drawer-highlight-item">
-                <span class="mh-highlight-val">8+</span>
-                <span class="mh-highlight-lbl">FLAGSHIP SYSTEMS</span>
-              </div>
-              <div class="mh-drawer-highlight-item">
-                <span class="mh-highlight-val">CERTIFIED</span>
-                <span class="mh-highlight-lbl">CYBER DEFENSE</span>
-              </div>
-              <div class="mh-drawer-highlight-item">
-                <span class="mh-highlight-val">GLOBAL</span>
-                <span class="mh-highlight-lbl">REMOTE READY</span>
-              </div>
-            </div>
-
-            <div class="mh-drawer-section-heading">
-              <span>🧠 CORE ENGINEERING CAPABILITIES</span>
-            </div>
-
-            <div class="mh-drawer-skills-list">
-              <div class="mh-drawer-skill-card">
-                <div class="mh-skill-card-head">
-                  <span>🤖</span>
-                  <span class="mh-skill-title">Autonomous AI Agents &amp; Swarms</span>
-                </div>
-                <p class="mh-skill-desc">Multi-Agent Swarm Orchestration, LangChain, Tool Calling, RAG Pipelines, Playwright Stealth Browser Automation, Prompt Architecture.</p>
-              </div>
-
-              <div class="mh-drawer-skill-card">
-                <div class="mh-skill-card-head">
-                  <span>💻</span>
-                  <span class="mh-skill-title">Full-Stack &amp; Cloud Platforms</span>
-                </div>
-                <p class="mh-skill-desc">Next.js 15 (App Router), TypeScript, Node.js, PostgreSQL, Medusa v1.20 Headless, Redis, Tailwind CSS, Docker, Linux Production Systems.</p>
-              </div>
-
-              <div class="mh-drawer-skill-card">
-                <div class="mh-skill-card-head">
-                  <span>📱</span>
-                  <span class="mh-skill-title">Mobile &amp; Cross-Platform Systems</span>
-                </div>
-                <p class="mh-skill-desc">Flutter (Android/iOS Architecture), Offline-First Sync, WhatsApp Cloud API Messaging Dispatchers, Push Notification Pipelines.</p>
-              </div>
-
-              <div class="mh-drawer-skill-card">
-                <div class="mh-skill-card-head">
-                  <span>🛡️</span>
-                  <span class="mh-skill-title">Cyber Defense &amp; API Security</span>
-                </div>
-                <p class="mh-skill-desc">Certified Web Security Engineer (Arena Web Security), Penetration Testing, Secure Token Auth, OWASP Top 10 Mitigation.</p>
-              </div>
-
-              <div class="mh-drawer-skill-card">
-                <div class="mh-skill-card-head">
-                  <span>🎨</span>
-                  <span class="mh-skill-title">3D Graphics &amp; Kinetic Motion</span>
-                </div>
-                <p class="mh-skill-desc">WebGPU, Three.js Custom Shaders, Remotion Motion Graphics, Blender Modeling &amp; Real-time Visual Pipelines.</p>
-              </div>
-            </div>
-
-            <!-- Studio Archive Callout -->
-            <div class="mh-drawer-video-callout" id="mh-about-video-trigger">
-              <div class="mh-video-callout-inner">
-                <span class="mh-video-callout-icon">🎬</span>
-                <div class="mh-video-callout-text">
-                  <strong>Looking for Commercial Creative Motion?</strong>
-                  <span>Explore High-Impact Video Productions &amp; Cinema Archive →</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mh-drawer-section-heading">
-              <span>⚡ DIRECT 1-TAP CONTACT</span>
-            </div>
-
-            <div class="mh-drawer-actions-grid">
-              <a href="https://wa.me/8801767850859?text=Hi%20Mahmud,%20I%20saw%20your%20portfolio!" target="_blank" rel="noopener noreferrer" class="mh-drawer-btn mh-btn-whatsapp">
-                <span>💬 WhatsApp Direct</span>
-              </a>
-              <button type="button" class="mh-drawer-btn mh-btn-email oQ_U9W_email" data-email="mahmudhasan.infodev@gmail.com">
-                <span>✉️ Copy Email</span>
-              </button>
-              <a href="https://www.linkedin.com/in/mahmud-hasan-687908269" target="_blank" rel="noopener noreferrer" class="mh-drawer-btn mh-btn-secondary">
-                <span>🔗 LinkedIn</span>
-              </a>
-              <a href="https://github.com/naimsmahmud50-dotcom" target="_blank" rel="noopener noreferrer" class="mh-drawer-btn mh-btn-secondary">
-                <span>💻 GitHub</span>
-              </a>
-            </div>
-
-            <div class="mh-drawer-footer-row">
-              MAHMUD HASAN · CERTIFIED BY ARENA WEB SECURITY · 2026
-            </div>
-          </div>
-        `;
-        document.body.appendChild(aboutModal);
-
-        const closeBtn = document.getElementById('mh-about-close');
-        if (closeBtn) closeBtn.addEventListener('click', closeAllDrawers);
-        aboutModal.addEventListener('click', (e) => {
-          if (e.target === aboutModal) closeAllDrawers();
-        });
-
-        const videoTrigger = document.getElementById('mh-about-video-trigger');
-        if (videoTrigger) {
-          videoTrigger.addEventListener('click', () => {
-            closeAllDrawers();
-            if (typeof window.__mhOpenMyVideos === 'function') {
-              window.__mhOpenMyVideos();
-            }
-          });
-        }
-      }
-
-      // 3. Inject Contact Drawer
-      if (!document.getElementById('mh-contact-drawer')) {
-        const contactModal = document.createElement('div');
-        contactModal.id = 'mh-contact-drawer';
-        contactModal.className = 'mh-drawer-backdrop';
-        contactModal.setAttribute('aria-hidden', 'true');
-        contactModal.setAttribute('role', 'dialog');
-        contactModal.setAttribute('aria-label', 'Contact Mahmud Hasan');
-        contactModal.innerHTML = `
-          <div class="mh-drawer-sheet mh-contact-sheet">
-            <div class="mh-drawer-drag-handle"></div>
-            <button type="button" class="mh-drawer-close-btn" id="mh-contact-close" aria-label="Close dialog">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-
-            <div class="mh-drawer-header-center">
-              <div class="mh-drawer-kicker">DIRECT CHANNELS</div>
-              <h3 class="mh-drawer-title">LET'S CONNECT</h3>
-              <p class="mh-drawer-subtitle">Available for high-impact contracts, technical leadership, and engineering consulting worldwide.</p>
-              <div class="mh-drawer-status-pill">
-                <span class="mh-status-dot"></span>
-                <span>AVAILABLE NOW // RESPONSE TIME &lt; 2 HOURS</span>
-              </div>
-            </div>
-
-            <div class="mh-contact-cards-stack">
-              <!-- Direct Email Card -->
-              <div class="mh-contact-card featured">
-                <div class="mh-contact-card-top">
-                  <div class="mh-contact-card-icon">✉️</div>
-                  <div class="mh-contact-card-info">
-                    <div class="mh-contact-type">PRIMARY EMAIL INBOX</div>
-                    <div class="mh-contact-val">mahmudhasan.infodev@gmail.com</div>
-                    <div class="mh-contact-subtext">Direct email for contract inquiries, scopes &amp; technical proposals</div>
-                  </div>
-                </div>
-                <div class="mh-contact-card-actions">
-                  <button type="button" class="mh-contact-sub-btn primary oQ_U9W_email" data-email="mahmudhasan.infodev@gmail.com">
-                    <span>📋 Copy Email</span>
-                  </button>
-                  <a href="mailto:mahmudhasan.infodev@gmail.com" class="mh-contact-sub-btn secondary">
-                    <span>↗ Send Email</span>
-                  </a>
-                </div>
-              </div>
-
-              <!-- Direct WhatsApp Card -->
-              <div class="mh-contact-card">
-                <div class="mh-contact-card-top">
-                  <div class="mh-contact-card-icon">💬</div>
-                  <div class="mh-contact-card-info">
-                    <div class="mh-contact-type">INSTANT MESSAGING</div>
-                    <div class="mh-contact-val">+880 1767-850859</div>
-                    <div class="mh-contact-subtext">WhatsApp direct for rapid project discussions and sprint alignment</div>
-                  </div>
-                </div>
-                <div class="mh-contact-card-actions">
-                  <a href="https://wa.me/8801767850859?text=Hi%20Mahmud,%20I%20saw%20your%20portfolio!" target="_blank" rel="noopener noreferrer" class="mh-contact-sub-btn whatsapp">
-                    <span>💬 Open WhatsApp Chat</span>
-                  </a>
-                </div>
-              </div>
-
-              <!-- Social Profiles Grid -->
-              <div class="mh-contact-grid-duo">
-                <a href="https://www.linkedin.com/in/mahmud-hasan-687908269" target="_blank" rel="noopener noreferrer" class="mh-contact-grid-card">
-                  <div class="mh-grid-card-head">
-                    <span>🔗 LinkedIn</span>
-                    <span class="mh-grid-arrow">↗</span>
-                  </div>
-                  <div class="mh-grid-card-handle">in/mahmud-hasan-687908269</div>
-                  <div class="mh-grid-card-sub">Professional Network &amp; Endorsements</div>
-                </a>
-
-                <a href="https://github.com/naimsmahmud50-dotcom" target="_blank" rel="noopener noreferrer" class="mh-contact-grid-card">
-                  <div class="mh-grid-card-head">
-                    <span>💻 GitHub</span>
-                    <span class="mh-grid-arrow">↗</span>
-                  </div>
-                  <div class="mh-grid-card-handle">naimsmahmud50-dotcom</div>
-                  <div class="mh-grid-card-sub">Open-Source Code Repositories</div>
-                </a>
-              </div>
-            </div>
-
-            <div class="mh-drawer-footer-row">
-              📍 DHAKA, BANGLADESH (UTC+6) · WORLDWIDE REMOTE READY
-            </div>
-          </div>
-        `;
-        document.body.appendChild(contactModal);
-
-        const closeBtn = document.getElementById('mh-contact-close');
-        if (closeBtn) closeBtn.addEventListener('click', closeAllDrawers);
-        contactModal.addEventListener('click', (e) => {
-          if (e.target === contactModal) closeAllDrawers();
-        });
-      }
-
-      // 4. Inject Projects Drawer
-      if (!document.getElementById('mh-projects-drawer')) {
-        const projectsModal = document.createElement('div');
-        projectsModal.id = 'mh-projects-drawer';
-        projectsModal.className = 'mh-drawer-backdrop';
-        projectsModal.setAttribute('aria-hidden', 'true');
-        projectsModal.setAttribute('role', 'dialog');
-        projectsModal.setAttribute('aria-label', 'All 8 Projects');
-        projectsModal.innerHTML = `
-          <div class="mh-drawer-sheet mh-projects-sheet">
-            <div class="mh-drawer-drag-handle"></div>
-            <button type="button" class="mh-drawer-close-btn" id="mh-projects-close" aria-label="Close dialog">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-
-            <div class="mh-drawer-header-center">
-              <div class="mh-drawer-kicker">FLAGSHIP DELIVERABLES</div>
-              <h3 class="mh-drawer-title">ALL 8 PROJECTS</h3>
-              <p class="mh-drawer-subtitle">Tap "VIEW SLIDE" to jump instantly to that project in slide view.</p>
-            </div>
-
-            <div class="mh-projects-drawer-list">
-              ${PORTFOLIO_PROJECTS_LIST.map((p, idx) => `
-                <div class="mh-drawer-project-card">
-                  <div class="mh-proj-card-meta">
-                    <span class="mh-proj-idx">${p.idxStr}</span>
-                    <span class="mh-proj-cat">${p.category}</span>
-                  </div>
-                  <h4 class="mh-proj-title">${p.title}</h4>
-                  <p class="mh-proj-desc">${p.desc}</p>
-                  <div class="mh-proj-tags">
-                    ${p.tags.map(t => `<span class="mh-proj-tag">${t}</span>`).join('')}
-                  </div>
-                  <div class="mh-proj-actions">
-                    <button type="button" class="mh-proj-jump-btn" onclick="window.__mhJumpToProject(${idx})">
-                      <span>▶ VIEW SLIDE</span>
-                    </button>
-                    <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="mh-proj-link-btn">
-                      <span>${p.label} ↗</span>
-                    </a>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-
-            <div class="mh-drawer-footer-row">
-              MAHMUD HASAN · FULL-STACK &amp; AI ARCHITECT · 2026
-            </div>
-          </div>
-        `;
-        document.body.appendChild(projectsModal);
-
-        const closeBtn = document.getElementById('mh-projects-close');
-        if (closeBtn) closeBtn.addEventListener('click', closeAllDrawers);
-        projectsModal.addEventListener('click', (e) => {
-          if (e.target === projectsModal) closeAllDrawers();
-        });
-      }
-    }
-
-    function closeAllDrawers() {
-      document.querySelectorAll('.mh-drawer-backdrop').forEach(el => {
-        el.classList.remove('active');
-        el.setAttribute('aria-hidden', 'true');
-      });
-      document.body.style.overflow = '';
-    }
-
-    function openAboutDrawer() {
-      closeAllDrawers();
-      injectDrawers();
-      const drawer = document.getElementById('mh-about-drawer');
-      if (drawer) {
-        drawer.classList.add('active');
-        drawer.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function openContactDrawer() {
-      closeAllDrawers();
-      injectDrawers();
-      const drawer = document.getElementById('mh-contact-drawer');
-      if (drawer) {
-        drawer.classList.add('active');
-        drawer.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function openProjectsDrawer() {
-      closeAllDrawers();
-      injectDrawers();
-      const drawer = document.getElementById('mh-projects-drawer');
-      if (drawer) {
-        drawer.classList.add('active');
-        drawer.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function jumpToProject(idx) {
-      closeAllDrawers();
-      if (window.__mhLiteController && window.__mhLiteController.eM) {
-        const pitch = window.__mhLiteController.ei?.pitch || 1.195;
-        window.__mhLiteController.eM.setScrollValue(idx * pitch);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        showToast(`Viewing Project 0${idx + 1}`);
-      } else {
-        const p = PORTFOLIO_PROJECTS_LIST[idx];
-        if (p && p.url) {
-          window.open(p.url, '_blank', 'noopener,noreferrer');
-        }
-      }
-    }
-
-    window.__mhOpenAboutDrawer = openAboutDrawer;
-    window.__mhCloseAboutDrawer = closeAllDrawers;
-    window.__mhOpenContactDrawer = openContactDrawer;
-    window.__mhCloseContactDrawer = closeAllDrawers;
-    window.__mhOpenProjectsDrawer = openProjectsDrawer;
-    window.__mhCloseProjectsDrawer = closeAllDrawers;
-    window.__mhCloseAllDrawers = closeAllDrawers;
-    window.__mhJumpToProject = jumpToProject;
-    window.__mhOpenHud = function(target) {
-      if (target === 'videos') {
-        if (typeof window.__mhOpenMyVideos === 'function') {
-          window.__mhOpenMyVideos();
-        }
-      } else {
-        openAboutDrawer();
-      }
-    };
-    window.__mhCloseHud = closeAllDrawers;
-
-    injectDrawers();
-    setTimeout(injectDrawers, 300);
-  }
+  // 12. Modular Portfolio Drawers removed (user requested original 3D routes)
 
   
   // 13. Mobile Project Slide View Cyber-HUD & Navigation Engine (Runs on mobile / lite)
@@ -2386,11 +1977,8 @@
           allBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (typeof window.__mhOpenProjectsDrawer === 'function') {
-              window.__mhOpenProjectsDrawer();
-            } else if (typeof window.__mhOpenHud === 'function') {
-              window.__mhOpenHud();
-            }
+            const base = getRepoBase();
+            window.location.assign(base + '/?variant=full&glide=projects');
           });
         }
       }
@@ -2452,8 +2040,7 @@
     setupFooterAndSocialsClean();
     setupEmailCopy();
     setupTerminal();
-    setupPortfolioDrawers();
-    setupMobileProjectSlideView();
+        setupMobileProjectSlideView();
     setupProjectHudActions();
     setupContact3DInteractivity();
     setupRouteAutoGlide();
