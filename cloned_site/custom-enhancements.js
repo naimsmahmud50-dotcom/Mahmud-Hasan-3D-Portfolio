@@ -1443,12 +1443,29 @@
     }, true);
   }
 
-  // 10. Direct Instant Lite Version Experience Engine & Navigation Bridge
+  // 10. Direct Instant Lite Version Experience Engine & Unified Navigation Bridge
   function setupLiteNavigation() {
     const base = getRepoBase();
-    const rawPath = window.location.pathname;
-    const currentPath = (base && rawPath.startsWith(base)) ? (rawPath.slice(base.length) || '/') : rawPath;
-    const isLite = currentPath.startsWith('/lite');
+
+    // Auto-redirect static fallback pages to the full 3D experience
+    try {
+      const p = window.location.pathname;
+      const cleanP = (base && p.startsWith(base)) ? (p.slice(base.length) || '/') : p;
+      if (cleanP === '/about' || cleanP === '/about.html') {
+        window.location.replace(base + '/?variant=full&glide=about');
+        return;
+      }
+      if (cleanP === '/contact' || cleanP === '/contact.html') {
+        window.location.replace(base + '/?variant=full&glide=contact');
+        return;
+      }
+      if (cleanP === '/projects' || cleanP === '/projects.html') {
+        window.location.replace(base + '/?variant=full&glide=projects');
+        return;
+      }
+    } catch (_) {}
+
+    const isLite = window.location.pathname.includes('/lite');
     if (isLite) {
       document.body.classList.add('is-lite');
       const hideLoader = () => {
@@ -1465,224 +1482,200 @@
       setTimeout(hideLoader, 300);
     }
 
+    // Helper to safely exit interior on 3D home
+    const safelyExit3DInterior = () => {
+      try {
+        if (window.__mhProjectStore && typeof window.__mhProjectStore.getState === 'function') {
+          const s = window.__mhProjectStore.getState();
+          if (s?.interiorStatus === 'interior' || s?.interiorStatus === 'entering') {
+            if (typeof s.exitInterior === 'function') {
+              s.exitInterior();
+            }
+          }
+        }
+      } catch (_) {}
+    };
+
+    // Helper to keep navbar panel visible and interactive
+    const ensureMenuVisible = () => {
+      const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
+      if (menuPanel) {
+        menuPanel.setAttribute('aria-hidden', 'false');
+      }
+    };
+
+    // UNIFIED CAPTURE-PHASE CLICK HANDLER FOR ALL BUTTONS
     document.addEventListener('click', (e) => {
-      // 1. Lite version direct activation
-      const liteLink = e.target.closest('a[href="/lite"], a[href$="/lite"], button[class*="y9w63G_lite"], .y9w63G_lite');
-      if (liteLink) {
+      // 1. Logo Click: If in 3D, exit interior and scroll to top; else go to 3D home
+      const logoBtn = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
+      if (logoBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const p = window.location.pathname;
+        const cleanP = (base && p.startsWith(base)) ? (p.slice(base.length) || '/') : p;
+        const isRoot3D = cleanP === '/' || cleanP === '/index.html';
+        if (isRoot3D) {
+          safelyExit3DInterior();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.location.assign(base + '/?variant=full');
+        }
+        return;
+      }
+
+      // 2. Direct standalone lite-switcher buttons (e.g. loader screen lite button)
+      const liteTrigger = e.target.closest('a[href="/lite"], a[href$="/lite"], button[class*="y9w63G_lite"], .y9w63G_lite');
+      if (liteTrigger && !liteTrigger.closest('._rHu7W_menuPanel, ._rHu7W_links')) {
         e.preventDefault();
         e.stopPropagation();
         window.location.assign(base + '/lite');
         return;
       }
 
-      // 2. Navigation when on Lite page: 3-dot menu buttons, logo, and footer links
-      const onLitePage = currentPath.startsWith('/lite') || window.location.pathname.includes('/lite');
-      if (onLitePage) {
-        // Logo click on Lite -> go to 3D Home
-        const logoBtn = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
-        if (logoBtn) {
-          e.preventDefault();
-          e.stopPropagation();
+      // 3. Navigation Links (Menu Panel, Header, Direct Items)
+      const navLink = e.target.closest('a._rHu7W_link, [class*="_rHu7W_menuPanel"] a, #mh-menu-item-extra-skills a, ._8VLL1W_legal, [class*="_8VLL1W_legal"]');
+      if (!navLink) return;
+
+      const rawHref = navLink.getAttribute('href') || '';
+      const href = (base && rawHref.startsWith(base)) ? (rawHref.slice(base.length) || '/') : rawHref;
+      const label = (navLink.innerText || navLink.textContent || '').trim().toUpperCase();
+
+      // Button: GITHUB REPO
+      if (label.includes('GITHUB') || href.includes('github.com')) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.open('https://github.com/naimsmahmud50-dotcom', '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      // Button: EXTRA SKILLS
+      if (label.includes('EXTRA SKILLS') || label.includes('VIDEOS') || href === '#extra-skills' || href.endsWith('#extra-skills')) {
+        e.preventDefault();
+        e.stopPropagation();
+        ensureMenuVisible();
+        if (typeof window.__mhOpenMyVideos === 'function') {
+          window.__mhOpenMyVideos();
+        } else if (typeof openMyVideosModal === 'function') {
+          openMyVideosModal();
+        }
+        return;
+      }
+
+      // Resolve current route at click-time dynamically
+      const curPath = (base && window.location.pathname.startsWith(base))
+        ? (window.location.pathname.slice(base.length) || '/')
+        : window.location.pathname;
+      const isRoot3D = curPath === '/' || curPath === '/index.html';
+      const onLite = curPath.startsWith('/lite');
+
+      // Button: PROJECT SLIDE VIEW
+      if (label.includes('PROJECT SLIDE VIEW') || label.includes('LITE') || href === '/lite' || href.endsWith('/lite')) {
+        e.preventDefault();
+        e.stopPropagation();
+        ensureMenuVisible();
+        if (onLite) {
+          if (window.__mhLiteController && window.__mhLiteController.eM) {
+            window.__mhLiteController.eM.setScrollValue(0);
+          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.location.assign(base + '/lite');
+        }
+        return;
+      }
+
+      // Helper to scroll reliably to a 3D section
+      const scroll3DTarget = (targetY) => {
+        try {
+          window.scrollTo(0, targetY);
+        } catch (_) {}
+        setTimeout(() => {
+          if (Math.abs(window.scrollY - targetY) > 50) {
+            window.scrollTo(0, targetY);
+          }
+        }, 150);
+      };
+
+      // Button: HOME
+      if (label === 'HOME' || href === '/' || href === '') {
+        e.preventDefault();
+        e.stopPropagation();
+        ensureMenuVisible();
+        if (isRoot3D) {
+          safelyExit3DInterior();
+          scroll3DTarget(0);
+        } else {
           window.location.assign(base + '/?variant=full');
-          return;
         }
+        return;
+      }
 
-        // Links inside the 3-dot menu or page navigation
-        const navLink = e.target.closest('a._rHu7W_link, [class*="_rHu7W_menuPanel"] a, [class*="_rHu7W_link"], ._8VLL1W_legal, [class*="_8VLL1W_legal"]');
-        if (navLink) {
-          const rawHref = navLink.getAttribute('href') || '';
-          const href = (base && rawHref.startsWith(base)) ? (rawHref.slice(base.length) || '/') : rawHref;
-          const label = (navLink.innerText || navLink.textContent || '').trim().toUpperCase();
+      // Button: PROJECTS
+      if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
+        e.preventDefault();
+        e.stopPropagation();
+        ensureMenuVisible();
+        if (isRoot3D) {
+          safelyExit3DInterior();
+          const h = window.innerHeight || 800;
+          const el = document.getElementById('scene1');
+          const targetY = (el && el.offsetTop > 0) ? el.offsetTop : Math.round(h * 1.0);
+          scroll3DTarget(targetY);
+        } else {
+          window.location.assign(base + '/?variant=full&glide=projects');
+        }
+        return;
+      }
 
-          // External links (LAB, socials, etc.) or mailto - let default proceed
-          if (href && (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#'))) {
-            return;
-          }
+      // Button: ABOUT
+      if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
+        e.preventDefault();
+        e.stopPropagation();
+        ensureMenuVisible();
+        if (isRoot3D) {
+          safelyExit3DInterior();
+          const h = window.innerHeight || 800;
+          const el = document.getElementById('sceneAbout');
+          const targetY = (el && el.offsetTop > 0) ? el.offsetTop : Math.round(h * 11.9);
+          scroll3DTarget(targetY);
+        } else {
+          window.location.assign(base + '/?variant=full&glide=about');
+        }
+        return;
+      }
 
-          const closeMenu = () => {
-            const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-            if (menuPanel) {
-              menuPanel.setAttribute('aria-hidden', 'false');
-            }
-          };
+      // Button: CONTACT
+      if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
+        e.preventDefault();
+        e.stopPropagation();
+        ensureMenuVisible();
+        if (isRoot3D) {
+          safelyExit3DInterior();
+          const h = window.innerHeight || 800;
+          const el = document.getElementById('sceneContactReveal');
+          const targetY = (el && el.offsetTop > 0) ? el.offsetTop : Math.round(h * 28.56);
+          scroll3DTarget(targetY);
+        } else {
+          window.location.assign(base + '/?variant=full&glide=contact');
+        }
+        return;
+      }
 
-          if (label === 'HOME' || href === '/') {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            window.location.assign(base + '/?variant=full');
-            return;
-          }
-
-          if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            window.location.assign(base + '/?variant=full&glide=projects');
-            return;
-          }
-
-          if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            // Navigate directly to the 3D About version
-            window.location.assign(base + '/?variant=full&glide=about');
-            return;
-          }
-
-          if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            // Navigate directly to the 3D Contact version
-            window.location.assign(base + '/?variant=full&glide=contact');
-            return;
-          }
-
-          if (label === 'MY VIDEOS' || label === 'AI VIDEOS' || label === 'VIDEOS' || label === 'EXTRA SKILLS') {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            if (typeof window.__mhOpenMyVideos === 'function') {
-              window.__mhOpenMyVideos();
-            }
-            return;
-          }
-
-          // Intercept any project detail route clicks on Lite to open direct demo/github
-          if (href && href.startsWith('/projects/')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const slug = href.replace('/projects/', '').replace(/-/g, ' ').toLowerCase();
-            let matched = null;
-            for (const [k, p] of Object.entries(PROJECTS_DB)) {
-              if (slug.includes(k) || k.includes(slug)) {
-                matched = p;
-                break;
-              }
-            }
-            const destination = matched?.demo || matched?.github || 'https://github.com/naimsmahmud50-dotcom';
-            window.open(destination, '_blank', 'noopener,noreferrer');
-            return;
-          }
-
-          if (label === 'PROJECT SLIDE VIEW' || label === 'LITE VERSION' || href === '/lite') {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            if (window.__mhLiteController && window.__mhLiteController.eM) {
-              window.__mhLiteController.eM.setScrollValue(0);
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            return;
-          }
-
-          if (href) {
-            e.preventDefault();
-            e.stopPropagation();
-            try {
-              const parsed = new URL(href, window.location.origin);
-              if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-                if (parsed.origin === window.location.origin) {
-                  window.location.assign(parsed.pathname + parsed.search + parsed.hash);
-                } else {
-                  window.open(parsed.href, '_blank', 'noopener,noreferrer');
-                }
-              }
-            } catch (_) {}
-            return;
+      // Lite View Project Card Links -> open live demo or github
+      if (onLite && href && href.startsWith('/projects/')) {
+        e.preventDefault();
+        e.stopPropagation();
+        const slug = href.replace('/projects/', '').replace(/-/g, ' ').toLowerCase();
+        let matched = null;
+        for (const [k, p] of Object.entries(PROJECTS_DB)) {
+          if (slug.includes(k) || k.includes(slug)) {
+            matched = p;
+            break;
           }
         }
-      } else {
-        // When in full 3D experience: smooth-glide navbar clicks to 3D scenes
-        const navLink = e.target.closest('a._rHu7W_link, [class*="_rHu7W_menuPanel"] a, [class*="_rHu7W_link"]');
-        if (navLink) {
-          const rawHref = navLink.getAttribute('href') || '';
-          const href = (base && rawHref.startsWith(base)) ? (rawHref.slice(base.length) || '/') : rawHref;
-          const label = (navLink.innerText || navLink.textContent || '').trim().toUpperCase();
-
-          const closeMenu = () => {
-            const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-            if (menuPanel) {
-              menuPanel.setAttribute('aria-hidden', 'false');
-            }
-          };
-
-          if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
-            const el = document.getElementById('sceneAbout');
-            if (el && el.offsetTop > 0) {
-              e.preventDefault();
-              e.stopPropagation();
-              closeMenu();
-              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-              return;
-            }
-          }
-
-          if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
-            const el = document.getElementById('sceneContactReveal');
-            if (el && el.offsetTop > 0) {
-              e.preventDefault();
-              e.stopPropagation();
-              closeMenu();
-              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-              return;
-            }
-          }
-
-          if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
-            const el = document.getElementById('scene1');
-            if (el && el.offsetTop > 0) {
-              e.preventDefault();
-              e.stopPropagation();
-              closeMenu();
-              window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-              return;
-            }
-          }
-
-          if (label === 'HOME' || href === '/' || href === '') {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            return;
-          }
-
-          if (label === 'MY VIDEOS' || label === 'AI VIDEOS' || label === 'VIDEOS' || label === 'EXTRA SKILLS' || href === '#extra-skills') {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            if (typeof window.__mhOpenMyVideos === 'function') {
-              window.__mhOpenMyVideos();
-            }
-            return;
-          }
-
-          if (label === 'PROJECT SLIDE VIEW' || label === 'LITE VERSION' || href === '/lite') {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-            window.location.assign(base + '/lite');
-            return;
-          }
-        }
-
-        // Only handle logo/home click when inside project interior to cleanly exit interior.
-        const homeTrigger = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
-        if (homeTrigger) {
-          try {
-            if (window.__mhProjectStore && typeof window.__mhProjectStore.getState === 'function') {
-              const s = window.__mhProjectStore.getState();
-              if (s.interiorStatus === 'interior' || s.interiorStatus === 'entering') {
-                if (typeof s.exitInterior === 'function') {
-                  s.exitInterior();
-                }
-              }
-            }
-          } catch (err) {}
-        }
+        const destination = matched?.demo || matched?.github || 'https://github.com/naimsmahmud50-dotcom';
+        window.open(destination, '_blank', 'noopener,noreferrer');
+        return;
       }
     }, true);
   }

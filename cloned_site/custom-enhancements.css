@@ -406,29 +406,18 @@ html[data-route*="lite"] .y9w63G_loaderContainer,
 /* ==========================================================================
    4. NAVBAR BUTTONS & STATUS BADGES
    ========================================================================== */
-._rHu7W_iconButton._rHu7W_menu {
-  width: 48px !important;
-  height: 48px !important;
-  border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+/* 3-dot menu button is permanently hidden in favor of inline links */
+._rHu7W_iconButton._rHu7W_menu,
+button._rHu7W_menu,
+button[aria-label="Menu"] {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
   padding: 0 !important;
-  margin-left: 1.5vw !important;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-  cursor: pointer !important;
-}
-
-._rHu7W_iconButton._rHu7W_menu:hover {
-  background: rgba(0, 229, 255, 0.2) !important;
-  border-color: var(--mh-cyan) !important;
-  box-shadow: 0 0 22px rgba(0, 229, 255, 0.55) !important;
-  transform: scale(1.1) !important;
+  opacity: 0 !important;
 }
 
 ._rHu7W_iconButton._rHu7W_sound {
@@ -1139,10 +1128,9 @@ html[data-route*="lite"] .y9w63G_loaderContainer,
     letter-spacing: 0.08em !important;
   }
 
-  ._rHu7W_iconButton._rHu7W_menu {
-    width: 38px !important;
-    height: 38px !important;
-    margin-left: 8px !important;
+  ._rHu7W_iconButton._rHu7W_menu,
+  button._rHu7W_menu {
+    display: none !important;
   }
 
   /* Floating Terminal Toggle elevated above mobile footer */
