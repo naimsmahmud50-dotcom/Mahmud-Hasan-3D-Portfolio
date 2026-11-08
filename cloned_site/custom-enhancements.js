@@ -1761,27 +1761,43 @@
 
       // Helper to scroll reliably and smoothly to any 3D section
       const scroll3DTarget = (targetY) => {
-        const startY = window.scrollY;
-        const diff = targetY - startY;
-        if (Math.abs(diff) < 2) {
-          window.scrollTo(0, targetY);
-          return;
-        }
-
-        const duration = 400; // butter-smooth 400ms lerp
-        const startTime = performance.now();
-        const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-        const interval = setInterval(() => {
-          const elapsed = performance.now() - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const currentY = Math.round(startY + diff * ease(progress));
-          window.scrollTo(0, currentY);
-          if (progress >= 1) {
-            clearInterval(interval);
-            window.scrollTo(0, targetY);
+        try {
+          if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
+            if (window.__lenis.isStopped) window.__lenis.start();
+            window.__lenis.scrollTo(targetY, { duration: 0.8, force: true });
+            return;
           }
-        }, 16);
+          if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+            if (window.lenis.isStopped) window.lenis.start();
+            window.lenis.scrollTo(targetY, { duration: 0.8, force: true });
+            return;
+          }
+
+          const startY = window.scrollY;
+          const diff = targetY - startY;
+          if (Math.abs(diff) < 2) {
+            window.scrollTo(0, targetY);
+            return;
+          }
+
+          const duration = 400; // butter-smooth 400ms lerp
+          const startTime = performance.now();
+          const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+          const interval = setInterval(() => {
+            const elapsed = performance.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const currentY = Math.round(startY + diff * ease(progress));
+            window.scrollTo(0, currentY);
+            if (progress >= 1) {
+              clearInterval(interval);
+              window.scrollTo(0, targetY);
+            }
+          }, 16);
+        } catch (err) {
+          console.error('[MH SCROLL3DTARGET ERROR]', err);
+          window.scrollTo(0, targetY);
+        }
       };
 
       // Button: HOME
@@ -1792,7 +1808,7 @@
         ensureMenuVisible();
         if (isRoot3D) {
           safelyExit3DInterior();
-          try { window.history.pushState(null, '', base ? (base + '/') : '/'); } catch (_) {}
+          
           scroll3DTarget(0);
         } else {
           window.location.assign(base + '/?variant=full');
@@ -1813,7 +1829,7 @@
           const targetY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.5755)
             : Math.round(h * 6.8);
-          try { window.history.pushState(null, '', base ? (base + '/projects') : '/projects'); } catch (_) {}
+          
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=projects');
@@ -1834,7 +1850,7 @@
           const targetY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
             : Math.round(h * 13.5);
-          try { window.history.pushState(null, '', base ? (base + '/about') : '/about'); } catch (_) {}
+          
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=about');
@@ -1855,7 +1871,7 @@
           const targetY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
             : Math.round(h * 29.5);
-          try { window.history.pushState(null, '', base ? (base + '/contact') : '/contact'); } catch (_) {}
+          
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=contact');

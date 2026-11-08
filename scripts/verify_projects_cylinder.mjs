@@ -42,6 +42,7 @@ async function main() {
     }
 
     await sendCdp('Page.enable');
+    await sendCdp('Page.bringToFront');
     await sendCdp('Runtime.enable');
     await sendCdp('Emulation.setDeviceMetricsOverride', {
       width,
@@ -92,6 +93,8 @@ async function main() {
         const s1El = document.getElementById('scene1');
         return {
           scrollY: window.scrollY,
+          lenisScroll: window.__lenis?.animatedScroll,
+          hasLenis: !!window.__lenis,
           expectedMin: 4500,
           expectedExact: s1El ? Math.round(s1El.offsetTop + s1El.offsetHeight * 0.5755) : 5479
         };
