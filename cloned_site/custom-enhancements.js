@@ -1206,29 +1206,27 @@
       const params = new URLSearchParams(window.location.search || '');
       const glide = params.get('glide') || '';
 
-      const targetSection = (path === '/about' || path === '/about.html' || glide === 'about') ? 'sceneAbout' :
-                            (path === '/contact' || path === '/contact.html' || glide === 'contact') ? 'sceneContactReveal' :
-                            (path === '/projects' || path === '/projects.html' || glide === 'projects') ? 'scene1' : null;
+      const routeKey = (path === '/about' || path === '/about.html' || glide === 'about') ? 'ABOUT' :
+                       (path === '/contact' || path === '/contact.html' || glide === 'contact') ? 'CONTACT' :
+                       (path === '/projects' || path === '/projects.html' || glide === 'projects') ? 'PROJECTS' : null;
 
-      if (!targetSection) return;
+      if (!routeKey) return;
 
-      document.documentElement.setAttribute('data-mh-glide', glide || targetSection);
+      document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
 
-      const getTargetY = () => {
+      const getFallbackTargetY = () => {
         const h = window.innerHeight || 800;
-        if (targetSection === 'scene1') {
-          const el = document.getElementById('scene1');
-          return (el && el.offsetHeight > 0)
-            ? Math.round(el.offsetTop + el.offsetHeight * 0.5755)
-            : Math.round(h * 6.8);
+        if (routeKey === 'PROJECTS') {
+          const s2 = document.getElementById('scene2');
+          return (s2 && s2.offsetTop > 0) ? s2.offsetTop : 5200;
         }
-        if (targetSection === 'sceneAbout') {
+        if (routeKey === 'ABOUT') {
           const el = document.getElementById('sceneAbout');
           return (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
             : Math.round(h * 13.5);
         }
-        if (targetSection === 'sceneContactReveal') {
+        if (routeKey === 'CONTACT') {
           const el = document.getElementById('sceneContactReveal');
           return (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
@@ -1237,23 +1235,23 @@
         return 0;
       };
 
-      const instantJump = () => {
-        const y = getTargetY();
-        if (y > 0) {
-          window.scrollTo(0, y);
-          return true;
+      const tryRouteRequest = () => {
+        if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[routeKey]) {
+          try {
+            window.__mhRouteStore.getState().request(window.__mhRoutes[routeKey], 'deeplink');
+            return true;
+          } catch (_) {}
         }
         return false;
       };
 
-      // Perform instant jump immediately
-      instantJump();
-
-      // Keep locking scroll position and auto-dismissing loader gate
+      let routed = tryRouteRequest();
       let attempts = 0;
       const interval = setInterval(() => {
         attempts++;
-        instantJump();
+        if (!routed && tryRouteRequest()) {
+          routed = true;
+        }
 
         // Auto click loader-enter as soon as it exists so 3D scene/audio unlocks immediately
         const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
@@ -1265,8 +1263,7 @@
         const loader = document.querySelector('.y9w63G_loaderContainer');
         const isExiting = loader && (loader.classList.contains('y9w63G_exiting') || window.getComputedStyle(loader).display === 'none');
 
-        if (isExiting || attempts >= 50) {
-          instantJump();
+        if (isExiting || attempts >= 40) {
           const shield = document.getElementById('mh-direct-glide-shield');
           if (shield && shield.style.opacity !== '0') {
             shield.style.transition = 'opacity 0.25s ease-out';
@@ -1278,11 +1275,14 @@
           }
         }
 
-        if (attempts >= 80) {
+        if (attempts >= 60 || (routed && attempts >= 15)) {
           clearInterval(interval);
-          instantJump();
+          if (!routed) {
+            const y = getFallbackTargetY();
+            if (y > 0) window.scrollTo(0, y);
+          }
         }
-      }, 50);
+      }, 80);
     } catch (err) {
       console.warn('Glide handler notice:', err);
     }
@@ -1739,8 +1739,8 @@
       const curPath = (base && window.location.pathname.startsWith(base))
         ? (window.location.pathname.slice(base.length) || '/')
         : window.location.pathname;
-      const isRoot3D = curPath === '/' || curPath === '/index.html';
       const onLite = curPath.startsWith('/lite');
+      const isRoot3D = !onLite && (!!document.getElementById('scene1') || !!document.querySelector('canvas') || curPath === '/' || curPath === '/index.html' || curPath === '/projects' || curPath === '/about' || curPath === '/contact');
 
       // Button: PROJECT SLIDE VIEW
       if (label.includes('PROJECT SLIDE VIEW') || label.includes('LITE') || href === '/lite' || href.endsWith('/lite')) {
@@ -1800,6 +1800,24 @@
         }
       };
 
+      // Helper to dispatch 3D route transition directly into WebGL state machine
+      const dispatch3DRoute = (routeKey, fallbackY) => {
+        safelyExit3DInterior();
+        if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[routeKey]) {
+          try {
+            window.__mhRouteStore.getState().request(window.__mhRoutes[routeKey], 'deeplink');
+            return;
+          } catch (_) {}
+        }
+        if (window.__mhNavigate && window.__mhRoutes && window.__mhRoutes[routeKey]) {
+          try {
+            window.__mhNavigate(window.__mhRoutes[routeKey]);
+            return;
+          } catch (_) {}
+        }
+        scroll3DTarget(fallbackY);
+      };
+
       // Button: HOME
       if (label === 'HOME' || href === '/' || href === '') {
         e.preventDefault();
@@ -1807,9 +1825,7 @@
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
-          safelyExit3DInterior();
-          
-          scroll3DTarget(0);
+          dispatch3DRoute('LANDING', 0);
         } else {
           window.location.assign(base + '/?variant=full');
         }
@@ -1823,14 +1839,9 @@
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
-          safelyExit3DInterior();
-          const h = window.innerHeight || 800;
-          const el = document.getElementById('scene1');
-          const targetY = (el && el.offsetHeight > 0)
-            ? Math.round(el.offsetTop + el.offsetHeight * 0.5755)
-            : Math.round(h * 6.8);
-          
-          scroll3DTarget(targetY);
+          const s2 = document.getElementById('scene2');
+          const fallbackY = (s2 && s2.offsetTop > 0) ? s2.offsetTop : 5200;
+          dispatch3DRoute('PROJECTS', fallbackY);
         } else {
           window.location.assign(base + '/?variant=full&glide=projects');
         }
@@ -1844,14 +1855,11 @@
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
-          safelyExit3DInterior();
-          const h = window.innerHeight || 800;
           const el = document.getElementById('sceneAbout');
-          const targetY = (el && el.offsetHeight > 0)
+          const fallbackY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
-            : Math.round(h * 13.5);
-          
-          scroll3DTarget(targetY);
+            : 6738;
+          dispatch3DRoute('ABOUT', fallbackY);
         } else {
           window.location.assign(base + '/?variant=full&glide=about');
         }
@@ -1865,14 +1873,11 @@
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
-          safelyExit3DInterior();
-          const h = window.innerHeight || 800;
           const el = document.getElementById('sceneContactReveal');
-          const targetY = (el && el.offsetHeight > 0)
+          const fallbackY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
-            : Math.round(h * 29.5);
-          
-          scroll3DTarget(targetY);
+            : 13500;
+          dispatch3DRoute('CONTACT', fallbackY);
         } else {
           window.location.assign(base + '/?variant=full&glide=contact');
         }
