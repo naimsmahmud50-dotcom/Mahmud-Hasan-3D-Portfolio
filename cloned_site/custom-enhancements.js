@@ -1500,13 +1500,9 @@
           }
 
           const closeMenu = () => {
-            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"], button[aria-label="Menu"]');
-            if (menuToggle) {
-              menuToggle.setAttribute('aria-expanded', 'false');
-            }
             const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
             if (menuPanel) {
-              menuPanel.setAttribute('aria-hidden', 'true');
+              menuPanel.setAttribute('aria-hidden', 'false');
             }
           };
 
@@ -1607,13 +1603,9 @@
           const label = (navLink.innerText || navLink.textContent || '').trim().toUpperCase();
 
           const closeMenu = () => {
-            const menuToggle = document.querySelector('button._rHu7W_menu, button[class*="_rHu7W_menu"], button[aria-label="Menu"]');
-            if (menuToggle) {
-              menuToggle.setAttribute('aria-expanded', 'false');
-            }
             const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
             if (menuPanel) {
-              menuPanel.setAttribute('aria-hidden', 'true');
+              menuPanel.setAttribute('aria-hidden', 'false');
             }
           };
 
@@ -1697,27 +1689,28 @@
 
   function setupMenuLabelSync() {
     function applySync() {
-      // 1. Ensure 3-dot menu button is visible and active
+      // 1. Hide 3-dot menu button completely
       const menuBtn = document.querySelector('button._rHu7W_menu, button[aria-label="Menu"]');
       if (menuBtn) {
-        menuBtn.style.removeProperty('display');
-        menuBtn.style.setProperty('visibility', 'visible', 'important');
-        menuBtn.style.setProperty('pointer-events', 'auto', 'important');
+        menuBtn.style.setProperty('display', 'none', 'important');
       }
 
-      // 2. When menuPanel is open (aria-hidden="false"), ensure links are unclipped and clickable
+      // 2. Keep menuPanel links permanently visible, unclipped, and clickable inline in the navbar
       const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-      if (menuPanel && menuPanel.getAttribute('aria-hidden') === 'false') {
+      if (menuPanel) {
+        menuPanel.setAttribute('aria-hidden', 'false');
         menuPanel.querySelectorAll('li._rHu7W_linkItem, li[class*="_rHu7W_linkItem"]').forEach(li => {
           li.style.setProperty('clip-path', 'none', 'important');
           li.style.setProperty('-webkit-clip-path', 'none', 'important');
           li.style.setProperty('opacity', '1', 'important');
           li.style.setProperty('visibility', 'visible', 'important');
           li.style.setProperty('transform', 'none', 'important');
+          li.style.setProperty('display', 'inline-flex', 'important');
         });
         menuPanel.querySelectorAll('a._rHu7W_link, a[class*="_rHu7W_link"]').forEach(a => {
           a.setAttribute('tabindex', '0');
           a.style.setProperty('pointer-events', 'auto', 'important');
+          a.style.setProperty('cursor', 'pointer', 'important');
         });
       }
 
@@ -1821,38 +1814,7 @@
     applySync();
     setInterval(applySync, 120);
 
-    // Toggle 3-dot menu button open / close
-    document.addEventListener('click', (e) => {
-      const menuBtn = e.target.closest('button._rHu7W_menu, button[aria-label="Menu"]');
-      if (menuBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-        const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
-        const nextState = !isExpanded;
-        menuBtn.setAttribute('aria-expanded', String(nextState));
-        if (menuPanel) {
-          menuPanel.setAttribute('aria-hidden', String(!nextState));
-          if (nextState) {
-            applySync();
-          }
-        }
-        return;
-      }
-
-      // Close menu when clicking outside
-      const insidePanel = e.target.closest('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-      if (!insidePanel) {
-        const openBtn = document.querySelector('button._rHu7W_menu[aria-expanded="true"], button[aria-label="Menu"][aria-expanded="true"]');
-        if (openBtn) {
-          openBtn.setAttribute('aria-expanded', 'false');
-          const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
-          if (menuPanel) menuPanel.setAttribute('aria-hidden', 'true');
-        }
-      }
-    }, true);
-
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', () => {
       setTimeout(applySync, 10);
       setTimeout(applySync, 60);
     }, true);

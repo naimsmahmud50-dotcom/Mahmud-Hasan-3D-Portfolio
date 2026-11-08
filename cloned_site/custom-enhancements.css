@@ -2434,67 +2434,158 @@ body.is-lite ._rHu7W_nav,
 }
 
 /* ==========================================================================
-   20. RESTORED ORIGINAL 3-DOT MENU BUTTON & SLEEK DROPDOWN MENU
+   20. DIRECT INLINE NAVBAR MENU (NO 3-DOT REQUIRED)
    ========================================================================== */
-/* 1. Ensure 3-dot menu button is always visible, interactive, and correctly positioned */
+/* 1. Hide / remove 3-dot button completely */
 button._rHu7W_menu,
 button[aria-label="Menu"] {
-  display: inline-flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  opacity: 0.9 !important;
-  cursor: pointer !important;
-}
-
-button._rHu7W_menu:hover,
-button[aria-label="Menu"]:hover {
-  opacity: 1 !important;
-}
-
-/* 2. Menu Panel: Closed state */
-div._rHu7W_menuPanel[aria-hidden="true"],
-div._rHu7W_menuPanel:not([aria-hidden="false"]) {
+  display: none !important;
   pointer-events: none !important;
-  opacity: 0 !important;
   visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-/* 3. Menu Panel: Open state */
-div._rHu7W_menuPanel[aria-hidden="false"] {
+/* 1.5 Ensure logo has order 1 */
+._rHu7W_logoWrap {
+  order: 1 !important;
+}
+
+/* 2. Position menuPanel directly inline in the navbar */
+div._rHu7W_menuPanel {
+  position: static !important;
   display: flex !important;
-  pointer-events: auto !important;
-  visibility: visible !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
   opacity: 1 !important;
-  z-index: 1000 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  order: 2 !important;
+  margin-left: auto !important;
+  margin-right: 1.5vw !important;
+  z-index: 101 !important;
 }
 
-div._rHu7W_menuPanel[aria-hidden="false"] li._rHu7W_linkItem {
+/* 3. Hide vertical divider line and sizer */
+._rHu7W_line,
+._rHu7W_linkSizer {
+  display: none !important;
+}
+
+/* 4. Display links horizontally in the navbar line */
+ul._rHu7W_links {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 1.35vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  pointer-events: auto !important;
+}
+
+/* 5. Force link items to be unclipped and permanently visible */
+li._rHu7W_linkItem {
   clip-path: none !important;
   -webkit-clip-path: none !important;
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
-  display: block !important;
+  display: inline-flex !important;
+  align-items: center !important;
   pointer-events: auto !important;
 }
 
-div._rHu7W_menuPanel[aria-hidden="false"] a._rHu7W_link {
+/* 6. Preserve exact typography, font, and uppercase styling */
+a._rHu7W_link {
   pointer-events: auto !important;
   cursor: pointer !important;
-  display: inline-block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  color: #ebebebeb !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  padding: 0.2rem 0.35rem !important;
+  position: relative !important;
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s !important;
 }
 
-div._rHu7W_menuPanel[aria-hidden="false"] a._rHu7W_link:hover {
+a._rHu7W_link:hover {
   color: #00e5ff !important;
 }
 
-div._rHu7W_menuPanel[aria-hidden="false"] ._rHu7W_line {
-  display: block !important;
-  width: 100% !important;
-  opacity: 0.3 !important;
+/* 7. Sound and Available sit cleanly to the right of the links */
+._rHu7W_sound {
+  order: 3 !important;
+  margin-left: 0 !important;
+}
+._rHu7W_availabilityWrap {
+  order: 4 !important;
+  margin-left: 1.25vw !important;
 }
 
-/* 4. Direct Glide & Instant Jump Support: suppress home intro flash & loader gate */
+@media (max-width: 1100px) {
+  ul._rHu7W_links {
+    gap: 10px !important;
+  }
+  a._rHu7W_link {
+    font-size: 0.78rem !important;
+    padding: 0.15rem 0.25rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  ._rHu7W_sound {
+    flex-shrink: 0 !important;
+  }
+  ._rHu7W_availabilityWrap {
+    flex-shrink: 0 !important;
+    margin-left: 8px !important;
+  }
+  div._rHu7W_menuPanel {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    max-width: calc(100vw - 190px) !important;
+    flex: 1 1 auto !important;
+  }
+  div._rHu7W_menuPanel::-webkit-scrollbar {
+    display: none !important;
+  }
+  ul._rHu7W_links {
+    gap: 8px !important;
+    white-space: nowrap !important;
+  }
+  a._rHu7W_link {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.02em !important;
+    padding: 0.15rem 0.2rem !important;
+  }
+}
+
+/* 8. Direct Glide & Instant Jump Support: suppress home intro flash & loader gate */
 html[data-mh-glide] #landing-intro,
 html[data-mh-glide] .r4ewHq_landingIntro {
   display: none !important;
