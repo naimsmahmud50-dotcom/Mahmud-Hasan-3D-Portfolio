@@ -2424,6 +2424,15 @@ body.is-lite ._rHu7W_nav,
 /* ==========================================================================
    20. DIRECT INLINE NAVBAR MENU (NO 3-DOT REQUIRED)
    ========================================================================== */
+/* 0. Navbar is permanently visible, interactable, and active across all views */
+nav._rHu7W_nav,
+._rHu7W_nav {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
 /* 1. Hide / remove 3-dot button completely */
 button._rHu7W_menu,
 button[aria-label="Menu"] {

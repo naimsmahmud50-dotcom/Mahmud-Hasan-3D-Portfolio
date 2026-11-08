@@ -17,6 +17,14 @@
       const params = new URLSearchParams(window.location.search || '');
       const glide = params.get('glide') || '';
       const path = window.location.pathname || '';
+      const base = (window.__REPO_BASE__) || (path.startsWith('/Mahmud-Hasan-3D-Portfolio') ? '/Mahmud-Hasan-3D-Portfolio' : '');
+
+      // Handle project subroutes cleanly
+      if (path.includes('/projects/') && !path.endsWith('/projects/') && !path.endsWith('/projects')) {
+        window.location.replace(base + '/?variant=full&glide=projects');
+        return;
+      }
+
       const isGlide = Boolean(glide || path.endsWith('/about') || path.endsWith('/about.html') || path.endsWith('/contact') || path.endsWith('/contact.html') || path.endsWith('/projects') || path.endsWith('/projects.html'));
       if (isGlide) {
         document.documentElement.setAttribute('data-mh-glide', glide || 'direct');
@@ -737,8 +745,9 @@
   }
 
   function setupTerminal() {
-    // Initial run after hydration and recurring guardian
-    setTimeout(ensureTerminalInDom, 1200);
+    // Initial run immediately and recurring guardian
+    ensureTerminalInDom();
+    setTimeout(ensureTerminalInDom, 400);
     setInterval(ensureTerminalInDom, 2500);
 
     // Keyboard shortcut: Cmd+K / Ctrl+K
@@ -1505,12 +1514,13 @@
     };
 
     // UNIFIED CAPTURE-PHASE CLICK HANDLER FOR ALL BUTTONS
-    document.addEventListener('click', (e) => {
+    window.addEventListener('click', (e) => {
       // 1. Logo Click: If in 3D, exit interior and scroll to top; else go to 3D home
       const logoBtn = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
       if (logoBtn) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         const p = window.location.pathname;
         const cleanP = (base && p.startsWith(base)) ? (p.slice(base.length) || '/') : p;
         const isRoot3D = cleanP === '/' || cleanP === '/index.html';
@@ -1528,6 +1538,7 @@
       if (liteTrigger && !liteTrigger.closest('._rHu7W_menuPanel, ._rHu7W_links')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         window.location.assign(base + '/lite');
         return;
       }
@@ -1544,6 +1555,7 @@
       if (label.includes('GITHUB') || href.includes('github.com')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         window.open('https://github.com/naimsmahmud50-dotcom', '_blank', 'noopener,noreferrer');
         return;
       }
@@ -1552,6 +1564,7 @@
       if (label.includes('EXTRA SKILLS') || label.includes('VIDEOS') || href === '#extra-skills' || href.endsWith('#extra-skills')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (typeof window.__mhOpenMyVideos === 'function') {
           window.__mhOpenMyVideos();
@@ -1572,6 +1585,7 @@
       if (label.includes('PROJECT SLIDE VIEW') || label.includes('LITE') || href === '/lite' || href.endsWith('/lite')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (onLite) {
           if (window.__mhLiteController && window.__mhLiteController.eM) {
@@ -1600,6 +1614,7 @@
       if (label === 'HOME' || href === '/' || href === '') {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
           safelyExit3DInterior();
@@ -1614,6 +1629,7 @@
       if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
           safelyExit3DInterior();
@@ -1631,6 +1647,7 @@
       if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
           safelyExit3DInterior();
@@ -1648,6 +1665,7 @@
       if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
           safelyExit3DInterior();
@@ -1661,11 +1679,13 @@
         return;
       }
 
-      // Lite View Project Card Links -> open live demo or github
-      if (onLite && href && href.startsWith('/projects/')) {
+      // Project Card Links across ALL views -> open live demo or github
+      const cleanProjHref = href ? href.replace(base, '') : '';
+      if (cleanProjHref.startsWith('/projects/') && cleanProjHref !== '/projects/' && cleanProjHref !== '/projects') {
         e.preventDefault();
         e.stopPropagation();
-        const slug = href.replace('/projects/', '').replace(/-/g, ' ').toLowerCase();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        const slug = cleanProjHref.replace('/projects/', '').replace(/-/g, ' ').toLowerCase().trim();
         let matched = null;
         for (const [k, p] of Object.entries(PROJECTS_DB)) {
           if (slug.includes(k) || k.includes(slug)) {
@@ -1682,15 +1702,40 @@
 
   function setupMenuLabelSync() {
     function applySync() {
-      // 1. Hide 3-dot menu button completely
-      const menuBtn = document.querySelector('button._rHu7W_menu, button[aria-label="Menu"]');
-      if (menuBtn) {
-        menuBtn.style.setProperty('display', 'none', 'important');
+      // 0. Ensure nav is visible and interactive
+      const nav = document.querySelector('nav._rHu7W_nav, [class*="_rHu7W_nav"]');
+      if (nav) {
+        nav.classList.add('_rHu7W_visible');
+        nav.style.setProperty('opacity', '1', 'important');
+        nav.style.setProperty('visibility', 'visible', 'important');
+        nav.style.setProperty('pointer-events', 'auto', 'important');
+        nav.style.setProperty('transform', 'translateY(0)', 'important');
       }
+
+      // 1. Hide 3-dot menu button completely
+      const menuBtns = document.querySelectorAll('button._rHu7W_menu, button[aria-label="Menu"], button[class*="_rHu7W_menu"]');
+      menuBtns.forEach(btn => {
+        btn.style.setProperty('display', 'none', 'important');
+        btn.style.setProperty('pointer-events', 'none', 'important');
+        btn.style.setProperty('visibility', 'hidden', 'important');
+        btn.style.setProperty('width', '0', 'important');
+        btn.style.setProperty('height', '0', 'important');
+        btn.style.setProperty('margin', '0', 'important');
+        btn.style.setProperty('padding', '0', 'important');
+        btn.setAttribute('aria-hidden', 'true');
+      });
 
       // 2. Keep menuPanel links permanently visible, unclipped, and clickable inline in the navbar
       const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
       if (menuPanel) {
+        menuPanel.style.setProperty('display', 'flex', 'important');
+        menuPanel.style.setProperty('flex-direction', 'row', 'important');
+        menuPanel.style.setProperty('align-items', 'center', 'important');
+        menuPanel.style.setProperty('visibility', 'visible', 'important');
+        menuPanel.style.setProperty('opacity', '1', 'important');
+        menuPanel.style.setProperty('pointer-events', 'auto', 'important');
+        menuPanel.style.setProperty('width', 'auto', 'important');
+        menuPanel.style.setProperty('height', 'auto', 'important');
         menuPanel.setAttribute('aria-hidden', 'false');
         menuPanel.querySelectorAll('li._rHu7W_linkItem, li[class*="_rHu7W_linkItem"]').forEach(li => {
           li.style.setProperty('clip-path', 'none', 'important');
@@ -1815,9 +1860,12 @@
     const observer = new MutationObserver(() => {
       applySync();
     });
-    const nav = document.querySelector('nav[data-navbar]');
-    if (nav) {
-      observer.observe(nav, { childList: true, subtree: true });
+    if (document.body) {
+      observer.observe(document.body, { childList: true, subtree: true });
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
     }
   }
 

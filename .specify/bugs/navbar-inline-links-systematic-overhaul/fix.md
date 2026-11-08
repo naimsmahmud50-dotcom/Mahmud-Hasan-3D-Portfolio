@@ -17,4 +17,11 @@
    - **PROJECT SLIDE VIEW**: Scrolls to top on `/lite`; from 3D Home navigates to `/lite`.
    - **GITHUB REPO**: Opens `https://github.com/naimsmahmud50-dotcom` in new tab.
 2. Implemented `scroll3DTarget(targetY)` with automatic 150ms fallback to ensure deterministic scroll coordinate positioning.
-3. Added auto-redirect for static fallbacks (`/about`, `/contact`, `/projects`) to redirect to `/?variant=full&glide=...`.
+3. Added auto-redirect for static fallbacks (`/about`, `/contact`, `/projects`, `/projects/<slug>`) to redirect to `/?variant=full&glide=...`.
+4. Intercepted all project card clicks (`href^="/projects/"`) across ALL views so they cleanly open the external live demo or GitHub project.
+5. In `setupMenuLabelSync`, bound `MutationObserver` directly to `document.body` to guard against React re-rendering the 3-dot menu.
+
+### C. Static Fallback Templates & Deployment
+1. Injected `custom-enhancements.css` and `custom-enhancements.js` into `legal-notice.html` and `legal-notice`.
+2. Updated `scripts/deploy_gh_pages.py` to prepend `BASE_PATH` to `custom-enhancements.css` and `custom-enhancements.js`.
+3. Generated static directory indexes for all 15 project slugs in both `deploy_root_gh_pages.py` and `deploy_gh_pages.py` to eliminate 404s on static hosting.

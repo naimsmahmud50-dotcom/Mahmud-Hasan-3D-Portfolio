@@ -68,8 +68,16 @@ index_path = os.path.join(EXPORT_DIR, "index.html")
 shutil.copy2(index_path, os.path.join(EXPORT_DIR, "404.html"))
 print("✓ Created 404.html SPA router fallback")
 
-# 4. Create directory indexes for clean subroutes
-for subroute in ["lite", "about", "projects", "contact", "legal-notice"]:
+# 4. Create directory indexes for clean subroutes & project slugs
+project_slugs = [
+    "madrasah-ecosystem", "secure-my-pc", "maijrun-store", "maijrun-tech",
+    "travel-with-maijrun", "arabic-language-club", "student-life-circle",
+    "facebook-automation", "linkedin-automation", "presti", "grandir",
+    "w3r-one", "cgtrader", "reaali", "currency"
+]
+all_subroutes = ["lite", "about", "projects", "contact", "legal-notice"] + [f"projects/{s}" for s in project_slugs]
+
+for subroute in all_subroutes:
     route_dir = os.path.join(EXPORT_DIR, subroute)
     src_file = os.path.join(EXPORT_DIR, f"{subroute}.html")
     if os.path.isfile(route_dir):
@@ -79,7 +87,7 @@ for subroute in ["lite", "about", "projects", "contact", "legal-notice"]:
         shutil.copy2(src_file, os.path.join(route_dir, "index.html"))
     else:
         shutil.copy2(index_path, os.path.join(route_dir, "index.html"))
-print("✓ Created subroute index.html files (lite/, about/, projects/, contact/, legal-notice/)")
+print(f"✓ Created {len(all_subroutes)} subroute index.html files (clean routes + project slugs)")
 
 # 5. Create root asset mirrors for 3D engine (models/, textures/, datas/, envMap/)
 for asset_folder in ["models", "textures", "datas", "envMap"]:

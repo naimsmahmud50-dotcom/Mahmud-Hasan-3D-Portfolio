@@ -61,7 +61,6 @@ for fpath in html_files:
             ('"/_next/', f'"{BASE_PATH}/_next/'),
             ("'/_next/", f"'{BASE_PATH}/_next/"),
             ('"/assets/', f'"{BASE_PATH}/assets/'),
-            ("'/_next/", f"'{BASE_PATH}/_next/"),
             ('"/draco/', f'"{BASE_PATH}/draco/'),
             ('"/fonts/', f'"{BASE_PATH}/fonts/'),
             ('"/images/', f'"{BASE_PATH}/images/'),
@@ -69,6 +68,10 @@ for fpath in html_files:
             ('"/favicon.ico', f'"{BASE_PATH}/favicon.ico'),
             ('"/icon.svg', f'"{BASE_PATH}/icon.svg'),
             ('"/apple-icon.png', f'"{BASE_PATH}/apple-icon.png'),
+            ('href="/custom-enhancements.css', f'href="{BASE_PATH}/custom-enhancements.css'),
+            ('src="/custom-enhancements.js', f'src="{BASE_PATH}/custom-enhancements.js'),
+            ('"/custom-enhancements.css', f'"{BASE_PATH}/custom-enhancements.css'),
+            ('"/custom-enhancements.js', f'"{BASE_PATH}/custom-enhancements.js'),
             ('href="/lite"', f'href="{BASE_PATH}/lite"'),
             ('href="/about"', f'href="{BASE_PATH}/?glide=about"'),
             ('href="/projects"', f'href="{BASE_PATH}/?glide=projects"'),
@@ -92,8 +95,16 @@ index_path = os.path.join(EXPORT_DIR, "index.html")
 shutil.copy2(index_path, os.path.join(EXPORT_DIR, "404.html"))
 print("✓ Created 404.html SPA router fallback")
 
-# 4. Create directory indexes for clean subroutes
-for subroute in ["lite", "about", "projects", "contact", "legal-notice"]:
+# 4. Create directory indexes for clean subroutes & project slugs
+project_slugs = [
+    "madrasah-ecosystem", "secure-my-pc", "maijrun-store", "maijrun-tech",
+    "travel-with-maijrun", "arabic-language-club", "student-life-circle",
+    "facebook-automation", "linkedin-automation", "presti", "grandir",
+    "w3r-one", "cgtrader", "reaali", "currency"
+]
+all_subroutes = ["lite", "about", "projects", "contact", "legal-notice"] + [f"projects/{s}" for s in project_slugs]
+
+for subroute in all_subroutes:
     route_dir = os.path.join(EXPORT_DIR, subroute)
     src_file = os.path.join(EXPORT_DIR, f"{subroute}.html")
     if os.path.isfile(route_dir):
@@ -104,7 +115,7 @@ for subroute in ["lite", "about", "projects", "contact", "legal-notice"]:
         shutil.copy2(src_file, os.path.join(route_dir, "index.html"))
     else:
         shutil.copy2(index_path, os.path.join(route_dir, "index.html"))
-print("✓ Created subroute index.html files (lite/, about/, projects/, contact/, legal-notice/)")
+print(f"✓ Created {len(all_subroutes)} subroute index.html files (clean routes + project slugs)")
 
 # 5. Adapt manifest.webmanifest
 manifest_path = os.path.join(EXPORT_DIR, "manifest.webmanifest")
