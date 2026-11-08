@@ -3,40 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
-const PORT = 8877;
+const PORT = 3001;
 const CHROME_PORT = 9262;
 const SITE_DIR = path.resolve(__dirname, '../cloned_site');
 
-// 1. Static Web Server with clean subroute handling
-const server = http.createServer((req, res) => {
-  let reqPath = req.url.split('?')[0];
-  if (reqPath === '/') reqPath = '/index.html';
-  if (reqPath === '/lite') reqPath = '/lite.html';
-  if (reqPath === '/about') reqPath = '/about.html';
-  if (reqPath === '/contact') reqPath = '/contact.html';
-  if (reqPath === '/projects') reqPath = '/projects.html';
-  if (reqPath === '/legal-notice') reqPath = '/legal-notice.html';
-
-  let filePath = path.join(SITE_DIR, reqPath);
-  if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) filePath += '.html';
-
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    let ct = 'text/plain';
-    if (filePath.endsWith('.html')) ct = 'text/html';
-    else if (filePath.endsWith('.css')) ct = 'text/css';
-    else if (filePath.endsWith('.js')) ct = 'application/javascript';
-    else if (filePath.endsWith('.json')) ct = 'application/json';
-    else if (filePath.endsWith('.wasm')) ct = 'application/wasm';
-    res.writeHead(200, { 'Content-Type': ct });
-    fs.createReadStream(filePath).pipe(res);
-  } else {
-    res.writeHead(404);
-    res.end('Not found: ' + req.url);
-  }
-});
-
-server.listen(PORT, async () => {
-  console.log(`[AUDIT] Local test server listening on http://127.0.0.1:${PORT}`);
+async function startAudit() {
   const tmpDir = fs.mkdtempSync('/tmp/chrome-final-audit-');
 
   const chrome = spawn('google-chrome', [
@@ -159,24 +130,24 @@ server.listen(PORT, async () => {
       fail('Inline Navbar Links', `Missing or invisible links: ${JSON.stringify(links)}`);
     }
 
-    // 1.3 Click PROJECTS -> 3D scroll to scene1
+    // 1.3 Click PROJECTS -> 3D scroll to scene1 projects cylinder cards
     await s1.evalExpr(`(() => {
       const a = Array.from(document.querySelectorAll('a._rHu7W_link')).find(el => el.textContent.includes('PROJECTS'));
       if (a) a.click();
     })()`);
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 1800));
     const yProjects = await s1.evalExpr(`window.scrollY`);
-    if (yProjects > 300) pass('Navbar Click: PROJECTS', `Direct 3D scroll to ${yProjects}px without page reload`);
-    else fail('Navbar Click: PROJECTS', `Scroll failed, scrollY is ${yProjects}px`);
+    if (yProjects >= 4500) pass('Navbar Click: PROJECTS', `Direct 3D scroll to projects cylinder cards at ${yProjects}px without page reload`);
+    else fail('Navbar Click: PROJECTS', `Scroll stopped prematurely at ${yProjects}px instead of projects cylinder (>= 4500px)`);
 
     // 1.4 Click ABOUT -> 3D scroll to sceneAbout
     await s1.evalExpr(`(() => {
       const a = Array.from(document.querySelectorAll('a._rHu7W_link')).find(el => el.textContent.includes('ABOUT'));
       if (a) a.click();
     })()`);
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 1800));
     const yAbout = await s1.evalExpr(`window.scrollY`);
-    if (yAbout > 3000) pass('Navbar Click: ABOUT', `Direct 3D scroll to ${yAbout}px without page reload`);
+    if (yAbout > 6000) pass('Navbar Click: ABOUT', `Direct 3D scroll to About scene at ${yAbout}px without page reload`);
     else fail('Navbar Click: ABOUT', `Scroll failed, scrollY is ${yAbout}px`);
 
     // 1.5 Click CONTACT -> 3D scroll to sceneContactReveal
@@ -184,9 +155,9 @@ server.listen(PORT, async () => {
       const a = Array.from(document.querySelectorAll('a._rHu7W_link')).find(el => el.textContent.includes('CONTACT'));
       if (a) a.click();
     })()`);
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 1800));
     const yContact = await s1.evalExpr(`window.scrollY`);
-    if (yContact > 8000) pass('Navbar Click: CONTACT', `Direct 3D scroll to ${yContact}px without page reload`);
+    if (yContact > 11000) pass('Navbar Click: CONTACT', `Direct 3D scroll to Contact scene at ${yContact}px without page reload`);
     else fail('Navbar Click: CONTACT', `Scroll failed, scrollY is ${yContact}px`);
 
     // 1.6 Click HOME -> 3D scroll back to top (0px)
@@ -194,7 +165,7 @@ server.listen(PORT, async () => {
       const a = Array.from(document.querySelectorAll('a._rHu7W_link')).find(el => el.textContent.trim().startsWith('HOME'));
       if (a) a.click();
     })()`);
-    await new Promise(r => setTimeout(r, 800));
+    await new Promise(r => setTimeout(r, 1500));
     const yHome = await s1.evalExpr(`window.scrollY`);
     if (yHome <= 300) pass('Navbar Click: HOME', `Direct 3D scroll to top (${yHome}px)`);
     else fail('Navbar Click: HOME', `Scroll to top failed, scrollY is ${yHome}px`);
@@ -365,7 +336,8 @@ server.listen(PORT, async () => {
     console.error('[AUDIT ERROR]:', err);
   } finally {
     chrome.kill();
-    server.close();
     process.exit(0);
   }
-});
+}
+
+startAudit();

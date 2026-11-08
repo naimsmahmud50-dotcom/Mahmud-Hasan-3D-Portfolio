@@ -10,6 +10,154 @@
 (function () {
   'use strict';
 
+  // 0. Hard Permanent CSS Injection for 3-Dot Menu Elimination & Inline Horizontal Navbar
+  (function injectPermanentNavbarStyles() {
+    if (typeof document === 'undefined') return;
+    const styleId = 'mh-navbar-hard-permanent-rules';
+    if (document.getElementById(styleId)) return;
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      /* 1. PERMANENTLY SUPPRESS 3-DOT MENU BUTTON ON ALL DEVICES, ORIENTATIONS, AND VIEWPORTS */
+      button._rHu7W_menu,
+      button[aria-label="Menu"],
+      button[class*="_rHu7W_menu"],
+      ._rHu7W_menu {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        position: absolute !important;
+        left: -99999px !important;
+        top: -99999px !important;
+      }
+
+      /* 2. PERMANENTLY KEEP ALL 7 NAVBAR LINKS VISIBLE AND HORIZONTALLY INLINE */
+      nav._rHu7W_nav,
+      [class*="_rHu7W_nav"] {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        z-index: 100 !important;
+      }
+
+      div._rHu7W_menuPanel,
+      [class*="_rHu7W_menuPanel"] {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        position: static !important;
+        margin: 0 !important;
+        margin-left: 2vw !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        clip-path: none !important;
+        -webkit-clip-path: none !important;
+        transform: none !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      ul._rHu7W_links,
+      [class*="_rHu7W_links"] {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 1.25rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+      }
+
+      li._rHu7W_linkItem,
+      li[class*="_rHu7W_linkItem"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        clip-path: none !important;
+        -webkit-clip-path: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+      }
+
+      a._rHu7W_link,
+      a[class*="_rHu7W_link"] {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        opacity: 0.9 !important;
+        visibility: visible !important;
+        font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
+        letter-spacing: 0.05em !important;
+        font-weight: 700 !important;
+        font-size: 0.88rem !important;
+        text-transform: uppercase !important;
+        color: #ebebeb !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        padding: 4px 6px !important;
+        transition: color 0.2s ease, opacity 0.2s ease !important;
+      }
+
+      a._rHu7W_link:hover,
+      a[class*="_rHu7W_link"]:hover {
+        color: #ffffff !important;
+        opacity: 1 !important;
+      }
+
+      button._rHu7W_sound,
+      [class*="_rHu7W_sound"] {
+        margin-left: auto !important;
+      }
+
+      @media (max-width: 900px) {
+        div._rHu7W_menuPanel,
+        [class*="_rHu7W_menuPanel"] {
+          margin-left: 10px !important;
+          overflow-x: auto !important;
+          scrollbar-width: none !important;
+          max-width: 60vw !important;
+        }
+        ul._rHu7W_links,
+        [class*="_rHu7W_links"] {
+          gap: 0.65rem !important;
+        }
+        a._rHu7W_link,
+        a[class*="_rHu7W_link"] {
+          font-size: 0.72rem !important;
+          padding: 2px 4px !important;
+        }
+      }
+    `;
+    const target = document.head || document.documentElement;
+    if (target) {
+      target.appendChild(style);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        (document.head || document.documentElement).appendChild(style);
+      });
+    }
+  })();
+
   // Early Direct-Glide Shield & Scroll Lock (Zero Home Page Landing Flash)
   (function initEarlyDirectGlide() {
     if (typeof window === 'undefined') return;
@@ -1067,19 +1215,32 @@
       document.documentElement.setAttribute('data-mh-glide', glide || targetSection);
 
       const getTargetY = () => {
-        const el = document.getElementById(targetSection);
-        if (el && el.offsetTop > 0) return el.offsetTop;
         const h = window.innerHeight || 800;
-        if (targetSection === 'sceneAbout') return Math.round(h * 11.9);
-        if (targetSection === 'sceneContactReveal') return Math.round(h * 28.56);
-        if (targetSection === 'scene1') return Math.round(h * 1.0);
+        if (targetSection === 'scene1') {
+          const el = document.getElementById('scene1');
+          return (el && el.offsetHeight > 0)
+            ? Math.round(el.offsetTop + el.offsetHeight * 0.5755)
+            : Math.round(h * 6.8);
+        }
+        if (targetSection === 'sceneAbout') {
+          const el = document.getElementById('sceneAbout');
+          return (el && el.offsetHeight > 0)
+            ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
+            : Math.round(h * 13.5);
+        }
+        if (targetSection === 'sceneContactReveal') {
+          const el = document.getElementById('sceneContactReveal');
+          return (el && el.offsetHeight > 0)
+            ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
+            : Math.round(h * 29.5);
+        }
         return 0;
       };
 
       const instantJump = () => {
         const y = getTargetY();
         if (y > 0) {
-          window.scrollTo({ top: y, behavior: 'instant' });
+          window.scrollTo(0, y);
           return true;
         }
         return false;
@@ -1598,16 +1759,29 @@
         return;
       }
 
-      // Helper to scroll reliably to a 3D section
+      // Helper to scroll reliably and smoothly to any 3D section
       const scroll3DTarget = (targetY) => {
-        try {
+        const startY = window.scrollY;
+        const diff = targetY - startY;
+        if (Math.abs(diff) < 2) {
           window.scrollTo(0, targetY);
-        } catch (_) {}
-        setTimeout(() => {
-          if (Math.abs(window.scrollY - targetY) > 50) {
+          return;
+        }
+
+        const duration = 400; // butter-smooth 400ms lerp
+        const startTime = performance.now();
+        const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const interval = setInterval(() => {
+          const elapsed = performance.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const currentY = Math.round(startY + diff * ease(progress));
+          window.scrollTo(0, currentY);
+          if (progress >= 1) {
+            clearInterval(interval);
             window.scrollTo(0, targetY);
           }
-        }, 150);
+        }, 16);
       };
 
       // Button: HOME
@@ -1626,7 +1800,7 @@
       }
 
       // Button: PROJECTS
-      if (label === 'PROJECTS' || href === '/projects' || href.includes('glide=projects')) {
+      if (label === 'PROJECTS' || label.startsWith('PROJECTS') || href === '/projects' || href.includes('glide=projects')) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
@@ -1635,7 +1809,9 @@
           safelyExit3DInterior();
           const h = window.innerHeight || 800;
           const el = document.getElementById('scene1');
-          const targetY = (el && el.offsetTop > 0) ? el.offsetTop : Math.round(h * 1.0);
+          const targetY = (el && el.offsetHeight > 0)
+            ? Math.round(el.offsetTop + el.offsetHeight * 0.5755)
+            : Math.round(h * 6.8);
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=projects');
@@ -1644,7 +1820,7 @@
       }
 
       // Button: ABOUT
-      if (label === 'ABOUT' || href === '/about' || href.includes('glide=about')) {
+      if (label === 'ABOUT' || label.startsWith('ABOUT') || href === '/about' || href.includes('glide=about')) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
@@ -1653,7 +1829,9 @@
           safelyExit3DInterior();
           const h = window.innerHeight || 800;
           const el = document.getElementById('sceneAbout');
-          const targetY = (el && el.offsetTop > 0) ? el.offsetTop : Math.round(h * 11.9);
+          const targetY = (el && el.offsetHeight > 0)
+            ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
+            : Math.round(h * 13.5);
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=about');
@@ -1662,7 +1840,7 @@
       }
 
       // Button: CONTACT
-      if (label === 'CONTACT' || href === '/contact' || href.includes('glide=contact')) {
+      if (label === 'CONTACT' || label.startsWith('CONTACT') || href === '/contact' || href.includes('glide=contact')) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
@@ -1671,7 +1849,9 @@
           safelyExit3DInterior();
           const h = window.innerHeight || 800;
           const el = document.getElementById('sceneContactReveal');
-          const targetY = (el && el.offsetTop > 0) ? el.offsetTop : Math.round(h * 28.56);
+          const targetY = (el && el.offsetHeight > 0)
+            ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
+            : Math.round(h * 29.5);
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=contact');
