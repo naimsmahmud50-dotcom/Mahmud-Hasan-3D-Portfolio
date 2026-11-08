@@ -1792,6 +1792,7 @@
         ensureMenuVisible();
         if (isRoot3D) {
           safelyExit3DInterior();
+          try { window.history.pushState(null, '', base ? (base + '/') : '/'); } catch (_) {}
           scroll3DTarget(0);
         } else {
           window.location.assign(base + '/?variant=full');
@@ -1812,6 +1813,7 @@
           const targetY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.5755)
             : Math.round(h * 6.8);
+          try { window.history.pushState(null, '', base ? (base + '/projects') : '/projects'); } catch (_) {}
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=projects');
@@ -1832,6 +1834,7 @@
           const targetY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
             : Math.round(h * 13.5);
+          try { window.history.pushState(null, '', base ? (base + '/about') : '/about'); } catch (_) {}
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=about');
@@ -1852,6 +1855,7 @@
           const targetY = (el && el.offsetHeight > 0)
             ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
             : Math.round(h * 29.5);
+          try { window.history.pushState(null, '', base ? (base + '/contact') : '/contact'); } catch (_) {}
           scroll3DTarget(targetY);
         } else {
           window.location.assign(base + '/?variant=full&glide=contact');
@@ -1892,17 +1896,19 @@
         nav.style.setProperty('transform', 'translateY(0)', 'important');
       }
 
-      // 1. Hide 3-dot menu button completely
+      // 1. Permanently delete 3-dot menu button from DOM completely
       const menuBtns = document.querySelectorAll('button._rHu7W_menu, button[aria-label="Menu"], button[class*="_rHu7W_menu"]');
       menuBtns.forEach(btn => {
-        btn.style.setProperty('display', 'none', 'important');
-        btn.style.setProperty('pointer-events', 'none', 'important');
-        btn.style.setProperty('visibility', 'hidden', 'important');
-        btn.style.setProperty('width', '0', 'important');
-        btn.style.setProperty('height', '0', 'important');
-        btn.style.setProperty('margin', '0', 'important');
-        btn.style.setProperty('padding', '0', 'important');
-        btn.setAttribute('aria-hidden', 'true');
+        try { btn.remove(); } catch (_) {
+          btn.style.setProperty('display', 'none', 'important');
+          btn.style.setProperty('pointer-events', 'none', 'important');
+          btn.style.setProperty('visibility', 'hidden', 'important');
+          btn.style.setProperty('width', '0', 'important');
+          btn.style.setProperty('height', '0', 'important');
+          btn.style.setProperty('margin', '0', 'important');
+          btn.style.setProperty('padding', '0', 'important');
+          btn.setAttribute('aria-hidden', 'true');
+        }
       });
 
       // 2. Keep menuPanel links permanently visible, unclipped, and clickable inline in the navbar
