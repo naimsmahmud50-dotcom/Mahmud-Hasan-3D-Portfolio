@@ -39,9 +39,22 @@
         top: -99999px !important;
       }
 
-      /* 2. PERMANENTLY KEEP ALL 7 NAVBAR LINKS VISIBLE AND HORIZONTALLY INLINE */
-      nav._rHu7W_nav,
-      [class*="_rHu7W_nav"] {
+      /* 2. COMPLETELY HIDE NAVBAR ON "MAHMUD AI ARCHITECT" LOADER SCREEN */
+      .y9w63G_loaderContainer:not(.y9w63G_exiting) ~ nav._rHu7W_nav,
+      .y9w63G_loaderContainer:not(.y9w63G_exiting) ~ [data-navbar],
+      body:has(.y9w63G_loaderContainer:not(.y9w63G_exiting)) nav._rHu7W_nav,
+      body:has(.y9w63G_loaderContainer:not(.y9w63G_exiting)) [class*="_rHu7W_nav"],
+      nav._rHu7W_nav:not(._rHu7W_visible),
+      [class*="_rHu7W_nav"]:not([class*="_rHu7W_visible"]) {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      /* 3. PERMANENTLY KEEP ALL 7 NAVBAR LINKS VISIBLE AND HORIZONTALLY INLINE ONCE EXPERIENCE IS REVEALED */
+      nav._rHu7W_nav._rHu7W_visible,
+      [class*="_rHu7W_nav"][class*="_rHu7W_visible"] {
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
@@ -1906,10 +1919,33 @@
   }
 
   function setupMenuLabelSync() {
+    function isLoaderActive() {
+      const loader = document.querySelector('.y9w63G_loaderContainer, [class*="loaderContainer"]');
+      if (!loader) return false;
+      if (loader.classList.contains('y9w63G_exiting') || loader.classList.contains('exiting')) return false;
+      try {
+        const style = window.getComputedStyle(loader);
+        if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+      } catch (_) {}
+      return true;
+    }
+
     function applySync() {
-      // 0. Ensure nav is visible and interactive
       const nav = document.querySelector('nav._rHu7W_nav, [class*="_rHu7W_nav"]');
+      if (isLoaderActive()) {
+        if (nav) {
+          nav.style.setProperty('display', 'none', 'important');
+          nav.style.setProperty('opacity', '0', 'important');
+          nav.style.setProperty('visibility', 'hidden', 'important');
+          nav.style.setProperty('pointer-events', 'none', 'important');
+          nav.classList.remove('_rHu7W_visible');
+        }
+        return;
+      }
+
+      // 0. Ensure nav is visible and interactive once experience is active
       if (nav) {
+        nav.style.removeProperty('display');
         nav.classList.add('_rHu7W_visible');
         nav.style.setProperty('opacity', '1', 'important');
         nav.style.setProperty('visibility', 'visible', 'important');
