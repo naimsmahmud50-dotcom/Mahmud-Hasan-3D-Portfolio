@@ -1227,27 +1227,6 @@
 
       document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
 
-      const getFallbackTargetY = () => {
-        const h = window.innerHeight || 800;
-        if (routeKey === 'PROJECTS') {
-          const s2 = document.getElementById('scene2');
-          return (s2 && s2.offsetTop > 0) ? s2.offsetTop : 5200;
-        }
-        if (routeKey === 'ABOUT') {
-          const el = document.getElementById('sceneAbout');
-          return (el && el.offsetHeight > 0)
-            ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
-            : Math.round(h * 13.5);
-        }
-        if (routeKey === 'CONTACT') {
-          const el = document.getElementById('sceneContactReveal');
-          return (el && el.offsetHeight > 0)
-            ? Math.round(el.offsetTop + el.offsetHeight * 0.7286)
-            : Math.round(h * 29.5);
-        }
-        return 0;
-      };
-
       const tryRouteRequest = () => {
         if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[routeKey]) {
           try {
@@ -1258,44 +1237,53 @@
         return false;
       };
 
-      let routed = tryRouteRequest();
+      let routed = false;
       let attempts = 0;
+      const maxAttempts = 300;
+
       const interval = setInterval(() => {
         attempts++;
-        if (!routed && tryRouteRequest()) {
-          routed = true;
-        }
-
-        // Auto click loader-enter as soon as it exists so 3D scene/audio unlocks immediately
-        const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
-        if (cta) {
-          cta.disabled = false;
-          cta.click();
-        }
 
         const loader = document.querySelector('.y9w63G_loaderContainer');
-        const isExiting = loader && (loader.classList.contains('y9w63G_exiting') || window.getComputedStyle(loader).display === 'none');
+        const isLoaderActive = loader && !loader.classList.contains('y9w63G_exiting') && window.getComputedStyle(loader).display !== 'none';
 
-        if (isExiting || attempts >= 40) {
+        // Auto click loader-enter as soon as it exists AND is enabled (assets fully loaded)
+        const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
+        if (cta && !cta.disabled && isLoaderActive) {
+          try {
+            cta.click();
+          } catch (_) {}
+        }
+
+        // Once the loader has exited or unmounted, dispatch the 3D route transition cleanly
+        if (!isLoaderActive) {
+          if (!routed && tryRouteRequest()) {
+            routed = true;
+          }
+
+          // Smoothly remove the shield
           const shield = document.getElementById('mh-direct-glide-shield');
           if (shield && shield.style.opacity !== '0') {
-            shield.style.transition = 'opacity 0.25s ease-out';
+            shield.style.transition = 'opacity 0.35s ease-out';
             shield.style.opacity = '0';
             shield.style.pointerEvents = 'none';
             setTimeout(() => {
               try { shield.remove(); } catch (_) {}
-            }, 300);
+            }, 400);
           }
         }
 
-        if (attempts >= 60 || (routed && attempts >= 15)) {
+        if (attempts >= maxAttempts || (routed && attempts >= 25)) {
           clearInterval(interval);
-          if (!routed) {
-            const y = getFallbackTargetY();
-            if (y > 0) window.scrollTo(0, y);
+          const shield = document.getElementById('mh-direct-glide-shield');
+          if (shield) {
+            shield.style.transition = 'opacity 0.25s ease-out';
+            shield.style.opacity = '0';
+            shield.style.pointerEvents = 'none';
+            setTimeout(() => { try { shield.remove(); } catch (_) {} }, 300);
           }
         }
-      }, 80);
+      }, 100);
     } catch (err) {
       console.warn('Glide handler notice:', err);
     }
@@ -1851,6 +1839,13 @@
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
+        if (onLite) {
+          if (window.__mhLiteController && window.__mhLiteController.eM) {
+            window.__mhLiteController.eM.setScrollValue(0);
+          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
         if (isRoot3D) {
           const s2 = document.getElementById('scene2');
           const fallbackY = (s2 && s2.offsetTop > 0) ? s2.offsetTop : 5200;
