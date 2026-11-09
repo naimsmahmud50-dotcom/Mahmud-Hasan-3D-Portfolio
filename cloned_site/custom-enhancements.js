@@ -52,7 +52,7 @@
         pointer-events: none !important;
       }
 
-      /* 3. PERMANENTLY KEEP ALL 7 NAVBAR LINKS VISIBLE AND HORIZONTALLY INLINE ONCE EXPERIENCE IS REVEALED */
+      /* 3. PERMANENTLY KEEP ALL 7 NAVBAR LINKS VISIBLE AND VERTICALLY STACKED UNDER SOUND & AVAILABLE */
       nav._rHu7W_nav._rHu7W_visible,
       [class*="_rHu7W_nav"][class*="_rHu7W_visible"] {
         display: flex !important;
@@ -68,17 +68,36 @@
         z-index: 100 !important;
       }
 
+      button._rHu7W_logoWrap {
+        order: 1 !important;
+      }
+      button._rHu7W_sound,
+      [class*="_rHu7W_sound"] {
+        order: 2 !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+      }
+      ._rHu7W_availabilityWrap,
+      [class*="_rHu7W_availabilityWrap"] {
+        order: 3 !important;
+        margin-left: 1.25vw !important;
+        flex-shrink: 0 !important;
+      }
+
       div._rHu7W_menuPanel,
       [class*="_rHu7W_menuPanel"] {
         display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
         visibility: visible !important;
         opacity: 1 !important;
         pointer-events: auto !important;
-        position: static !important;
+        position: absolute !important;
+        top: calc(100% + 8px) !important;
+        right: 2.5vw !important;
+        left: auto !important;
+        bottom: auto !important;
         margin: 0 !important;
-        margin-left: 2vw !important;
         padding: 0 !important;
         background: transparent !important;
         border: none !important;
@@ -87,25 +106,30 @@
         -webkit-clip-path: none !important;
         transform: none !important;
         width: auto !important;
+        max-width: 320px !important;
         height: auto !important;
         overflow: visible !important;
+        order: 10 !important;
+        z-index: 101 !important;
       }
 
       ul._rHu7W_links,
       [class*="_rHu7W_links"] {
         display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 1.25rem !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        gap: 0.55rem !important;
         margin: 0 !important;
         padding: 0 !important;
         list-style: none !important;
+        pointer-events: auto !important;
       }
 
       li._rHu7W_linkItem,
       li[class*="_rHu7W_linkItem"] {
-        display: inline-flex !important;
-        align-items: center !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        width: 100% !important;
         clip-path: none !important;
         -webkit-clip-path: none !important;
         opacity: 1 !important;
@@ -115,6 +139,9 @@
 
       a._rHu7W_link,
       a[class*="_rHu7W_link"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
         pointer-events: auto !important;
         cursor: pointer !important;
         opacity: 0.9 !important;
@@ -122,42 +149,72 @@
         font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
         letter-spacing: 0.05em !important;
         font-weight: 700 !important;
-        font-size: 0.88rem !important;
+        font-size: 0.92rem !important;
         text-transform: uppercase !important;
         color: #ebebeb !important;
         text-decoration: none !important;
         white-space: nowrap !important;
         padding: 4px 6px !important;
-        transition: color 0.2s ease, opacity 0.2s ease !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85) !important;
       }
 
       a._rHu7W_link:hover,
       a[class*="_rHu7W_link"]:hover {
-        color: #ffffff !important;
+        color: #00e5ff !important;
         opacity: 1 !important;
+        transform: translateX(-4px) !important;
+        text-shadow: 0 0 12px rgba(0, 229, 255, 0.7) !important;
       }
 
-      button._rHu7W_sound,
-      [class*="_rHu7W_sound"] {
-        margin-left: auto !important;
-      }
-
-      @media (max-width: 900px) {
+      @media (max-width: 768px) {
+        nav._rHu7W_nav,
+        [class*="_rHu7W_nav"] {
+          padding-block: 0.9rem !important;
+          padding-inline: 16px !important;
+        }
         div._rHu7W_menuPanel,
         [class*="_rHu7W_menuPanel"] {
-          margin-left: 10px !important;
-          overflow-x: auto !important;
-          scrollbar-width: none !important;
-          max-width: 60vw !important;
+          right: 16px !important;
+          top: calc(100% + 6px) !important;
         }
         ul._rHu7W_links,
         [class*="_rHu7W_links"] {
-          gap: 0.65rem !important;
+          gap: 0.4rem !important;
         }
         a._rHu7W_link,
         a[class*="_rHu7W_link"] {
-          font-size: 0.72rem !important;
-          padding: 2px 4px !important;
+          font-size: 0.8rem !important;
+          padding: 3px 4px !important;
+        }
+      }
+        a._rHu7W_link,
+        a[class*="_rHu7W_link"] {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          width: 100% !important;
+          font-size: 0.78rem !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.06em !important;
+          color: #e0e0e0 !important;
+          text-transform: uppercase !important;
+          text-decoration: none !important;
+          padding: 6px 10px !important;
+          border-radius: 4px !important;
+          box-sizing: border-box !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+          transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease !important;
+        }
+        li._rHu7W_linkItem:last-child a._rHu7W_link,
+        li[class*="_rHu7W_linkItem"]:last-child a[class*="_rHu7W_link"] {
+          border-bottom: none !important;
+        }
+        a._rHu7W_link:hover,
+        a[class*="_rHu7W_link"]:hover {
+          background: rgba(0, 229, 255, 0.12) !important;
+          color: #00e5ff !important;
+          padding-left: 14px !important;
         }
       }
     `;
@@ -1217,73 +1274,155 @@
       const rawPath = window.location.pathname;
       const path = (base && rawPath.startsWith(base)) ? (rawPath.slice(base.length) || '/') : rawPath;
       const params = new URLSearchParams(window.location.search || '');
-      const glide = params.get('glide') || '';
+      const glide = params.get('glide') || params.get('target') || '';
+      let storedTarget = '';
+      try { storedTarget = sessionStorage.getItem('mh_target_scene') || ''; } catch (_) {}
+      const effective = (glide || storedTarget || '').toLowerCase();
 
-      const routeKey = (path === '/about' || path === '/about.html' || glide === 'about') ? 'ABOUT' :
-                       (path === '/contact' || path === '/contact.html' || glide === 'contact') ? 'CONTACT' :
-                       (path === '/projects' || path === '/projects.html' || glide === 'projects') ? 'PROJECTS' : null;
+      const routeKey = (path === '/about' || path === '/about.html' || effective === 'about') ? 'ABOUT' :
+                       (path === '/contact' || path === '/contact.html' || effective === 'contact') ? 'CONTACT' :
+                       (path === '/projects' || path === '/projects.html' || effective === 'projects') ? 'PROJECTS' :
+                       ((path === '/' || path === '/index.html') && (effective === 'home' || effective === 'landing')) ? 'LANDING' : null;
 
-      if (!routeKey) return;
+      const hasEntered = (function() {
+        try { return sessionStorage.getItem('mh_entered_experience') === 'true'; } catch (_) { return false; }
+      })();
 
-      document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
-
-      const tryRouteRequest = () => {
-        if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[routeKey]) {
-          try {
-            window.__mhRouteStore.getState().request(window.__mhRoutes[routeKey], 'deeplink');
-            return true;
-          } catch (_) {}
-        }
-        return false;
-      };
-
-      let routed = false;
-      let attempts = 0;
-      const maxAttempts = 300;
-
-      const interval = setInterval(() => {
-        attempts++;
-
-        const loader = document.querySelector('.y9w63G_loaderContainer');
-        const isLoaderActive = loader && !loader.classList.contains('y9w63G_exiting') && window.getComputedStyle(loader).display !== 'none';
-
-        // Auto click loader-enter as soon as it exists AND is enabled (assets fully loaded)
-        const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
-        if (cta && !cta.disabled && isLoaderActive) {
-          try {
-            cta.click();
-          } catch (_) {}
+      // Trigger instant bypass and navigation if target exists OR user has already entered
+      if (routeKey || (hasEntered && (path === '/' || path === '/index.html'))) {
+        document.documentElement.classList.add('mh-bypass-loader');
+        document.documentElement.setAttribute('data-mh-bypassing-loader', 'true');
+        if (routeKey) {
+          document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
         }
 
-        // Once the loader has exited or unmounted, dispatch the 3D route transition cleanly
-        if (!isLoaderActive) {
+        // Render sleek cyber transition veil to hide loading seamlessly
+        let shield = document.getElementById('mh-direct-glide-shield');
+        if (!shield) {
+          shield = document.createElement('div');
+          shield.id = 'mh-direct-glide-shield';
+          shield.style.cssText = 'position:fixed;inset:0;background:#0d0e12;z-index:9999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#e0e0e0;font-family:monospace;letter-spacing:2px;font-size:12px;pointer-events:all;transition:opacity 0.35s ease-out;';
+          shield.innerHTML = '<div style="display:flex;align-items:center;gap:12px;"><div style="width:18px;height:18px;border:2px solid #444;border-top-color:#e0e0e0;border-radius:50%;animation:mh-spin 0.8s linear infinite;"></div><span>INITIALIZING 3D ENVIRONMENT...</span></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
+          (document.body || document.documentElement).appendChild(shield);
+        }
+
+        const targetKey = routeKey || 'LANDING';
+
+        const tryRouteRequest = () => {
+          if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[targetKey]) {
+            try {
+              window.__mhRouteStore.getState().request(window.__mhRoutes[targetKey], 'deeplink');
+              return true;
+            } catch (_) {}
+          }
+          return false;
+        };
+
+        const getTargetY = () => {
+          if (targetKey === 'PROJECTS') {
+            const s2 = document.getElementById('scene2');
+            return (s2 && s2.offsetTop > 0) ? s2.offsetTop : 5200;
+          }
+          if (targetKey === 'ABOUT') {
+            try {
+              if (window.__mhRoutes && window.__mhRoutes.ABOUT && typeof window.__mhRoutes.ABOUT.resolveOffset === 'function') {
+                const y = window.__mhRoutes.ABOUT.resolveOffset();
+                if (y > 0) return y;
+              }
+            } catch (_) {}
+            const survey = document.getElementById('sceneAboutSurvey');
+            if (survey && survey.offsetHeight > 0) {
+              return Math.round(survey.offsetTop + survey.offsetHeight * 0.2236 + window.innerHeight * 1.746725);
+            }
+            const sAbout = document.getElementById('sceneAbout');
+            if (sAbout && sAbout.offsetTop > 0) {
+              return Math.round(sAbout.offsetTop + window.innerHeight * (4.4 + 6.6 + 2.26 * 0.2236 + 0.0175));
+            }
+            return 21080;
+          }
+          if (targetKey === 'CONTACT') {
+            const el = document.getElementById('sceneContactReveal');
+            return (el && el.offsetHeight > 0) ? Math.round(el.offsetTop + el.offsetHeight * 0.7286) : 13500;
+          }
+          return 0;
+        };
+
+        let routed = false;
+        let attempts = 0;
+        const maxAttempts = 40;
+
+        const interval = setInterval(() => {
+          attempts++;
+
+          // Synchronize and unlock 3D loader store immediately
+          if (window.__mhLoaderStore && typeof window.__mhLoaderStore.getState === 'function') {
+            try {
+              const ls = window.__mhLoaderStore.getState();
+              if (!ls.hasLoaderExitStarted && typeof ls.setLoaderExitStarted === 'function') {
+                ls.setLoaderExitStarted(true);
+              }
+              if (!ls.hasLoaderUnmounted && typeof ls.setLoaderUnmounted === 'function') {
+                ls.setLoaderUnmounted(true);
+              }
+              if (!ls.isExperienceInteractive && typeof ls.setExperienceInteractive === 'function') {
+                ls.setExperienceInteractive(true);
+              }
+              if (!ls.hasArrivalSceneRevealed && typeof ls.setArrivalSceneRevealed === 'function') {
+                ls.setArrivalSceneRevealed(true);
+              }
+            } catch (_) {}
+          }
+
+          // Auto-trigger CTA click to unlock 3D engine immediately
+          const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
+          if (cta) {
+            cta.disabled = false;
+            cta.removeAttribute('disabled');
+            try { cta.click(); } catch (_) {}
+          }
+
+          // Check if route store is ready and request route
           if (!routed && tryRouteRequest()) {
             routed = true;
           }
 
-          // Smoothly remove the shield
-          const shield = document.getElementById('mh-direct-glide-shield');
-          if (shield && shield.style.opacity !== '0') {
-            shield.style.transition = 'opacity 0.35s ease-out';
-            shield.style.opacity = '0';
-            shield.style.pointerEvents = 'none';
-            setTimeout(() => {
-              try { shield.remove(); } catch (_) {}
-            }, 400);
-          }
-        }
+          if (routed) {
+            const targetY = getTargetY();
+            try {
+              window.scrollTo(0, targetY);
+              if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
+                window.__lenis.scrollTo(targetY, { immediate: true });
+              }
+            } catch (_) {}
 
-        if (attempts >= maxAttempts || (routed && attempts >= 25)) {
-          clearInterval(interval);
-          const shield = document.getElementById('mh-direct-glide-shield');
-          if (shield) {
-            shield.style.transition = 'opacity 0.25s ease-out';
-            shield.style.opacity = '0';
-            shield.style.pointerEvents = 'none';
-            setTimeout(() => { try { shield.remove(); } catch (_) {} }, 300);
+            try {
+              sessionStorage.removeItem('mh_target_scene');
+              sessionStorage.setItem('mh_entered_experience', 'true');
+            } catch (_) {}
+
+            if (shield && shield.style.opacity !== '0') {
+              shield.style.transition = 'opacity 0.15s ease-out';
+              shield.style.opacity = '0';
+              shield.style.pointerEvents = 'none';
+              setTimeout(() => {
+                try { shield.remove(); } catch (_) {}
+              }, 200);
+            }
           }
-        }
-      }, 100);
+
+          if (attempts >= maxAttempts || routed) {
+            clearInterval(interval);
+            if (shield) {
+              shield.style.transition = 'opacity 0.15s ease-out';
+              shield.style.opacity = '0';
+              shield.style.pointerEvents = 'none';
+              setTimeout(() => {
+                try { shield.remove(); } catch (_) {}
+              }, 200);
+            }
+          }
+        }, 80);
+      }
     } catch (err) {
       console.warn('Glide handler notice:', err);
     }
@@ -1531,6 +1670,9 @@
       if (targetBtn && !isEntering) {
         isEntering = true;
         try {
+          sessionStorage.setItem('mh_entered_experience', 'true');
+        } catch (_) {}
+        try {
           if (window.__aengel_audioEngine && window.__aengel_audioEngine.ctx && window.__aengel_audioEngine.ctx.state === 'suspended') {
             window.__aengel_audioEngine.ctx.resume();
           }
@@ -1623,15 +1765,27 @@
       const p = window.location.pathname;
       const cleanP = (base && p.startsWith(base)) ? (p.slice(base.length) || '/') : p;
       if (cleanP === '/about' || cleanP === '/about.html') {
-        window.location.replace(base + '/?variant=full&glide=about');
+        try {
+          sessionStorage.setItem('mh_entered_experience', 'true');
+          sessionStorage.setItem('mh_target_scene', 'ABOUT');
+        } catch (_) {}
+        window.location.replace(base + '/?variant=full&target=about');
         return;
       }
       if (cleanP === '/contact' || cleanP === '/contact.html') {
-        window.location.replace(base + '/?variant=full&glide=contact');
+        try {
+          sessionStorage.setItem('mh_entered_experience', 'true');
+          sessionStorage.setItem('mh_target_scene', 'CONTACT');
+        } catch (_) {}
+        window.location.replace(base + '/?variant=full&target=contact');
         return;
       }
       if (cleanP === '/projects' || cleanP === '/projects.html') {
-        window.location.replace(base + '/?variant=full&glide=projects');
+        try {
+          sessionStorage.setItem('mh_entered_experience', 'true');
+          sessionStorage.setItem('mh_target_scene', 'PROJECTS');
+        } catch (_) {}
+        window.location.replace(base + '/?variant=full&target=projects');
         return;
       }
     } catch (_) {}
@@ -1677,7 +1831,7 @@
 
     // UNIFIED CAPTURE-PHASE CLICK HANDLER FOR ALL BUTTONS
     window.addEventListener('click', (e) => {
-      // 1. Logo Click: If in 3D, exit interior and scroll to top; else go to 3D home
+      // 1. Logo Click: If in 3D, exit interior and smoothly scroll to landing; else go to 3D home
       const logoBtn = e.target.closest('button._rHu7W_logoWrap, [class*="_rHu7W_logoWrap"]');
       if (logoBtn) {
         e.preventDefault();
@@ -1685,12 +1839,16 @@
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         const p = window.location.pathname;
         const cleanP = (base && p.startsWith(base)) ? (p.slice(base.length) || '/') : p;
-        const isRoot3D = cleanP === '/' || cleanP === '/index.html';
-        if (isRoot3D) {
-          safelyExit3DInterior();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+        const in3D = !cleanP.startsWith('/lite') && (!!document.getElementById('scene1') || !!document.querySelector('canvas') || cleanP === '/' || cleanP === '/index.html' || cleanP === '/projects' || cleanP === '/about' || cleanP === '/contact');
+        ensureMenuVisible();
+        if (in3D) {
+          dispatch3DRoute('LANDING', 0);
         } else {
-          window.location.assign(base + '/?variant=full');
+          try {
+            sessionStorage.setItem('mh_entered_experience', 'true');
+            sessionStorage.setItem('mh_target_scene', 'LANDING');
+          } catch (_) {}
+          window.location.assign(base + '/?variant=full&target=home');
         }
         return;
       }
@@ -1765,12 +1923,12 @@
         try {
           if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
             if (window.__lenis.isStopped) window.__lenis.start();
-            window.__lenis.scrollTo(targetY, { duration: 0.8, force: true });
+            window.__lenis.scrollTo(targetY, { duration: 0.55, force: true });
             return;
           }
           if (window.lenis && typeof window.lenis.scrollTo === 'function') {
             if (window.lenis.isStopped) window.lenis.start();
-            window.lenis.scrollTo(targetY, { duration: 0.8, force: true });
+            window.lenis.scrollTo(targetY, { duration: 0.55, force: true });
             return;
           }
 
@@ -1781,7 +1939,7 @@
             return;
           }
 
-          const duration = 400; // butter-smooth 400ms lerp
+          const duration = 350; // butter-smooth 350ms lerp
           const startTime = performance.now();
           const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -1804,15 +1962,25 @@
       // Helper to dispatch 3D route transition directly into WebGL state machine
       const dispatch3DRoute = (routeKey, fallbackY) => {
         safelyExit3DInterior();
+        if (routeKey === 'LANDING') {
+          try {
+            const homePath = (base && window.location.pathname.startsWith(base)) ? (base + '/') : '/';
+            if (window.location.pathname !== homePath && !window.location.pathname.includes('/lite')) {
+              window.history.pushState(null, '', homePath);
+            }
+          } catch (_) {}
+        }
         if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[routeKey]) {
           try {
             window.__mhRouteStore.getState().request(window.__mhRoutes[routeKey], 'deeplink');
+            scroll3DTarget(fallbackY);
             return;
           } catch (_) {}
         }
         if (window.__mhNavigate && window.__mhRoutes && window.__mhRoutes[routeKey]) {
           try {
             window.__mhNavigate(window.__mhRoutes[routeKey]);
+            scroll3DTarget(fallbackY);
             return;
           } catch (_) {}
         }
@@ -1828,54 +1996,74 @@
         if (isRoot3D) {
           dispatch3DRoute('LANDING', 0);
         } else {
-          window.location.assign(base + '/?variant=full');
+          try {
+            sessionStorage.setItem('mh_entered_experience', 'true');
+            sessionStorage.setItem('mh_target_scene', 'LANDING');
+          } catch (_) {}
+          window.location.assign(base + '/?variant=full&target=home');
         }
         return;
       }
 
       // Button: PROJECTS
-      if (label === 'PROJECTS' || label.startsWith('PROJECTS') || href === '/projects' || href.includes('glide=projects')) {
+      if (label === 'PROJECTS' || label.startsWith('PROJECTS') || href === '/projects' || href.includes('glide=projects') || href.includes('target=projects')) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
-        if (onLite) {
-          if (window.__mhLiteController && window.__mhLiteController.eM) {
-            window.__mhLiteController.eM.setScrollValue(0);
-          }
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          return;
-        }
         if (isRoot3D) {
           const s2 = document.getElementById('scene2');
           const fallbackY = (s2 && s2.offsetTop > 0) ? s2.offsetTop : 5200;
           dispatch3DRoute('PROJECTS', fallbackY);
         } else {
-          window.location.assign(base + '/?variant=full&glide=projects');
+          try {
+            sessionStorage.setItem('mh_entered_experience', 'true');
+            sessionStorage.setItem('mh_target_scene', 'PROJECTS');
+          } catch (_) {}
+          window.location.assign(base + '/?variant=full&target=projects');
         }
         return;
       }
 
       // Button: ABOUT
-      if (label === 'ABOUT' || label.startsWith('ABOUT') || href === '/about' || href.includes('glide=about')) {
+      if (label === 'ABOUT' || label.startsWith('ABOUT') || href === '/about' || href.includes('glide=about') || href.includes('target=about')) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
         if (isRoot3D) {
-          const el = document.getElementById('sceneAbout');
-          const fallbackY = (el && el.offsetHeight > 0)
-            ? Math.round(el.offsetTop + el.offsetHeight * 0.8)
-            : 6738;
+          let fallbackY = 0;
+          try {
+            if (window.__mhRoutes && window.__mhRoutes.ABOUT && typeof window.__mhRoutes.ABOUT.resolveOffset === 'function') {
+              fallbackY = window.__mhRoutes.ABOUT.resolveOffset();
+            }
+          } catch (_) {}
+          if (!fallbackY) {
+            const survey = document.getElementById('sceneAboutSurvey');
+            if (survey && survey.offsetHeight > 0) {
+              fallbackY = Math.round(survey.offsetTop + survey.offsetHeight * 0.2236 + window.innerHeight * 1.746725);
+            } else {
+              const sAbout = document.getElementById('sceneAbout');
+              if (sAbout && sAbout.offsetTop > 0) {
+                fallbackY = Math.round(sAbout.offsetTop + window.innerHeight * (4.4 + 6.6 + 2.26 * 0.2236 + 0.0175));
+              } else {
+                fallbackY = 21080;
+              }
+            }
+          }
           dispatch3DRoute('ABOUT', fallbackY);
         } else {
-          window.location.assign(base + '/?variant=full&glide=about');
+          try {
+            sessionStorage.setItem('mh_entered_experience', 'true');
+            sessionStorage.setItem('mh_target_scene', 'ABOUT');
+          } catch (_) {}
+          window.location.assign(base + '/?variant=full&target=about');
         }
         return;
       }
 
       // Button: CONTACT
-      if (label === 'CONTACT' || label.startsWith('CONTACT') || href === '/contact' || href.includes('glide=contact')) {
+      if (label === 'CONTACT' || label.startsWith('CONTACT') || href === '/contact' || href.includes('glide=contact') || href.includes('target=contact')) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
@@ -1887,7 +2075,11 @@
             : 13500;
           dispatch3DRoute('CONTACT', fallbackY);
         } else {
-          window.location.assign(base + '/?variant=full&glide=contact');
+          try {
+            sessionStorage.setItem('mh_entered_experience', 'true');
+            sessionStorage.setItem('mh_target_scene', 'CONTACT');
+          } catch (_) {}
+          window.location.assign(base + '/?variant=full&target=contact');
         }
         return;
       }
@@ -1963,15 +2155,21 @@
         }
       });
 
-      // 2. Keep menuPanel links permanently visible, unclipped, and clickable inline in the navbar
+      // 2. Keep menuPanel links permanently visible, unclipped, and clickable vertically under sound/available
       const menuPanel = document.querySelector('div._rHu7W_menuPanel, [class*="_rHu7W_menuPanel"]');
       if (menuPanel) {
+        const isMobileNav = window.innerWidth <= 768;
         menuPanel.style.setProperty('display', 'flex', 'important');
-        menuPanel.style.setProperty('flex-direction', 'row', 'important');
-        menuPanel.style.setProperty('align-items', 'center', 'important');
+        menuPanel.style.setProperty('flex-direction', 'column', 'important');
+        menuPanel.style.setProperty('align-items', 'flex-end', 'important');
         menuPanel.style.setProperty('visibility', 'visible', 'important');
         menuPanel.style.setProperty('opacity', '1', 'important');
         menuPanel.style.setProperty('pointer-events', 'auto', 'important');
+        menuPanel.style.setProperty('position', 'absolute', 'important');
+        menuPanel.style.setProperty('top', isMobileNav ? 'calc(100% + 6px)' : 'calc(100% + 8px)', 'important');
+        menuPanel.style.setProperty('right', isMobileNav ? '16px' : '2.5vw', 'important');
+        menuPanel.style.setProperty('left', 'auto', 'important');
+        menuPanel.style.setProperty('bottom', 'auto', 'important');
         menuPanel.style.setProperty('width', 'auto', 'important');
         menuPanel.style.setProperty('height', 'auto', 'important');
         menuPanel.setAttribute('aria-hidden', 'false');
@@ -1981,7 +2179,9 @@
           li.style.setProperty('opacity', '1', 'important');
           li.style.setProperty('visibility', 'visible', 'important');
           li.style.setProperty('transform', 'none', 'important');
-          li.style.setProperty('display', 'inline-flex', 'important');
+          li.style.setProperty('display', 'flex', 'important');
+          li.style.setProperty('justify-content', 'flex-end', 'important');
+          li.style.setProperty('width', '100%', 'important');
         });
         menuPanel.querySelectorAll('a._rHu7W_link, a[class*="_rHu7W_link"]').forEach(a => {
           a.setAttribute('tabindex', '0');
@@ -2371,7 +2571,57 @@
     syncCarouselHUD();
   }
 
+  // 14. Direct 3D Animation & Continuous Scroll Engine
+  function setupDirectScrollEngine() {
+    function unlockAndStartScroll() {
+      try {
+        if (window.__mhScrollLockStore && typeof window.__mhScrollLockStore.getState === 'function') {
+          const s = window.__mhScrollLockStore.getState();
+          if (s && s.owners && s.owners.has('loader')) {
+            s.unlock('loader');
+          }
+        }
+      } catch (_) {}
+
+      try {
+        if (window.__mhLoaderStore && typeof window.__mhLoaderStore.getState === 'function') {
+          const l = window.__mhLoaderStore.getState();
+          if (!l.hasLoaderUnmounted && typeof l.setLoaderUnmounted === 'function') l.setLoaderUnmounted(true);
+          if (!l.hasLoaderExitStarted && typeof l.setLoaderExitStarted === 'function') l.setLoaderExitStarted(true);
+          if (!l.isExperienceInteractive && typeof l.setExperienceInteractive === 'function') l.setExperienceInteractive(true);
+          if (!l.hasArrivalSceneRevealed && typeof l.setArrivalSceneRevealed === 'function') l.setArrivalSceneRevealed(true);
+        }
+      } catch (_) {}
+
+      try {
+        const lenis = window.__lenis || window.lenis;
+        if (lenis && lenis.isStopped && typeof lenis.start === 'function') {
+          lenis.start();
+        }
+      } catch (_) {}
+
+      try {
+        const loader = document.querySelector('.y9w63G_loaderContainer, [class*="loaderContainer"]');
+        if (loader && !loader.classList.contains('y9w63G_exiting')) {
+          loader.classList.add('y9w63G_exiting');
+          loader.style.setProperty('pointer-events', 'none', 'important');
+          loader.style.setProperty('display', 'none', 'important');
+        }
+      } catch (_) {}
+    }
+
+    unlockAndStartScroll();
+    const unlockTimer = setInterval(unlockAndStartScroll, 200);
+    setTimeout(() => clearInterval(unlockTimer), 6000);
+
+    window.addEventListener('wheel', unlockAndStartScroll, { passive: true, capture: true });
+    window.addEventListener('touchstart', unlockAndStartScroll, { passive: true, capture: true });
+    window.addEventListener('touchmove', unlockAndStartScroll, { passive: true, capture: true });
+    window.addEventListener('keydown', unlockAndStartScroll, { passive: true, capture: true });
+  }
+
   function init() {
+    setupDirectScrollEngine();
     setupErrorRecoveryGuardian();
     setupLiteNavigation();
     setupMenuLabelSync();

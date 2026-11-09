@@ -2464,20 +2464,35 @@ button[aria-label="Menu"] {
   order: 1 !important;
 }
 
-/* 2. Position menuPanel directly inline in the navbar */
-div._rHu7W_menuPanel {
-  position: static !important;
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  width: auto !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  top: auto !important;
-  right: auto !important;
+/* 2. Sound and Available sit cleanly on the right */
+button._rHu7W_sound,
+[class*="_rHu7W_sound"] {
+  order: 2 !important;
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+._rHu7W_availabilityWrap,
+[class*="_rHu7W_availabilityWrap"] {
+  order: 3 !important;
+  margin-left: 1.25vw !important;
+  flex-shrink: 0 !important;
+}
+
+/* 3. Position menuPanel vertically directly under sound & available on the right */
+div._rHu7W_menuPanel,
+[class*="_rHu7W_menuPanel"] {
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  right: 2.5vw !important;
   left: auto !important;
   bottom: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  width: auto !important;
+  max-width: 320px !important;
+  margin: 0 !important;
+  padding: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
@@ -2486,113 +2501,103 @@ div._rHu7W_menuPanel {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  order: 2 !important;
-  margin-left: auto !important;
-  margin-right: 1.5vw !important;
+  order: 10 !important;
   z-index: 101 !important;
 }
 
-/* 3. Hide vertical divider line and sizer */
+/* 4. Hide vertical divider line and sizer */
 ._rHu7W_line,
 ._rHu7W_linkSizer {
   display: none !important;
 }
 
-/* 4. Display links horizontally in the navbar line */
-ul._rHu7W_links {
+/* 5. Display links vertically top-to-bottom */
+ul._rHu7W_links,
+[class*="_rHu7W_links"] {
   display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 1.35vw !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 0.55rem !important;
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
   pointer-events: auto !important;
 }
 
-/* 5. Force link items to be unclipped and permanently visible */
-li._rHu7W_linkItem {
+/* 6. Force link items to be unclipped and permanently visible */
+li._rHu7W_linkItem,
+li[class*="_rHu7W_linkItem"] {
   clip-path: none !important;
   -webkit-clip-path: none !important;
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
-  display: inline-flex !important;
-  align-items: center !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
   pointer-events: auto !important;
 }
 
-/* 6. Preserve exact typography, font, and uppercase styling */
-a._rHu7W_link {
+/* 7. Preserve exact typography, font, uppercase styling, with sleek hover glow */
+a._rHu7W_link,
+a[class*="_rHu7W_link"] {
   pointer-events: auto !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: flex-end !important;
   font-family: var(--font-navbar-body, system-ui, sans-serif) !important;
-  font-size: 0.88rem !important;
+  font-size: 0.92rem !important;
   font-weight: 700 !important;
-  letter-spacing: 0.03em !important;
-  color: #ebebebeb !important;
+  letter-spacing: 0.05em !important;
+  color: #ebebeb !important;
   text-transform: uppercase !important;
   text-decoration: none !important;
   white-space: nowrap !important;
-  padding: 0.2rem 0.35rem !important;
+  padding: 4px 6px !important;
   position: relative !important;
-  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85) !important;
 }
 
-a._rHu7W_link:hover {
+a._rHu7W_link:hover,
+a[class*="_rHu7W_link"]:hover {
   color: #00e5ff !important;
-}
-
-/* 7. Sound and Available sit cleanly to the right of the links */
-._rHu7W_sound {
-  order: 3 !important;
-  margin-left: 0 !important;
-}
-._rHu7W_availabilityWrap {
-  order: 4 !important;
-  margin-left: 1.25vw !important;
+  transform: translateX(-4px) !important;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.7) !important;
 }
 
 @media (max-width: 1100px) {
   ul._rHu7W_links {
-    gap: 10px !important;
+    gap: 0.45rem !important;
   }
   a._rHu7W_link {
-    font-size: 0.78rem !important;
-    padding: 0.15rem 0.25rem !important;
+    font-size: 0.86rem !important;
+    padding: 3px 5px !important;
   }
 }
 
 @media (max-width: 768px) {
-  ._rHu7W_sound {
-    flex-shrink: 0 !important;
+  nav._rHu7W_nav,
+  [class*="_rHu7W_nav"] {
+    padding-block: 0.9rem !important;
+    padding-inline: 16px !important;
   }
-  ._rHu7W_availabilityWrap {
-    flex-shrink: 0 !important;
-    margin-left: 8px !important;
+  div._rHu7W_menuPanel,
+  [class*="_rHu7W_menuPanel"] {
+    right: 16px !important;
+    top: calc(100% + 6px) !important;
   }
-  div._rHu7W_menuPanel {
-    margin-left: 8px !important;
-    margin-right: 8px !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none !important;
-    max-width: calc(100vw - 190px) !important;
-    flex: 1 1 auto !important;
+  ul._rHu7W_links,
+  [class*="_rHu7W_links"] {
+    gap: 0.4rem !important;
   }
-  div._rHu7W_menuPanel::-webkit-scrollbar {
-    display: none !important;
-  }
-  ul._rHu7W_links {
-    gap: 8px !important;
-    white-space: nowrap !important;
-  }
-  a._rHu7W_link {
-    font-size: 0.72rem !important;
-    letter-spacing: 0.02em !important;
-    padding: 0.15rem 0.2rem !important;
+  a._rHu7W_link,
+  a[class*="_rHu7W_link"] {
+    font-size: 0.8rem !important;
+    padding: 3px 4px !important;
   }
 }
 

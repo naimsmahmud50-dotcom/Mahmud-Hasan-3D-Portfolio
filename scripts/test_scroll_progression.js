@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { spawn } = require('child_process');
 
-const CHROME_PORT = 9280;
+const CHROME_PORT = 9300;
 
 async function run() {
   const tmpDir = fs.mkdtempSync('/tmp/chrome-prog-');
