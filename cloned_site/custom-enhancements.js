@@ -10,6 +10,14 @@
 (function () {
   'use strict';
 
+  // =========================================================================
+  // INITIAL ENTER SCREEN PRESERVATION CONFIGURATION
+  // To re-enable the original MAHMUD AI ARCHITECT enter screen (with 0-100% counter
+  // and ENTER button), set MH_BYPASS_INITIAL_ENTER_SCREEN = false.
+  // When true, the enter button is automatically bypassed for instant entry.
+  // =========================================================================
+  const MH_BYPASS_INITIAL_ENTER_SCREEN = true;
+
   // 0. Hard Permanent CSS Injection for 3-Dot Menu Elimination & Inline Horizontal Navbar
   (function injectPermanentNavbarStyles() {
     if (typeof document === 'undefined') return;
@@ -246,17 +254,21 @@
       const isGlide = Boolean(glide || path.endsWith('/about') || path.endsWith('/about.html') || path.endsWith('/contact') || path.endsWith('/contact.html') || path.endsWith('/projects') || path.endsWith('/projects.html'));
       if (isGlide) {
         document.documentElement.setAttribute('data-mh-glide', glide || 'direct');
-        const shield = document.createElement('div');
-        shield.id = 'mh-direct-glide-shield';
-        shield.style.cssText = 'position:fixed;inset:0;background:#141414;z-index:999999;pointer-events:auto;';
-        if (document.body) {
-          document.body.appendChild(shield);
-        } else {
-          document.addEventListener('DOMContentLoaded', () => {
-            if (!document.getElementById('mh-direct-glide-shield')) {
-              document.body.appendChild(shield);
-            }
-          });
+        let shield = document.getElementById('mh-direct-glide-shield');
+        if (!shield) {
+          shield = document.createElement('div');
+          shield.id = 'mh-direct-glide-shield';
+          shield.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle at center,#111318 0%,#08090c 100%);z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#00e5ff;font-family:monospace;letter-spacing:2px;font-size:12px;pointer-events:all;transition:opacity 0.25s ease-out;';
+          shield.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 28px;border:1px solid rgba(0,229,255,0.22);border-radius:12px;background:rgba(13,14,18,0.85);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,229,255,0.12);"><div style="display:flex;align-items:center;gap:12px;"><div style="width:20px;height:20px;border:2px solid rgba(0,229,255,0.2);border-top-color:#00e5ff;border-radius:50%;animation:mh-spin 0.7s linear infinite;"></div><span style="font-weight:700;letter-spacing:2px;font-size:11px;color:#ebebeb;">INITIALIZING 3D ENVIRONMENT</span></div><div style="font-size:10px;color:#888;letter-spacing:1.5px;">MAHMUD HASAN // PORTFOLIO</div></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
+          if (document.body) {
+            document.body.appendChild(shield);
+          } else {
+            document.addEventListener('DOMContentLoaded', () => {
+              if (!document.getElementById('mh-direct-glide-shield')) {
+                document.body.appendChild(shield);
+              }
+            });
+          }
         }
       }
     } catch (_) {}
@@ -1301,8 +1313,8 @@
         if (!shield) {
           shield = document.createElement('div');
           shield.id = 'mh-direct-glide-shield';
-          shield.style.cssText = 'position:fixed;inset:0;background:#0d0e12;z-index:9999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#e0e0e0;font-family:monospace;letter-spacing:2px;font-size:12px;pointer-events:all;transition:opacity 0.35s ease-out;';
-          shield.innerHTML = '<div style="display:flex;align-items:center;gap:12px;"><div style="width:18px;height:18px;border:2px solid #444;border-top-color:#e0e0e0;border-radius:50%;animation:mh-spin 0.8s linear infinite;"></div><span>INITIALIZING 3D ENVIRONMENT...</span></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
+          shield.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle at center,#111318 0%,#08090c 100%);z-index:9999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#00e5ff;font-family:monospace;letter-spacing:2px;font-size:12px;pointer-events:all;transition:opacity 0.25s ease-out;';
+          shield.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 28px;border:1px solid rgba(0,229,255,0.22);border-radius:12px;background:rgba(13,14,18,0.85);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,229,255,0.12);"><div style="display:flex;align-items:center;gap:12px;"><div style="width:20px;height:20px;border:2px solid rgba(0,229,255,0.2);border-top-color:#00e5ff;border-radius:50%;animation:mh-spin 0.7s linear infinite;"></div><span style="font-weight:700;letter-spacing:2px;font-size:11px;color:#ebebeb;">INITIALIZING 3D ENVIRONMENT</span></div><div style="font-size:10px;color:#888;letter-spacing:1.5px;">MAHMUD HASAN // PORTFOLIO</div></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
           (document.body || document.documentElement).appendChild(shield);
         }
 
@@ -1349,7 +1361,7 @@
 
         let routed = false;
         let attempts = 0;
-        const maxAttempts = 40;
+        const maxAttempts = 14;
 
         const interval = setInterval(() => {
           attempts++;
@@ -2573,7 +2585,40 @@
 
   // 14. Direct 3D Animation & Continuous Scroll Engine
   function setupDirectScrollEngine() {
+    function showFastInitLoader() {
+      if (!MH_BYPASS_INITIAL_ENTER_SCREEN) return;
+      if (document.getElementById('mh-fast-init-loader') || document.getElementById('mh-direct-glide-shield')) return;
+      const fLoader = document.createElement('div');
+      fLoader.id = 'mh-fast-init-loader';
+      fLoader.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 28px;border:1px solid rgba(0,229,255,0.22);border-radius:12px;background:rgba(13,14,18,0.85);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,229,255,0.12);"><div style="display:flex;align-items:center;gap:12px;"><div style="width:20px;height:20px;border:2px solid rgba(0,229,255,0.2);border-top-color:#00e5ff;border-radius:50%;animation:mh-spin 0.7s linear infinite;"></div><span style="font-weight:700;letter-spacing:2px;font-size:11px;color:#ebebeb;">INITIALIZING 3D ENVIRONMENT</span></div><div style="font-size:10px;color:#888;letter-spacing:1.5px;">MAHMUD HASAN // PORTFOLIO</div></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
+      (document.body || document.documentElement).appendChild(fLoader);
+
+      const dismissFastLoader = () => {
+        const el = document.getElementById('mh-fast-init-loader');
+        if (el && el.style.opacity !== '0') {
+          el.style.transition = 'opacity 0.25s ease-out';
+          el.style.opacity = '0';
+          setTimeout(() => { try { el.remove(); } catch (_) {} }, 280);
+        }
+      };
+
+      const checkCanvasReady = setInterval(() => {
+        const cv = document.querySelector('canvas');
+        if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0) {
+          clearInterval(checkCanvasReady);
+          setTimeout(dismissFastLoader, 300);
+        }
+      }, 80);
+
+      setTimeout(() => {
+        clearInterval(checkCanvasReady);
+        dismissFastLoader();
+      }, 1500);
+    }
+
     function unlockAndStartScroll() {
+      if (!MH_BYPASS_INITIAL_ENTER_SCREEN) return;
+
       try {
         if (window.__mhScrollLockStore && typeof window.__mhScrollLockStore.getState === 'function') {
           const s = window.__mhScrollLockStore.getState();
@@ -2610,6 +2655,7 @@
       } catch (_) {}
     }
 
+    showFastInitLoader();
     unlockAndStartScroll();
     const unlockTimer = setInterval(unlockAndStartScroll, 200);
     setTimeout(() => clearInterval(unlockTimer), 6000);

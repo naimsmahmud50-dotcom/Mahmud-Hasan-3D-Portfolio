@@ -2619,10 +2619,31 @@ html[data-mh-glide] .y9w63G_loaderContainer {
 #mh-direct-glide-shield {
   position: fixed !important;
   inset: 0 !important;
-  background: #141414 !important;
+  background: radial-gradient(circle at center, #111318 0%, #08090c 100%) !important;
   z-index: 999999 !important;
   pointer-events: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: opacity 0.25s ease-out !important;
+}
+
+#mh-fast-init-loader {
+  position: fixed !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at center, #111318 0%, #08090c 100%) !important;
+  z-index: 99999 !important;
+  pointer-events: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: opacity 0.3s ease-out !important;
+}
+
+@keyframes mh-spin {
+  to { transform: rotate(360deg); }
 }
 
 
