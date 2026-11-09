@@ -196,35 +196,6 @@
           padding: 3px 4px !important;
         }
       }
-        a._rHu7W_link,
-        a[class*="_rHu7W_link"] {
-          display: flex !important;
-          align-items: center !important;
-          justify-content: flex-start !important;
-          width: 100% !important;
-          font-size: 0.78rem !important;
-          font-weight: 700 !important;
-          letter-spacing: 0.06em !important;
-          color: #e0e0e0 !important;
-          text-transform: uppercase !important;
-          text-decoration: none !important;
-          padding: 6px 10px !important;
-          border-radius: 4px !important;
-          box-sizing: border-box !important;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-          transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease !important;
-        }
-        li._rHu7W_linkItem:last-child a._rHu7W_link,
-        li[class*="_rHu7W_linkItem"]:last-child a[class*="_rHu7W_link"] {
-          border-bottom: none !important;
-        }
-        a._rHu7W_link:hover,
-        a[class*="_rHu7W_link"]:hover {
-          background: rgba(0, 229, 255, 0.12) !important;
-          color: #00e5ff !important;
-          padding-left: 14px !important;
-        }
-      }
     `;
     const target = document.head || document.documentElement;
     if (target) {
@@ -1279,7 +1250,64 @@
     return '';
   };
 
-    // 6.1 Initial Direct Route Auto-Glide & Instant Positioning
+  // 6.0 Instant Home Venue / Landing Scene Revelation & Illumination
+  function forceInstantLandingReveal() {
+    try {
+      if (typeof window.__mhRevealLanding === 'function') {
+        window.__mhRevealLanding();
+      }
+      if (window.__mhLandingContext) {
+        const { m, y, h, d } = window.__mhLandingContext;
+        if (h) h.value = 1;
+        if (d) d.value = 1;
+        if (m) {
+          if (m.spot) {
+            m.spot.intensity = (y && y.spotIntensity != null) ? y.spotIntensity : 314;
+            if (y && y.spotAngle != null) m.spot.angle = y.spotAngle;
+          }
+          if (m.directional) {
+            m.directional.intensity = (y && y.directionalIntensity != null) ? y.directionalIntensity : 2.6;
+          }
+          if (m.fog) {
+            m.fog.density = (y && y.fogDensity != null) ? y.fogDensity : 0.05;
+          }
+          if (m.volumetric) {
+            if (y && y.volOpacity != null && m.volumetric.opacity) m.volumetric.opacity.value = y.volOpacity;
+            if (y && y.volEmissive != null && m.volumetric.emissiveIntensity) m.volumetric.emissiveIntensity.value = y.volEmissive;
+          }
+          if (m.beamDust && y && y.beamDustReveal != null && m.beamDust.reveal) {
+            m.beamDust.reveal.value = y.beamDustReveal;
+          }
+          if (m.waterGlow) {
+            if (y && y.glowIntensity != null && m.waterGlow.glowIntensity) m.waterGlow.glowIntensity.value = y.glowIntensity;
+            if (y && y.glowRadius != null && m.waterGlow.glowRadius) m.waterGlow.glowRadius.value = y.glowRadius;
+          }
+          if (m.drift && m.drift.position) {
+            m.drift.position.y = 0;
+          }
+        }
+      }
+      if (window.__mhStargate && window.__mhStargate.openProgress) {
+        window.__mhStargate.openProgress.value = 0;
+      }
+      if (window.__mhScenes) {
+        if (window.__mhScenes.landing && window.__mhScenes.landing.scene) {
+          window.__mhScenes.landing.scene.visible = true;
+        }
+        if (window.__mhScenes.projects && window.__mhScenes.projects.scene) {
+          window.__mhScenes.projects.scene.visible = false;
+        }
+      }
+      if (window.__mhLoaderStore && typeof window.__mhLoaderStore.getState === 'function') {
+        const ls = window.__mhLoaderStore.getState();
+        if (!ls.hasArrivalSceneRevealed && typeof ls.setArrivalSceneRevealed === 'function') {
+          ls.setArrivalSceneRevealed(true);
+        }
+      }
+    } catch (_) {}
+  }
+
+  // 6.1 Initial Direct Route Auto-Glide & Instant Positioning
   function setupRouteAutoGlide() {
     try {
       const base = getRepoBase();
@@ -1287,28 +1315,29 @@
       const path = (base && rawPath.startsWith(base)) ? (rawPath.slice(base.length) || '/') : rawPath;
       const params = new URLSearchParams(window.location.search || '');
       const glide = params.get('glide') || params.get('target') || '';
+
+      const isRoot = (path === '/' || path === '/index.html' || path === '');
+      if (isRoot && !glide) {
+        try { sessionStorage.removeItem('mh_target_scene'); } catch (_) {}
+      }
+
       let storedTarget = '';
       try { storedTarget = sessionStorage.getItem('mh_target_scene') || ''; } catch (_) {}
-      const effective = (glide || storedTarget || '').toLowerCase();
+      const effective = (glide || (isRoot ? '' : storedTarget) || '').toLowerCase();
+
+      const isExplicitGlide = Boolean(glide || path === '/about' || path === '/about.html' || path === '/contact' || path === '/contact.html' || path === '/projects' || path === '/projects.html');
 
       const routeKey = (path === '/about' || path === '/about.html' || effective === 'about') ? 'ABOUT' :
                        (path === '/contact' || path === '/contact.html' || effective === 'contact') ? 'CONTACT' :
-                       (path === '/projects' || path === '/projects.html' || effective === 'projects') ? 'PROJECTS' :
-                       ((path === '/' || path === '/index.html') && (effective === 'home' || effective === 'landing')) ? 'LANDING' : null;
+                       (path === '/projects' || path === '/projects.html' || (isExplicitGlide && effective === 'projects')) ? 'PROJECTS' : 'LANDING';
 
-      const hasEntered = (function() {
-        try { return sessionStorage.getItem('mh_entered_experience') === 'true'; } catch (_) { return false; }
-      })();
+      const isNonLanding = (routeKey !== 'LANDING');
 
-      // Trigger instant bypass and navigation if target exists OR user has already entered
-      if (routeKey || (hasEntered && (path === '/' || path === '/index.html'))) {
+      if (isNonLanding) {
         document.documentElement.classList.add('mh-bypass-loader');
         document.documentElement.setAttribute('data-mh-bypassing-loader', 'true');
-        if (routeKey) {
-          document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
-        }
+        document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
 
-        // Render sleek cyber transition veil to hide loading seamlessly
         let shield = document.getElementById('mh-direct-glide-shield');
         if (!shield) {
           shield = document.createElement('div');
@@ -1318,8 +1347,7 @@
           (document.body || document.documentElement).appendChild(shield);
         }
 
-        const targetKey = routeKey || 'LANDING';
-
+        const targetKey = routeKey;
         const tryRouteRequest = () => {
           if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[targetKey]) {
             try {
@@ -1366,26 +1394,16 @@
         const interval = setInterval(() => {
           attempts++;
 
-          // Synchronize and unlock 3D loader store immediately
           if (window.__mhLoaderStore && typeof window.__mhLoaderStore.getState === 'function') {
             try {
               const ls = window.__mhLoaderStore.getState();
-              if (!ls.hasLoaderExitStarted && typeof ls.setLoaderExitStarted === 'function') {
-                ls.setLoaderExitStarted(true);
-              }
-              if (!ls.hasLoaderUnmounted && typeof ls.setLoaderUnmounted === 'function') {
-                ls.setLoaderUnmounted(true);
-              }
-              if (!ls.isExperienceInteractive && typeof ls.setExperienceInteractive === 'function') {
-                ls.setExperienceInteractive(true);
-              }
-              if (!ls.hasArrivalSceneRevealed && typeof ls.setArrivalSceneRevealed === 'function') {
-                ls.setArrivalSceneRevealed(true);
-              }
+              if (!ls.hasLoaderExitStarted && typeof ls.setLoaderExitStarted === 'function') ls.setLoaderExitStarted(true);
+              if (!ls.hasLoaderUnmounted && typeof ls.setLoaderUnmounted === 'function') ls.setLoaderUnmounted(true);
+              if (!ls.isExperienceInteractive && typeof ls.setExperienceInteractive === 'function') ls.setExperienceInteractive(true);
+              if (!ls.hasArrivalSceneRevealed && typeof ls.setArrivalSceneRevealed === 'function') ls.setArrivalSceneRevealed(true);
             } catch (_) {}
           }
 
-          // Auto-trigger CTA click to unlock 3D engine immediately
           const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
           if (cta) {
             cta.disabled = false;
@@ -1393,7 +1411,6 @@
             try { cta.click(); } catch (_) {}
           }
 
-          // Check if route store is ready and request route
           if (!routed && tryRouteRequest()) {
             routed = true;
           }
@@ -1408,7 +1425,7 @@
             } catch (_) {}
 
             try {
-              sessionStorage.removeItem('mh_target_scene');
+              sessionStorage.setItem('mh_target_scene', targetKey.toLowerCase());
               sessionStorage.setItem('mh_entered_experience', 'true');
             } catch (_) {}
 
@@ -1416,9 +1433,7 @@
               shield.style.transition = 'opacity 0.15s ease-out';
               shield.style.opacity = '0';
               shield.style.pointerEvents = 'none';
-              setTimeout(() => {
-                try { shield.remove(); } catch (_) {}
-              }, 200);
+              setTimeout(() => { try { shield.remove(); } catch (_) {} }, 200);
             }
           }
 
@@ -1428,12 +1443,20 @@
               shield.style.transition = 'opacity 0.15s ease-out';
               shield.style.opacity = '0';
               shield.style.pointerEvents = 'none';
-              setTimeout(() => {
-                try { shield.remove(); } catch (_) {}
-              }, 200);
+              setTimeout(() => { try { shield.remove(); } catch (_) {} }, 200);
             }
           }
         }, 80);
+      } else {
+        // Pure Home Landing: Ensure zero scroll, no shield, instant illumination!
+        try {
+          window.scrollTo(0, 0);
+          if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
+            window.__lenis.scrollTo(0, { immediate: true });
+          }
+          sessionStorage.removeItem('mh_target_scene');
+        } catch (_) {}
+        forceInstantLandingReveal();
       }
     } catch (err) {
       console.warn('Glide handler notice:', err);
@@ -1976,16 +1999,23 @@
         safelyExit3DInterior();
         if (routeKey === 'LANDING') {
           try {
+            sessionStorage.removeItem('mh_target_scene');
             const homePath = (base && window.location.pathname.startsWith(base)) ? (base + '/') : '/';
             if (window.location.pathname !== homePath && !window.location.pathname.includes('/lite')) {
               window.history.pushState(null, '', homePath);
             }
           } catch (_) {}
+          forceInstantLandingReveal();
         }
         if (window.__mhRouteStore && window.__mhRoutes && window.__mhRoutes[routeKey]) {
           try {
             window.__mhRouteStore.getState().request(window.__mhRoutes[routeKey], 'deeplink');
             scroll3DTarget(fallbackY);
+            if (routeKey === 'LANDING') {
+              forceInstantLandingReveal();
+              setTimeout(forceInstantLandingReveal, 120);
+              setTimeout(forceInstantLandingReveal, 350);
+            }
             return;
           } catch (_) {}
         }
@@ -1993,10 +2023,20 @@
           try {
             window.__mhNavigate(window.__mhRoutes[routeKey]);
             scroll3DTarget(fallbackY);
+            if (routeKey === 'LANDING') {
+              forceInstantLandingReveal();
+              setTimeout(forceInstantLandingReveal, 120);
+              setTimeout(forceInstantLandingReveal, 350);
+            }
             return;
           } catch (_) {}
         }
         scroll3DTarget(fallbackY);
+        if (routeKey === 'LANDING') {
+          forceInstantLandingReveal();
+          setTimeout(forceInstantLandingReveal, 120);
+          setTimeout(forceInstantLandingReveal, 350);
+        }
       };
 
       // Button: HOME
@@ -2005,12 +2045,14 @@
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
         ensureMenuVisible();
+        try { sessionStorage.removeItem('mh_target_scene'); } catch (_) {}
         if (isRoot3D) {
           dispatch3DRoute('LANDING', 0);
+          forceInstantLandingReveal();
         } else {
           try {
             sessionStorage.setItem('mh_entered_experience', 'true');
-            sessionStorage.setItem('mh_target_scene', 'LANDING');
+            sessionStorage.removeItem('mh_target_scene');
           } catch (_) {}
           window.location.assign(base + '/?variant=full&target=home');
         }
@@ -2606,9 +2648,10 @@
         const cv = document.querySelector('canvas');
         if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0) {
           clearInterval(checkCanvasReady);
-          setTimeout(dismissFastLoader, 300);
+          forceInstantLandingReveal();
+          setTimeout(dismissFastLoader, 150);
         }
-      }, 80);
+      }, 60);
 
       setTimeout(() => {
         clearInterval(checkCanvasReady);
@@ -2618,6 +2661,10 @@
 
     function unlockAndStartScroll() {
       if (!MH_BYPASS_INITIAL_ENTER_SCREEN) return;
+
+      if (window.scrollY < 100) {
+        forceInstantLandingReveal();
+      }
 
       try {
         if (window.__mhScrollLockStore && typeof window.__mhScrollLockStore.getState === 'function') {
@@ -2659,6 +2706,13 @@
     unlockAndStartScroll();
     const unlockTimer = setInterval(unlockAndStartScroll, 200);
     setTimeout(() => clearInterval(unlockTimer), 6000);
+
+    const revealLandingInterval = setInterval(() => {
+      if (window.scrollY < 100) {
+        forceInstantLandingReveal();
+      }
+    }, 120);
+    setTimeout(() => clearInterval(revealLandingInterval), 4000);
 
     window.addEventListener('wheel', unlockAndStartScroll, { passive: true, capture: true });
     window.addEventListener('touchstart', unlockAndStartScroll, { passive: true, capture: true });
