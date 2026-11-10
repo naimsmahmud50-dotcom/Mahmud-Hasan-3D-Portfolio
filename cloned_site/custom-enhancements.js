@@ -1954,8 +1954,28 @@
       }
 
       // Helper to scroll reliably and smoothly to any 3D section
+      let activeScrollInterval = null;
       const scroll3DTarget = (targetY) => {
         try {
+          if (activeScrollInterval) {
+            clearInterval(activeScrollInterval);
+            activeScrollInterval = null;
+          }
+
+          if (targetY === 0) {
+            try {
+              if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
+                window.__lenis.scrollTo(0, { immediate: true });
+              }
+              if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+                window.lenis.scrollTo(0, { immediate: true });
+              }
+            } catch (_) {}
+            window.scrollTo(0, 0);
+            forceInstantLandingReveal();
+            return;
+          }
+
           if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
             if (window.__lenis.isStopped) window.__lenis.start();
             window.__lenis.scrollTo(targetY, { duration: 0.55, force: true });
@@ -1978,13 +1998,14 @@
           const startTime = performance.now();
           const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-          const interval = setInterval(() => {
+          activeScrollInterval = setInterval(() => {
             const elapsed = performance.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
             const currentY = Math.round(startY + diff * ease(progress));
             window.scrollTo(0, currentY);
             if (progress >= 1) {
-              clearInterval(interval);
+              clearInterval(activeScrollInterval);
+              activeScrollInterval = null;
               window.scrollTo(0, targetY);
             }
           }, 16);
