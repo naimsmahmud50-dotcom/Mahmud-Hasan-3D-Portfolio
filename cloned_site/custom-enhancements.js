@@ -885,9 +885,23 @@
       return new Intl.DateTimeFormat('en-US', options).format(now);
     }
 
-    // Update availability elements
+    function ensureClockElement() {
+      if (!document.body) return null;
+      let clockSpan = document.getElementById('mh-dhaka-clock');
+      if (!clockSpan) {
+        const container = document.createElement('div');
+        container.id = 'mh-dhaka-clock-container';
+        container.style.cssText = 'position:fixed; bottom:18px; left:20px; z-index:90; font-family:"SF Mono",Menlo,monospace; font-size:11px; letter-spacing:1px; color:rgba(255,255,255,0.7); display:flex; align-items:center; gap:6px; pointer-events:none; background:rgba(10,16,28,0.75); padding:4px 10px; border-radius:9999px; border:1px solid rgba(255,255,255,0.1); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);';
+        container.innerHTML = '<span style="width:6px; height:6px; border-radius:50%; background:#00e5ff; box-shadow:0 0 8px #00e5ff; display:inline-block;"></span><span>DHAKA: <span id="mh-dhaka-clock" style="color:#00e5ff; font-weight:600;">' + getDhakaTime() + '</span></span>';
+        document.body.appendChild(container);
+        clockSpan = document.getElementById('mh-dhaka-clock');
+      }
+      return clockSpan;
+    }
+
+    ensureClockElement();
     setInterval(() => {
-      const clockSpan = document.getElementById('mh-dhaka-clock');
+      const clockSpan = document.getElementById('mh-dhaka-clock') || ensureClockElement();
       if (clockSpan) {
         clockSpan.textContent = getDhakaTime();
       }
@@ -2042,28 +2056,7 @@
             return;
           }
 
-          const startY = window.scrollY;
-          const diff = targetY - startY;
-          if (Math.abs(diff) < 2) {
-            window.scrollTo(0, targetY);
-            return;
-          }
-
-          const duration = 350; // butter-smooth 350ms lerp
-          const startTime = performance.now();
-          const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-          activeScrollInterval = setInterval(() => {
-            const elapsed = performance.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const currentY = Math.round(startY + diff * ease(progress));
-            window.scrollTo(0, currentY);
-            if (progress >= 1) {
-              clearInterval(activeScrollInterval);
-              activeScrollInterval = null;
-              window.scrollTo(0, targetY);
-            }
-          }, 16);
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
         } catch (err) {
           console.error('[MH SCROLL3DTARGET ERROR]', err);
           window.scrollTo(0, targetY);
@@ -2416,6 +2409,15 @@
         linkSizer.appendChild(sizerSpan);
       }
     }
+
+    let throttleTimeout = null;
+    const throttledApplySync = () => {
+      if (throttleTimeout) return;
+      throttleTimeout = setTimeout(() => {
+        throttleTimeout = null;
+        applySync();
+      }, 150);
+    };
 
     applySync();
     let syncInterval = setInterval(() => {
@@ -2811,6 +2813,7 @@
     setupAboutSection();
     setupFooterAndSocialsClean();
     setupEmailCopy();
+    initDhakaClock();
     setupTerminal();
         setupMobileProjectSlideView();
     setupProjectHudActions();
