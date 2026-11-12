@@ -1,0 +1,58 @@
+{
+  "cliffRock1": {
+    "scale": 1,
+    "position": { "x": 11.662, "y": 0.313, "z": -1.505 },
+    "rotation": { "x": 0, "y": 0, "z": 0 },
+    "roots1": true,
+    "roots2": true
+  },
+  "cliffRock2": {
+    "scale": 0.9,
+    "position": { "x": 11.3, "y": -0.197, "z": -6 },
+    "rotation": { "x": 0.238, "y": -0.08, "z": -0.284 },
+    "roots1": true,
+    "roots2": true
+  },
+  "cliffRock3": {
+    "scale": 0.759,
+    "position": { "x": -0.919, "y": 0.878, "z": -9.811 },
+    "rotation": { "x": 0.741, "y": -0.599, "z": -0.979 },
+    "roots1": true,
+    "roots2": false
+  },
+  "cliffRock4": {
+    "scale": 2.21,
+    "position": { "x": -12, "y": -0.3, "z": -6.906 },
+    "rotation": { "x": 0.133, "y": 0.8, "z": -1.004 },
+    "roots1": false,
+    "roots2": true
+  },
+  "cliffRock5": {
+    "scale": 0.8,
+    "position": { "x": 6.96, "y": -0.2, "z": -12.9 },
+    "rotation": { "x": 0.204, "y": 0.64, "z": -0.299 },
+    "roots1": false,
+    "roots2": false
+  },
+  "cliffRock6": {
+    "scale": 1.6,
+    "position": { "x": 3.2, "y": 0, "z": -15 },
+    "rotation": { "x": 0, "y": 0.3, "z": 0.6 },
+    "roots1": false,
+    "roots2": true
+  },
+  "cliffRock7": {
+    "scale": 3.4,
+    "position": { "x": 23.2, "y": 0, "z": -8 },
+    "rotation": { "x": 0, "y": 0.3, "z": 1 },
+    "roots1": false,
+    "roots2": true
+  },
+  "cliffRock8": {
+    "scale": 0.4,
+    "position": { "x": -3.1, "y": -0.85, "z": 2.2 },
+    "rotation": { "x": -0.8, "y": -0.15, "z": 1.05 },
+    "roots1": false,
+    "roots2": true
+  }
+}
