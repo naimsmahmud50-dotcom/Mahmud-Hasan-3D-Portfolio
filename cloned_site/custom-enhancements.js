@@ -2754,18 +2754,23 @@
 
       const checkCanvasReady = setInterval(() => {
         const cv = document.querySelector('canvas');
-        const landingReady = !!(window.__mhScenes?.landing?.scene?.visible);
-        if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0 && landingReady) {
-          clearInterval(checkCanvasReady);
+        const landingScene = window.__mhScenes?.landing?.scene;
+        const landingReady = !!(landingScene && landingScene.visible);
+        if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0) {
           forceInstantLandingReveal();
-          setTimeout(dismissFastLoader, 150);
+          if (landingReady || (window.__mhScenes?.landing?.scene?.visible)) {
+            clearInterval(checkCanvasReady);
+            setTimeout(dismissFastLoader, 150);
+          }
         }
       }, 60);
 
+      // Failsafe timeout: keep visual initialization feedback active until 3D assets finish downloading
       setTimeout(() => {
         clearInterval(checkCanvasReady);
+        forceInstantLandingReveal();
         dismissFastLoader();
-      }, 4000);
+      }, 16000);
     }
 
     function unlockAndStartScroll() {
@@ -2814,7 +2819,7 @@
     showFastInitLoader();
     unlockAndStartScroll();
     const unlockTimer = setInterval(unlockAndStartScroll, 200);
-    setTimeout(() => clearInterval(unlockTimer), 6000);
+    setTimeout(() => clearInterval(unlockTimer), 16000);
 
     // Landing illumination guard: stop interval once fully revealed
     const revealLandingInterval = setInterval(() => {
@@ -2829,7 +2834,7 @@
         clearInterval(revealLandingInterval);
       }
     }, 120);
-    setTimeout(() => clearInterval(revealLandingInterval), 4000);
+    setTimeout(() => clearInterval(revealLandingInterval), 16000);
 
     window.addEventListener('wheel', unlockAndStartScroll, { passive: true, capture: true });
     window.addEventListener('touchstart', unlockAndStartScroll, { passive: true, capture: true });

@@ -23,10 +23,12 @@ a._rHu7W_link:hover,a[class*="_rHu7W_link"]:hover{color:#00e5ff!important;opacit
 </style><script id="mh-early-session-check">
 (function() {
   try {
-    var hasEntered = sessionStorage.getItem('mh_entered_experience') === 'true';
+    // Default bypass when enter screen is disabled (set enterScreenEnabled = true if original initial enter screen is ever requested)
+    var enterScreenEnabled = false;
     var params = new URLSearchParams(window.location.search || '');
-    var hasTarget = params.has('target') || params.has('glide') ;
-    if (hasEntered || hasTarget) {
+    var hasTarget = params.has('target') || params.has('glide');
+    var hasEntered = sessionStorage.getItem('mh_entered_experience') === 'true';
+    if (!enterScreenEnabled || hasEntered || hasTarget) {
       document.documentElement.classList.add('mh-bypass-loader');
       document.documentElement.setAttribute('data-mh-bypassing-loader', 'true');
     }
