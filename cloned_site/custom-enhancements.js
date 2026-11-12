@@ -1556,97 +1556,120 @@
       }
     }
 
+    let isEnhancing = false;
+    let aboutObserver = null;
     function checkAndEnhanceAbout() {
+      if (isEnhancing) return;
       // Do not mutate DOM during initial loader & React hydration
       if (document.querySelector('button[data-testid="loader-enter"]')) return;
 
       const aboutRoot = document.querySelector("._5tgptW_root, [class*='_5tgptW_root']");
       if (aboutRoot) {
-        // 1. Update Subtitle to Full Stack Developer & AI Automation Expert
-        const subtitle = aboutRoot.querySelector("._5tgptW_subtitle, [class*='_5tgptW_subtitle']");
-        if (subtitle && !subtitle.textContent.includes("FULL STACK")) {
-          subtitle.textContent = "FULL STACK DEVELOPER • AI AUTOMATION EXPERT";
-        }
-
-        // 2. Update Lead Text cleanly with Mahmud's Core Focus
-        const lead = aboutRoot.querySelector("._5tgptW_lead, [class*='_5tgptW_lead']");
-        const targetLead = "Specializing in end-to-end full stack web platforms, autonomous AI agent workflows, and resilient mobile application engineering. Dedicated to transforming complex engineering challenges into secure, scalable digital products.";
-        if (lead && lead.textContent !== targetLead) {
-          lead.textContent = targetLead;
-        }
-
-        // 3. Render clean, emoji-free, cyber-editorial skills matrix
-        if (!document.getElementById("mh-about-skills-matrix")) {
-          const oldSeal = document.getElementById("mh-about-security-seal");
-          if (oldSeal) oldSeal.remove();
-          const oldContainer = document.getElementById("mh-about-skills-container");
-          if (oldContainer) oldContainer.remove();
-
-          const skillsContainer = document.createElement("div");
-          skillsContainer.id = "mh-about-skills-matrix";
-          skillsContainer.style.pointerEvents = "auto";
-          skillsContainer.style.marginTop = "10px";
-          skillsContainer.style.marginBottom = "4px";
-          skillsContainer.innerHTML = `
-            <div class="mh-skills-grid">
-              <div class="mh-skill-chip">
-                <span class="chip-accent">//</span>
-                <span class="chip-lead">FULL STACK DEV</span>
-                <span class="chip-sep">/</span>
-                <span class="chip-detail">NEXT.JS · NODE.JS · REACT · TYPESCRIPT</span>
-              </div>
-              <div class="mh-skill-chip">
-                <span class="chip-accent">//</span>
-                <span class="chip-lead">AI AUTOMATION</span>
-                <span class="chip-sep">/</span>
-                <span class="chip-detail">LANGCHAIN · AUTONOMOUS AGENTS · PYTHON</span>
-              </div>
-              <div class="mh-skill-chip">
-                <span class="chip-accent">//</span>
-                <span class="chip-lead">MEDIA &amp; MOTION</span>
-                <span class="chip-sep">/</span>
-                <span class="chip-detail">CREATIVE DIRECTION · MOTION VFX · SOUND</span>
-              </div>
-              <div class="mh-skill-chip">
-                <span class="chip-accent">//</span>
-                <span class="chip-lead">MOBILE APPS</span>
-                <span class="chip-sep">/</span>
-                <span class="chip-detail">FLUTTER · ANDROID SDK · CROSS-PLATFORM</span>
-              </div>
-              <div class="mh-skill-chip">
-                <span class="chip-accent">//</span>
-                <span class="chip-lead">INTEGRATIONS</span>
-                <span class="chip-sep">/</span>
-                <span class="chip-detail">WHATSAPP CLOUD API · WEBHOOKS · BOTS</span>
-              </div>
-              <div class="mh-skill-chip">
-                <span class="chip-accent">//</span>
-                <span class="chip-lead">CYBER SECURITY</span>
-                <span class="chip-sep">/</span>
-                <span class="chip-detail">OWASP TOP 10 · PENETRATION TESTING</span>
-              </div>
-            </div>
-          `;
-          if (lead) {
-            lead.parentNode.insertBefore(skillsContainer, lead.nextSibling);
+        isEnhancing = true;
+        try {
+          // 1. Update Subtitle to Full Stack Developer & AI Automation Expert
+          const subtitle = aboutRoot.querySelector("._5tgptW_subtitle, [class*='_5tgptW_subtitle']");
+          if (subtitle && !subtitle.textContent.includes("FULL STACK")) {
+            subtitle.textContent = "FULL STACK DEVELOPER • AI AUTOMATION EXPERT";
           }
+
+          // 2. Update Lead Text cleanly with Mahmud's Core Focus
+          const lead = aboutRoot.querySelector("._5tgptW_lead, [class*='_5tgptW_lead']");
+          const targetLead = "Specializing in end-to-end full stack web platforms, autonomous AI agent workflows, and resilient mobile application engineering. Dedicated to transforming complex engineering challenges into secure, scalable digital products.";
+          if (lead && lead.textContent !== targetLead) {
+            lead.textContent = targetLead;
+          }
+
+          // 3. Render clean, emoji-free, cyber-editorial skills matrix
+          if (!document.getElementById("mh-about-skills-matrix")) {
+            const oldSeal = document.getElementById("mh-about-security-seal");
+            if (oldSeal) oldSeal.remove();
+            const oldContainer = document.getElementById("mh-about-skills-container");
+            if (oldContainer) oldContainer.remove();
+
+            const skillsContainer = document.createElement("div");
+            skillsContainer.id = "mh-about-skills-matrix";
+            skillsContainer.style.pointerEvents = "auto";
+            skillsContainer.style.marginTop = "10px";
+            skillsContainer.style.marginBottom = "4px";
+            skillsContainer.innerHTML = `
+              <div class="mh-skills-grid">
+                <div class="mh-skill-chip">
+                  <span class="chip-accent">//</span>
+                  <span class="chip-lead">FULL STACK DEV</span>
+                  <span class="chip-sep">/</span>
+                  <span class="chip-detail">NEXT.JS · NODE.JS · REACT · TYPESCRIPT</span>
+                </div>
+                <div class="mh-skill-chip">
+                  <span class="chip-accent">//</span>
+                  <span class="chip-lead">AI AUTOMATION</span>
+                  <span class="chip-sep">/</span>
+                  <span class="chip-detail">LANGCHAIN · AUTONOMOUS AGENTS · PYTHON</span>
+                </div>
+                <div class="mh-skill-chip">
+                  <span class="chip-accent">//</span>
+                  <span class="chip-lead">MEDIA &amp; MOTION</span>
+                  <span class="chip-sep">/</span>
+                  <span class="chip-detail">CREATIVE DIRECTION · MOTION VFX · SOUND</span>
+                </div>
+                <div class="mh-skill-chip">
+                  <span class="chip-accent">//</span>
+                  <span class="chip-lead">MOBILE APPS</span>
+                  <span class="chip-sep">/</span>
+                  <span class="chip-detail">FLUTTER · ANDROID SDK · CROSS-PLATFORM</span>
+                </div>
+                <div class="mh-skill-chip">
+                  <span class="chip-accent">//</span>
+                  <span class="chip-lead">INTEGRATIONS</span>
+                  <span class="chip-sep">/</span>
+                  <span class="chip-detail">WHATSAPP CLOUD API · WEBHOOKS · BOTS</span>
+                </div>
+                <div class="mh-skill-chip">
+                  <span class="chip-accent">//</span>
+                  <span class="chip-lead">CYBER SECURITY</span>
+                  <span class="chip-sep">/</span>
+                  <span class="chip-detail">OWASP TOP 10 · PENETRATION TESTING</span>
+                </div>
+              </div>
+            `;
+            if (lead) {
+              lead.parentNode.insertBefore(skillsContainer, lead.nextSibling);
+            }
+          }
+          alignPortraitBelowPlate();
+          if (aboutObserver && document.getElementById('mh-about-skills-matrix')) {
+            aboutObserver.disconnect();
+            aboutObserver = null;
+          }
+        } finally {
+          isEnhancing = false;
         }
-        alignPortraitBelowPlate();
       }
     }
 
     checkAndEnhanceAbout();
-    const aboutObserver = new MutationObserver(() => {
+    aboutObserver = new MutationObserver(() => {
       checkAndEnhanceAbout();
     });
     if (document.body) {
       aboutObserver.observe(document.body, { childList: true, subtree: true });
     } else {
       document.addEventListener('DOMContentLoaded', () => {
-        aboutObserver.observe(document.body, { childList: true, subtree: true });
+        if (aboutObserver && document.body) {
+          aboutObserver.observe(document.body, { childList: true, subtree: true });
+        }
       });
     }
-    window.addEventListener('scroll', checkAndEnhanceAbout, { passive: true });
+
+    let scrollRaf = null;
+    window.addEventListener('scroll', () => {
+      if (!scrollRaf) {
+        scrollRaf = requestAnimationFrame(() => {
+          checkAndEnhanceAbout();
+          scrollRaf = null;
+        });
+      }
+    }, { passive: true });
     window.addEventListener('resize', alignPortraitBelowPlate, { passive: true });
   }
 
