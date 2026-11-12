@@ -71,17 +71,13 @@
         top: -99999px !important;
       }
 
-      /* 2. COMPLETELY HIDE NAVBAR ON "MAHMUD AI ARCHITECT" LOADER SCREEN */
-      .y9w63G_loaderContainer:not(.y9w63G_exiting) ~ nav._rHu7W_nav,
-      .y9w63G_loaderContainer:not(.y9w63G_exiting) ~ [data-navbar],
-      body:has(.y9w63G_loaderContainer:not(.y9w63G_exiting)) nav._rHu7W_nav,
-      body:has(.y9w63G_loaderContainer:not(.y9w63G_exiting)) [class*="_rHu7W_nav"],
-      nav._rHu7W_nav:not(._rHu7W_visible),
-      [class*="_rHu7W_nav"]:not([class*="_rHu7W_visible"]) {
-        display: none !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
+      /* 2. DIRECT NAVBAR VISIBILITY (NO HIDING DELAY) */
+      nav._rHu7W_nav,
+      [class*="_rHu7W_nav"] {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
       }
 
       /* 3. PERMANENTLY KEEP ALL 7 NAVBAR LINKS VISIBLE AND VERTICALLY STACKED UNDER SOUND & AVAILABLE */

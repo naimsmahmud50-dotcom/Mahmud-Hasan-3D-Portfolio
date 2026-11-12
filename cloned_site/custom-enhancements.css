@@ -2424,17 +2424,13 @@ body.is-lite ._rHu7W_nav,
 /* ==========================================================================
    20. DIRECT INLINE NAVBAR MENU (NO 3-DOT REQUIRED)
    ========================================================================== */
-/* 0. Navbar is completely hidden on "MAHMUD AI ARCHITECT" loader screen */
-.y9w63G_loaderContainer:not(.y9w63G_exiting) ~ nav._rHu7W_nav,
-.y9w63G_loaderContainer:not(.y9w63G_exiting) ~ [data-navbar],
-body:has(.y9w63G_loaderContainer:not(.y9w63G_exiting)) nav._rHu7W_nav,
-body:has(.y9w63G_loaderContainer:not(.y9w63G_exiting)) [class*="_rHu7W_nav"],
-nav._rHu7W_nav:not(._rHu7W_visible),
-._rHu7W_nav:not(._rHu7W_visible) {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* 0. Direct navbar visibility: always display flex and visible */
+nav._rHu7W_nav,
+[class*="_rHu7W_nav"] {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 /* Once visible (after entering experience), navbar is visible and interactable */

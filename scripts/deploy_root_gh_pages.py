@@ -32,10 +32,7 @@ for root, _, files in os.walk(EXPORT_DIR):
 
 BUILD_TS = int(time.time())
 
-base_script = f"""<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<script>
+base_script = f"""<script>
   window.__REPO_BASE__ = '';
   window.TURBOPACK_CHUNK_BASE_PATH = '/_next/';
 </script>"""
