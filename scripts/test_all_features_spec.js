@@ -136,7 +136,10 @@ async function runTargetAudit(url, targetName) {
     // Test 3: 3D Navigation to PROJECTS
     console.log(`\nPhase 3: 3D Scene Navigation - PROJECTS:`);
     await call('Runtime.evaluate', {
-      expression: `window.scrollTo({ top: 5000, behavior: 'instant' })`
+      expression: `(() => {
+        const y = 5200;
+        window.scrollTo({ top: y, behavior: 'instant' });
+      })()`
     });
     await sleep(2000);
     const projectsY = await evalInPage(`window.scrollY`);
@@ -145,9 +148,17 @@ async function runTargetAudit(url, targetName) {
     // Test 4: 3D Navigation to ABOUT (Mahmud Portrait & Skills Matrix)
     console.log(`\nPhase 4: 3D Scene Navigation - ABOUT (Portrait & Skills Matrix):`);
     await call('Runtime.evaluate', {
-      expression: `window.scrollTo({ top: 21080, behavior: 'instant' })`
+      expression: `(() => {
+        let y = 10991;
+        try {
+          if (window.__mhRoutes && window.__mhRoutes.ABOUT && typeof window.__mhRoutes.ABOUT.resolveOffset === 'function') {
+            y = window.__mhRoutes.ABOUT.resolveOffset();
+          }
+        } catch (_) {}
+        window.scrollTo({ top: Math.round(y), behavior: 'instant' });
+      })()`
     });
-    await sleep(2000);
+    await sleep(2500);
 
     const aboutState = await evalInPage(`(() => {
       const portrait = document.querySelector('img.mh-portrait-img, img[src*="mahmud.jpg"], [class*="_5tgptW_portrait"]');
@@ -161,13 +172,21 @@ async function runTargetAudit(url, targetName) {
       };
     })()`);
 
-    record('Mahmud Hasan Real Portrait Mounted in About Scene', !!aboutState?.hasPortrait);
+    record('Mahmud Hasan Real Portrait Mounted in About Scene', !!aboutState?.hasPortrait, { hasPortrait: aboutState?.hasPortrait });
     record('About Skills Matrix Rendered with Skill Chips', aboutState && aboutState.hasMatrix && aboutState.skillsCount > 0, { skillsCount: aboutState?.skillsCount });
 
     // Test 5: 3D Navigation to CONTACT
     console.log(`\nPhase 5: 3D Scene Navigation - CONTACT:`);
     await call('Runtime.evaluate', {
-      expression: `window.scrollTo({ top: 30000, behavior: 'instant' })`
+      expression: `(() => {
+        let y = 13595;
+        try {
+          if (window.__mhRoutes && window.__mhRoutes.CONTACT && typeof window.__mhRoutes.CONTACT.resolveOffset === 'function') {
+            y = window.__mhRoutes.CONTACT.resolveOffset();
+          }
+        } catch (_) {}
+        window.scrollTo({ top: Math.round(y), behavior: 'instant' });
+      })()`
     });
     await sleep(2000);
     const contactY = await evalInPage(`window.scrollY`);

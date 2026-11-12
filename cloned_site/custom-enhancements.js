@@ -1636,15 +1636,17 @@
     }
 
     checkAndEnhanceAbout();
-    let aboutInterval = setInterval(() => {
+    const aboutObserver = new MutationObserver(() => {
       checkAndEnhanceAbout();
-      if (document.getElementById('mh-about-skills-matrix')) {
-        clearInterval(aboutInterval);
-        aboutInterval = null;
-      }
-    }, 350);
-    setTimeout(() => { if (aboutInterval) clearInterval(aboutInterval); }, 10000);
-
+    });
+    if (document.body) {
+      aboutObserver.observe(document.body, { childList: true, subtree: true });
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        aboutObserver.observe(document.body, { childList: true, subtree: true });
+      });
+    }
+    window.addEventListener('scroll', checkAndEnhanceAbout, { passive: true });
     window.addEventListener('resize', alignPortraitBelowPlate, { passive: true });
   }
 
