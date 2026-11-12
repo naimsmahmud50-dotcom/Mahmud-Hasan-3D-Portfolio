@@ -2754,7 +2754,8 @@
 
       const checkCanvasReady = setInterval(() => {
         const cv = document.querySelector('canvas');
-        if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0) {
+        const landingReady = !!(window.__mhScenes?.landing?.scene?.visible);
+        if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0 && landingReady) {
           clearInterval(checkCanvasReady);
           forceInstantLandingReveal();
           setTimeout(dismissFastLoader, 150);
@@ -2764,7 +2765,7 @@
       setTimeout(() => {
         clearInterval(checkCanvasReady);
         dismissFastLoader();
-      }, 1500);
+      }, 4000);
     }
 
     function unlockAndStartScroll() {
@@ -2815,9 +2816,17 @@
     const unlockTimer = setInterval(unlockAndStartScroll, 200);
     setTimeout(() => clearInterval(unlockTimer), 6000);
 
+    // Landing illumination guard: stop interval once fully revealed
     const revealLandingInterval = setInterval(() => {
       if (window.scrollY < 100) {
         forceInstantLandingReveal();
+        const ctx = window.__mhLandingContext;
+        const landingScene = window.__mhScenes?.landing?.scene;
+        if (ctx && ctx.h && ctx.h.value >= 1 && landingScene && landingScene.visible) {
+          clearInterval(revealLandingInterval);
+        }
+      } else {
+        clearInterval(revealLandingInterval);
       }
     }, 120);
     setTimeout(() => clearInterval(revealLandingInterval), 4000);
