@@ -18,6 +18,30 @@
   // =========================================================================
   const MH_BYPASS_INITIAL_ENTER_SCREEN = true;
 
+  // Anti-Stall Cache Sanitation: Prevents outdated cache files & broken storage from freezing the 3D engine
+  (function setupCacheSanitation() {
+    if (typeof window === 'undefined') return;
+    try {
+      // Invalidate legacy service worker caches if any were ever registered
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          names.forEach((name) => {
+            if (name.includes('mahmud') || name.includes('portfolio') || name.includes('next') || name.includes('workbox')) {
+              caches.delete(name);
+            }
+          });
+        }).catch(() => {});
+      }
+      // Clean lingering navigation overrides from sessionStorage on fresh landing visits
+      if (typeof sessionStorage !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search || '');
+        if (!urlParams.get('glide') && !urlParams.get('target')) {
+          sessionStorage.removeItem('mh_target_scene');
+        }
+      }
+    } catch (_) {}
+  })();
+
   // 0. Hard Permanent CSS Injection for 3-Dot Menu Elimination & Inline Horizontal Navbar
   (function injectPermanentNavbarStyles() {
     if (typeof document === 'undefined') return;
@@ -302,7 +326,16 @@
 
     // Fail-Safe Watchdog: If 3D canvas fails or unrecoverably hangs for >6s, smoothly fallback to /lite
     let watchdogTimer = null;
+    let watchdogInterval = null;
     function checkSceneProgress() {
+      // If canvas is already rendered and interactive, stop checking immediately to save CPU
+      if (document.querySelector('canvas')) {
+        if (watchdogInterval) {
+          clearInterval(watchdogInterval);
+          watchdogInterval = null;
+        }
+        return;
+      }
       const base = getBase();
       const currentPath = window.location.pathname;
       if (currentPath.includes('/lite')) return;
@@ -326,7 +359,7 @@
         }
       }
     }
-    setInterval(checkSceneProgress, 300);
+    watchdogInterval = setInterval(checkSceneProgress, 300);
   })();
 
 
@@ -1509,7 +1542,7 @@
       }
     }
 
-    setInterval(() => {
+    function checkAndEnhanceAbout() {
       // Do not mutate DOM during initial loader & React hydration
       if (document.querySelector('button[data-testid="loader-enter"]')) return;
 
@@ -1584,11 +1617,21 @@
             lead.parentNode.insertBefore(skillsContainer, lead.nextSibling);
           }
         }
+        alignPortraitBelowPlate();
       }
-      alignPortraitBelowPlate();
-    }, 200);
+    }
 
-    window.addEventListener('resize', alignPortraitBelowPlate);
+    checkAndEnhanceAbout();
+    let aboutInterval = setInterval(() => {
+      checkAndEnhanceAbout();
+      if (document.getElementById('mh-about-skills-matrix')) {
+        clearInterval(aboutInterval);
+        aboutInterval = null;
+      }
+    }, 350);
+    setTimeout(() => { if (aboutInterval) clearInterval(aboutInterval); }, 10000);
+
+    window.addEventListener('resize', alignPortraitBelowPlate, { passive: true });
   }
 
   // 9. Footer Cleanup (Remove Legal notice & Lab) & Authentic WhatsApp Direct Integration
@@ -1626,7 +1669,10 @@
     }
 
     cleanElements();
-    setInterval(cleanElements, 200);
+    setTimeout(cleanElements, 400);
+    setTimeout(cleanElements, 1200);
+    setTimeout(cleanElements, 3000);
+    window.addEventListener('popstate', cleanElements, { passive: true });
   }
 
   // 7. Contact 3D Cinematic Interaction Engine
@@ -1764,6 +1810,15 @@
       if (hud) {
         hud.remove();
       }
+      let isInterior = false;
+      try {
+        if (window.__mhProjectStore && typeof window.__mhProjectStore.getState === 'function') {
+          const s = window.__mhProjectStore.getState().interiorStatus;
+          isInterior = s === 'interior' || s === 'entering';
+        }
+      } catch (_) {}
+      if (!isInterior) return;
+
       // Also decorate any 2D slide view CLOSE buttons with X icon
       document.querySelectorAll('button._3nxWKG_control, a._3nxWKG_control, [data-control]').forEach(btn => {
         if (btn.textContent.trim() === 'CLOSE' && !btn.querySelector('.mh-ctrl-icon')) {
@@ -1772,7 +1827,7 @@
       });
     }
 
-    setInterval(syncExitHudState, 200);
+    setInterval(syncExitHudState, 600);
 
     // Escape key listener for immediate exit
     window.addEventListener('keydown', function(e) {
@@ -2363,15 +2418,21 @@
     }
 
     applySync();
-    setInterval(applySync, 120);
+    let syncInterval = setInterval(() => {
+      applySync();
+      if (!isLoaderActive() && document.getElementById('mh-menu-item-extra-skills')) {
+        clearInterval(syncInterval);
+        syncInterval = setInterval(applySync, 2000);
+      }
+    }, 250);
 
     document.addEventListener('click', () => {
       setTimeout(applySync, 10);
-      setTimeout(applySync, 60);
+      setTimeout(applySync, 80);
     }, true);
 
     const observer = new MutationObserver(() => {
-      applySync();
+      throttledApplySync();
     });
     if (document.body) {
       observer.observe(document.body, { childList: true, subtree: true });
@@ -2407,9 +2468,8 @@
   
   // 13. Mobile Project Slide View Cyber-HUD & Navigation Engine (Runs on mobile / lite)
   function setupMobileProjectSlideView() {
-    const isMobile = window.innerWidth <= 768;
     const isLite = window.location.pathname.includes('/lite') || document.body.classList.contains('is-lite');
-    if (!isMobile && !isLite) return;
+    if (!isLite) return;
 
     const LITE_PROJECTS_DATA = [
       {

@@ -14,8 +14,8 @@ print(f"🚀 Preparing GitHub Pages deployment for {REPO_NAME}...")
 if os.path.exists(EXPORT_DIR):
     shutil.rmtree(EXPORT_DIR)
 
-shutil.copytree(SRC_DIR, EXPORT_DIR)
-print(f"✓ Copied static files to {EXPORT_DIR}")
+shutil.copytree(SRC_DIR, EXPORT_DIR, ignore=shutil.ignore_patterns('*.bak*', '*.tmp', '*~', '.DS_Store', '*.log', '*.pre-fix*'))
+print(f"✓ Copied clean static files (excluding cache & bak files) to {EXPORT_DIR}")
 
 # 1. Create .nojekyll so GitHub Pages does not ignore _next directory
 with open(os.path.join(EXPORT_DIR, ".nojekyll"), "w") as f:
@@ -49,9 +49,9 @@ for fpath in html_files:
         if "<head>" in content and "window.TURBOPACK_CHUNK_BASE_PATH" not in content:
             content = content.replace("<head>", f"<head>\n{base_script}", 1)
 
-        # Cache bust modified scripts to guarantee browsers never serve stale cached code
+        # Cache bust all scripts and stylesheets to guarantee browsers never serve stale cached code
         content = re.sub(
-            r"(3-0-2h2vnc5wo\.js|2vs2yctr590c[^\s'\"]*\.js|402p77n-ks3lc\.js|1ce4v9de-32bk\.js|15rpswwaw33xn\.js|1361kj0d795e7\.js|17mobvoifngux\.js|2c6pwbjah8t60\.js|3wde5zqulmo4m\.js|0jkqbqgnsg78r\.js|custom-enhancements\.js|custom-enhancements\.css)(?:\?v=[^\s'\"]+)?",
+            r"((?:3-0-2h2vnc5wo|2vs2yctr590c[^\s'\"]*|402p77n-ks3lc|1ce4v9de-32bk|15rpswwaw33xn|1361kj0d795e7|17mobvoifngux|2c6pwbjah8t60|3wde5zqulmo4m|0jkqbqgnsg78r|2nsn2slz5emql|1fkaya2t7r343|0i8eef_83jjb7|3lcic14d4y1ao|turbopack-[^\s'\"]+|35p8czi5w0hl4|1xe1p_tggbi8q|3h6slpp9wmyda|3xcl4xq50tveu|0p1vhzo_szt7p|1mvvi0svwz1hl[^\s'\"]*|336s76ytsfcmf|0cz1d0mv5g_q7|custom-enhancements)\.(?:js|css))(?:\?v=[^\s'\"]+)?",
             rf"\1?v={BUILD_TS}",
             content
         )
