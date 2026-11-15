@@ -1,0 +1,12 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="26" fill="#030712"/>
+  <rect width="118" height="118" x="1" y="1" rx="25" stroke="rgba(56, 189, 248, 0.25)" stroke-width="2"/>
+  <g transform="translate(20, 26)">
+    <!-- M Letter (White) -->
+    <path d="M0 68V0H12L28 32L44 0H56V68H44V24L30 52H26L12 24V68H0Z" fill="#F8FAFC"/>
+    <!-- Interlocked H (Cyan Glow) -->
+    <path d="M56 68V0H68V28H80V0H92V68H80V38H68V68H56Z" fill="#38BDF8"/>
+    <!-- AI Pulse Node -->
+    <circle cx="86" cy="4" r="3.5" fill="#06B6D4"/>
+  </g>
+</svg>

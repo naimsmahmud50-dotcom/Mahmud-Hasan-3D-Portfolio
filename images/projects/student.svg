@@ -1,0 +1,58 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0C0F15"/>
+  <circle cx="850" cy="350" r="300" fill="#2563EB" fill-opacity="0.12" filter="blur(140px)"/>
+  
+  <path d="M0 200H1200M0 400H1200M0 600H1200M300 0V800M600 0V800M900 0V800" stroke="#FFFFFF" stroke-opacity="0.03" stroke-width="1"/>
+  
+  <!-- Exam Test Simulator Mockup -->
+  <g transform="translate(600, 150)">
+    <rect width="500" height="500" rx="16" fill="#141923" stroke="#222C3E" stroke-width="2"/>
+    <rect width="500" height="36" rx="16" fill="#1C2331"/>
+    <circle cx="24" cy="18" r="5" fill="#EF4444"/>
+    <circle cx="40" cy="18" r="5" fill="#F59E0B"/>
+    <circle cx="56" cy="18" r="5" fill="#10B981"/>
+    
+    <!-- Test Timer Bar -->
+    <rect x="24" y="56" width="452" height="60" rx="10" fill="#192231"/>
+    <text x="44" y="92" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="14">HSC Board Examination Simulation</text>
+    <rect x="360" y="70" width="100" height="32" rx="16" fill="#EF4444" fill-opacity="0.2"/>
+    <text x="410" y="91" fill="#F87171" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">⏱ 44:18</text>
+    
+    <!-- Question Card with Formula -->
+    <rect x="24" y="130" width="452" height="150" rx="12" fill="#1B2536" stroke="#2A374C"/>
+    <text x="44" y="165" fill="#94A3B8" font-family="sans-serif" font-size="12">Question 14 of 45 · Physics Chapter 4</text>
+    <text x="44" y="195" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="15">A particle of mass m undergoes harmonic oscillation:</text>
+    <text x="44" y="235" fill="#60A5FA" font-family="serif" font-size="16" font-style="italic">E_total = ½ k A² = ½ m v_max²</text>
+    
+    <!-- Options List -->
+    <g transform="translate(24, 300)">
+      <rect width="452" height="40" rx="8" fill="#151C28" stroke="#2563EB" stroke-width="1.5"/>
+      <text x="40" y="25" fill="#93C5FD" font-family="sans-serif" font-size="13">A. Directly proportional to amplitude squared [SELECTED]</text>
+      
+      <rect y="50" width="452" height="40" rx="8" fill="#151C28"/>
+      <text x="40" y="75" fill="#94A3B8" font-family="sans-serif" font-size="13">B. Inversely proportional to mass</text>
+      
+      <rect y="100" width="452" height="40" rx="8" fill="#151C28"/>
+      <text x="40" y="125" fill="#94A3B8" font-family="sans-serif" font-size="13">C. Independent of frequency</text>
+    </g>
+  </g>
+
+  <!-- Editorial Info -->
+  <g transform="translate(100, 200)">
+    <rect x="0" y="0" width="160" height="32" rx="16" fill="#2563EB" fill-opacity="0.15" stroke="#2563EB" stroke-opacity="0.4"/>
+    <text x="80" y="21" fill="#60A5FA" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">REACT · EDTECH PLATFORM</text>
+    
+    <text x="0" y="100" fill="#FFFFFF" font-family="sans-serif" font-size="44" font-weight="800" letter-spacing="-1">Student Life Circle</text>
+    <text x="0" y="145" fill="#94A3B8" font-family="sans-serif" font-size="20" font-weight="400">Exam-Prep &amp; National Board Archive</text>
+    
+    <g transform="translate(0, 220)">
+      <rect x="0" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="24" y="36" fill="#60A5FA" font-family="sans-serif" font-size="24" font-weight="bold">50k+</text>
+      <text x="24" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Question Bank</text>
+      
+      <rect x="180" y="0" width="160" height="80" rx="12" fill="#141922" stroke="#252D3D"/>
+      <text x="204" y="36" fill="#10B981" font-family="sans-serif" font-size="24" font-weight="bold">10k+</text>
+      <text x="204" y="58" fill="#64748B" font-family="sans-serif" font-size="12">Exams Evaluated</text>
+    </g>
+  </g>
+</svg>

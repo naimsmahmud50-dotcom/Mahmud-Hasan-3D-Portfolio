@@ -1,0 +1,441 @@
+{
+  "cards": [
+    {
+      "slug": "madrasah-ecosystem",
+      "name": "Madrasah Ecosystem",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-CGTRADER-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-CGTRADER-1600x900.webp",
+        "alt": "Madrasah Ecosystem Software",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 1",
+        "title": "Madrasah Ecosystem",
+        "year": 2024,
+        "tagline": "Multi-Tenant Education & Hifz Tracking Platform",
+        "description": "An integrated multi-tenant management ecosystem unifying Flutter Android apps for parents and teachers with an enterprise web console. Automates tuition billing via WhatsApp notifications and tracks real-time Quran Hifz progress with offline-first synchronization.",
+        "roleTitles": [
+          "fullstack architect",
+          "android developer"
+        ],
+        "roleDescription": "Architected the multi-tenant backend, Flutter cross-platform mobile client, and automated WhatsApp Cloud messaging dispatchers.",
+        "stack": [
+          "Flutter",
+          "NestJS",
+          "PostgreSQL",
+          "WhatsApp API",
+          "Docker"
+        ],
+        "challenges": "Ensuring reliable offline-first database synchronization for rural areas with intermittent connectivity using local SQLite buffers and conflict resolution.",
+        "liveUrl": "https://github.com/naimsmahmud50-dotcom/Madrasha-Managemant-Softaware"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-CGTRADER.webp",
+          "alt": "Madrasah Ecosystem Dashboard",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-CGTRADER.webp",
+          "alt": "Madrasah Ecosystem Mobile View",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-CGTRADER.webp",
+          "alt": "Madrasah Ecosystem Hifz Tracker",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-CGTRADER.webp",
+          "alt": "Madrasah Ecosystem Billing Module",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "secure-my-pc",
+      "name": "Secure My PC",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-W3RONE-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-W3RONE-1600x900.webp",
+        "alt": "Secure My PC",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 2 \u2022 Private Enterprise Repo",
+        "title": "Secure My PC",
+        "year": 2024,
+        "tagline": "Native Windows Threat Watchdog & Defense Daemon [Private Repo]",
+        "description": "A lightweight native security utility that protects Windows workstations against unauthorized external media and suspicious background activity. Features sub-50ms USB flash drive interception and automated emergency lockouts with negligible CPU overhead. (Source code is maintained in an authorized private enterprise repository).",
+        "roleTitles": [
+          "systems & security engineer",
+          "pc software developer"
+        ],
+        "roleDescription": "Engineered low-level Win32 hardware event interception hooks, daemon watchdog routines, and an intuitive desktop console.",
+        "stack": [
+          "C# / .NET",
+          "Win32 APIs",
+          "Tauri",
+          "Rust",
+          "SQLite"
+        ],
+        "challenges": "Interpreting low-level Win32 hardware device signals cleanly without false positives or degrading system performance.",
+        "liveUrl": "https://github.com/naimsmahmud50-dotcom"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-W3RONE.webp",
+          "alt": "Secure My PC Live Defense Console",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-W3RONE.webp",
+          "alt": "Secure My PC USB Interception",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-W3RONE.webp",
+          "alt": "Secure My PC Process Watchdog",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-W3RONE.webp",
+          "alt": "Secure My PC Security Analytics",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "maijrun-store",
+      "name": "MAIJRUN Tech Store",
+      "nameInk": "#00e5ff",
+      "image": "/images/projects/store.svg",
+      "ogImage": {
+        "url": "/images/projects/store.svg",
+        "alt": "MAIJRUN Tech Store",
+        "width": 1200,
+        "height": 800
+      },
+      "editorial": {
+        "overline": "Project 3",
+        "title": "MAIJRUN Tech Store",
+        "year": 2024,
+        "tagline": "Enterprise Headless Tech & Hardware E-Commerce Platform",
+        "description": "A production-grade, headless e-commerce ecosystem built for Bangladesh's tech and hardware market (Laptops, Custom Desktops, PC Components). Features live Custom PC Builder compatibility engine, BDT pricing with bKash/Nagad/SSLCommerz, live Steadfast/Pathao courier tracking, passwordless phone OTP, and OWASP ASVS L2 security.",
+        "roleTitles": [
+          "Lead Full-Stack E-Commerce Architect",
+          "Systems Engineer"
+        ],
+        "roleDescription": "Architected the Next.js 15 headless storefront, Medusa v1.20 backend, real-time hardware compatibility engine, and localized payment & courier webhook gateways.",
+        "stack": [
+          "Next.js 15",
+          "TypeScript",
+          "Medusa v1.20",
+          "PostgreSQL",
+          "Redis",
+          "Tailwind CSS"
+        ],
+        "challenges": "Engineered real-time hardware socket matching and TDP power headroom validation while maintaining strict OWASP ASVS Level 2 security and sub-second payment idempotency.",
+        "liveUrl": "https://github.com/naimsmahmud50-dotcom/Maijrun-Teach"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-PRESTI.webp",
+          "alt": "Autonomous AI Agent Architecture",
+          "aspect": 1.776851851851852
+        },
+        {
+          "url": "/assets/CarouselImg2-PRESTI.webp",
+          "alt": "AI Agent Decision Graph",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-PRESTI.webp",
+          "alt": "AI Agent Execution Stream",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-PRESTI.webp",
+          "alt": "AI Agent Human Oversight HUD",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "travel-with-maijrun",
+      "name": "Travel with Maijrun",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-GRANDIR-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-GRANDIR-1600x900.webp",
+        "alt": "Travel with Maijrun",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 4",
+        "title": "Travel with Maijrun",
+        "year": 2024,
+        "tagline": "Modern Travel Agency & Curated Tour Portal",
+        "description": "A high-performance travel booking and concierge platform showcasing curated international holiday packages and destination guides. Features dynamic booking inquiry pipelines, interactive itineraries, and instant quote generation.",
+        "roleTitles": [
+          "lead web app developer",
+          "ui engineer"
+        ],
+        "roleDescription": "Engineered responsive Next.js web application, interactive itinerary builder, and customer inquiry management pipeline.",
+        "stack": [
+          "Next.js 14",
+          "TypeScript",
+          "Tailwind CSS",
+          "Framer Motion",
+          "PostgreSQL"
+        ],
+        "challenges": "Delivering sub-100ms page transitions and responsive image loading across variable international mobile networks.",
+        "liveUrl": "https://travel-w-ith-maijrun-alpha.vercel.app"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-GRANDIR.webp",
+          "alt": "Travel with Maijrun Hero Interface",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-GRANDIR.webp",
+          "alt": "Travel Package Itinerary View",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-GRANDIR.webp",
+          "alt": "Destination Discovery Grid",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-GRANDIR.webp",
+          "alt": "Booking Inquiry Checkout",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "arabic-language-club",
+      "name": "Arabic Language & Cultural Club",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-REAALI-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-REAALI-1600x900.webp",
+        "alt": "Arabic Language & Cultural Club",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 5",
+        "title": "Arabic Language & Cultural Club",
+        "year": 2023,
+        "tagline": "Linguistic Learning Platform & Cultural Hub",
+        "description": "An interactive community and educational hub for Arabic language learners. Delivers structured audio-visual lessons, grammar study modules, interactive quizzes, and collaborative community discussion forums.",
+        "roleTitles": [
+          "fullstack developer",
+          "ui designer"
+        ],
+        "roleDescription": "Developed bidirectional RTL layout support, lesson player interfaces, and community forum modules.",
+        "stack": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Tailwind CSS",
+          "PostgreSQL"
+        ],
+        "challenges": "Handling flawless bidirectional right-to-left (RTL) typography rendering alongside responsive audio playback synchronization.",
+        "liveUrl": "https://arabic-langualge-and-cultural-club.vercel.app"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-REAALI.webp",
+          "alt": "Arabic Language Club Course Player",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-REAALI.webp",
+          "alt": "Interactive Grammar Practice",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-REAALI.webp",
+          "alt": "Student Community Forum",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-REAALI.webp",
+          "alt": "Audio-Visual Lesson Module",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "student-life-circle",
+      "name": "Student Life Circle",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-CURRENCY-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-CURRENCY-1600x900.webp",
+        "alt": "Student Life Circle",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 6",
+        "title": "Student Life Circle",
+        "year": 2023,
+        "tagline": "Exam-Prep Platform & Student Community",
+        "description": "A collaborative educational platform connecting students across Bangladesh. Provides curated board exam question archives, interactive practice quizzes, skill development workshops, and peer study groups.",
+        "roleTitles": [
+          "platform architect",
+          "fullstack developer"
+        ],
+        "roleDescription": "Engineered scalable community forum backend, quiz evaluation engine, and past-paper PDF repository.",
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS",
+          "Express.js",
+          "MongoDB"
+        ],
+        "challenges": "Handling high concurrent traffic spikes during national board exam seasons without latency degradation.",
+        "liveUrl": "https://naimsmahmud50-dotcom.github.io/Student-Life-Circle/"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-CURRENCY.webp",
+          "alt": "Student Life Circle Community Feed",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-CURRENCY.webp",
+          "alt": "Board Exam Archive & Practice Tests",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-CURRENCY.webp.webp",
+          "alt": "Interactive Quiz Evaluator",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "facebook-automation",
+      "name": "Facebook Automation",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-FACEBOOK-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-FACEBOOK.webp",
+        "alt": "Facebook Automation Tool",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 7",
+        "title": "Facebook Automation",
+        "year": 2024,
+        "tagline": "Automated Page Operations & Auto-Reply Suite",
+        "description": "A smart social media utility that streamlines Facebook page operations. Automates scheduled post publishing, instant customer inquiry auto-replies, smart comment moderation, and engagement metrics tracking.",
+        "roleTitles": [
+          "automation engineer",
+          "ai workflow developer"
+        ],
+        "roleDescription": "Integrated Meta Graph APIs, webhook event dispatchers, and automated response rules for high-volume customer inquiries.",
+        "stack": [
+          "Python",
+          "Node.js",
+          "Meta Graph API",
+          "Redis",
+          "SQLite"
+        ],
+        "challenges": "Complying strictly with Meta API rate limits and token refresh cycles while ensuring sub-second response times.",
+        "liveUrl": "https://github.com/naimsmahmud50-dotcom/Facebook-Automation-"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-FACEBOOK.webp",
+          "alt": "Facebook Automation Scheduling Matrix",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-FACEBOOK.webp",
+          "alt": "Webhook Auto-Response Pipeline",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-FACEBOOK.webp",
+          "alt": "Comment Sentiment & Auto-Moderation",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-FACEBOOK.webp",
+          "alt": "Engagement Analytics & Post Dispatcher",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    },
+    {
+      "slug": "linkedin-automation",
+      "name": "LinkedIn Automation",
+      "nameInk": "#e0e0e0",
+      "image": "/assets/HeroImg-LinkedIn Automation-1600x900.webp",
+      "ogImage": {
+        "url": "/assets/HeroImg-LinkedIn Automation.webp",
+        "alt": "LinkedIn Automation Tool",
+        "width": 2560,
+        "height": 1440
+      },
+      "editorial": {
+        "overline": "Project 8",
+        "title": "LinkedIn Automation",
+        "year": 2026,
+        "tagline": "Autonomous LinkedIn Growth & AI Lead Generation Engine with Telegram Bot Control",
+        "description": "Production-grade autonomous Python automation ecosystem combining Playwright stealth browser automation, Gemini AI content generation, automated YouTube trend synthesis, intelligent lead persona evaluation, and mobile Telegram bot remote control.",
+        "roleTitles": [
+          "lead automation engineer",
+          "python architect"
+        ],
+        "roleDescription": "Architected the 3-tier decoupled automation pipeline (Telegram Controller, Gemini Content Engine, Playwright Stealth Automator) with SQLite state management and human-like behavioral fuzzing.",
+        "stack": [
+          "Python 3.12",
+          "Playwright",
+          "Google Gemini AI",
+          "Telegram Bot API",
+          "SQLite",
+          "AsyncIO"
+        ],
+        "challenges": "Bypassing advanced bot detection algorithms via anti-fingerprinting stealth utilities, randomized human-like typing delays, viewport jitter, and strict rate-limiting (25 connections/day) without risking account restriction.",
+        "liveUrl": "https://github.com/naimsmahmud50-dotcom/Linkdin-Automation-"
+      },
+      "gallery": [
+        {
+          "url": "/assets/CarouselImg1-LinkedIn Automation.webp",
+          "alt": "Playwright Stealth Engine & Telegram Controller",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg2-LinkedIn Automation.webp",
+          "alt": "Gemini AI Content Generator & Trend Synthesizer",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg3-LinkedIn Automation.webp",
+          "alt": "Stealth Anti-Detection & Rate-Limiting Engine",
+          "aspect": 1.7777777777777777
+        },
+        {
+          "url": "/assets/CarouselImg4-LinkedIn Automation.webp",
+          "alt": "SQLite Database & Mobile Telegram Approval Bot",
+          "aspect": 1.7777777777777777
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "Rock1": {
+    "rockType": 1,
+    "scale": 1.4,
+    "position": { "x": -1.5, "y": -0.052, "z": -0.1379 },
+    "rotation": { "x": 0.09, "y": 0.806, "z": -0.797 }
+  },
+  "Rock2": {
+    "rockType": 5,
+    "scale": 1.3,
+    "position": { "x": -1.237, "y": 0.061, "z": 0.195 },
+    "rotation": { "x": 0, "y": 0, "z": 0.345 }
+  },
+  "Rock3": {
+    "rockType": 8,
+    "scale": 2.2,
+    "position": { "x": -2.2, "y": 0.061, "z": 4.2 },
+    "rotation": { "x": 0, "y": 0, "z": 0 }
+  },
+  "Rock4": {
+    "rockType": 6,
+    "scale": 1.2,
+    "position": { "x": -1.2, "y": 0.061, "z": 4 },
+    "rotation": { "x": 0, "y": 0, "z": 0 }
+  },
+  "Rock5": {
+    "rockType": 6,
+    "scale": 1.2,
+    "position": { "x": 2.8, "y": 0.061, "z": 0 },
+    "rotation": { "x": 0, "y": 0, "z": 0 }
+  },
+  "Rock6": {
+    "rockType": 5,
+    "scale": 1.3,
+    "position": { "x": 6.8, "y": 0.061, "z": 0.3 },
+    "rotation": { "x": 0.3, "y": 0, "z": 0 }
+  },
+  "Rock7": {
+    "rockType": 1,
+    "scale": 1.9,
+    "position": { "x": 7.6, "y": 0.061, "z": 0.5 },
+    "rotation": { "x": 0.3, "y": 0, "z": 0 }
+  },
+  "Rock8": {
+    "rockType": 8,
+    "scale": 2.2,
+    "position": { "x": -4.6, "y": 0.061, "z": -3.5 },
+    "rotation": { "x": 0.3, "y": 0, "z": 0 }
+  },
+  "Rock9": {
+    "rockType": 5,
+    "scale": 3.8,
+    "position": { "x": -4.4, "y": 0.061, "z": -4.5 },
+    "rotation": { "x": 0.3, "y": 0.9, "z": 0 }
+  }
+}
