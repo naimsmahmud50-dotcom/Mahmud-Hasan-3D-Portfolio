@@ -245,22 +245,6 @@
       const isGlide = Boolean(glide || path.endsWith('/about') || path.endsWith('/about.html') || path.endsWith('/contact') || path.endsWith('/contact.html') || path.endsWith('/projects') || path.endsWith('/projects.html'));
       if (isGlide) {
         document.documentElement.setAttribute('data-mh-glide', glide || 'direct');
-        let shield = document.getElementById('mh-direct-glide-shield');
-        if (!shield) {
-          shield = document.createElement('div');
-          shield.id = 'mh-direct-glide-shield';
-          shield.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle at center,#111318 0%,#08090c 100%);z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#00e5ff;font-family:monospace;letter-spacing:2px;font-size:12px;pointer-events:all;transition:opacity 0.25s ease-out;';
-          shield.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 28px;border:1px solid rgba(0,229,255,0.22);border-radius:12px;background:rgba(13,14,18,0.85);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,229,255,0.12);"><div style="display:flex;align-items:center;gap:12px;"><div style="width:20px;height:20px;border:2px solid rgba(0,229,255,0.2);border-top-color:#00e5ff;border-radius:50%;animation:mh-spin 0.7s linear infinite;"></div><span style="font-weight:700;letter-spacing:2px;font-size:11px;color:#ebebeb;">INITIALIZING 3D ENVIRONMENT</span></div><div style="font-size:10px;color:#888;letter-spacing:1.5px;">MAHMUD HASAN // PORTFOLIO</div></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
-          if (document.body) {
-            document.body.appendChild(shield);
-          } else {
-            document.addEventListener('DOMContentLoaded', () => {
-              if (!document.getElementById('mh-direct-glide-shield')) {
-                document.body.appendChild(shield);
-              }
-            });
-          }
-        }
       }
     } catch (_) {}
   })();
@@ -1381,14 +1365,7 @@
         document.documentElement.setAttribute('data-mh-bypassing-loader', 'true');
         document.documentElement.setAttribute('data-mh-glide', (glide || routeKey).toLowerCase());
 
-        let shield = document.getElementById('mh-direct-glide-shield');
-        if (!shield) {
-          shield = document.createElement('div');
-          shield.id = 'mh-direct-glide-shield';
-          shield.style.cssText = 'position:fixed;inset:0;background:radial-gradient(circle at center,#111318 0%,#08090c 100%);z-index:9999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#00e5ff;font-family:monospace;letter-spacing:2px;font-size:12px;pointer-events:all;transition:opacity 0.25s ease-out;';
-          shield.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 28px;border:1px solid rgba(0,229,255,0.22);border-radius:12px;background:rgba(13,14,18,0.85);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,229,255,0.12);"><div style="display:flex;align-items:center;gap:12px;"><div style="width:20px;height:20px;border:2px solid rgba(0,229,255,0.2);border-top-color:#00e5ff;border-radius:50%;animation:mh-spin 0.7s linear infinite;"></div><span style="font-weight:700;letter-spacing:2px;font-size:11px;color:#ebebeb;">INITIALIZING 3D ENVIRONMENT</span></div><div style="font-size:10px;color:#888;letter-spacing:1.5px;">MAHMUD HASAN // PORTFOLIO</div></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
-          (document.body || document.documentElement).appendChild(shield);
-        }
+
 
         const targetKey = routeKey;
         const tryRouteRequest = () => {
@@ -2732,41 +2709,8 @@
   // 14. Direct 3D Animation & Continuous Scroll Engine
   function setupDirectScrollEngine() {
     function showFastInitLoader() {
-      if (!MH_BYPASS_INITIAL_ENTER_SCREEN) return;
-      if (document.getElementById('mh-fast-init-loader') || document.getElementById('mh-direct-glide-shield')) return;
-      const fLoader = document.createElement('div');
-      fLoader.id = 'mh-fast-init-loader';
-      fLoader.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 28px;border:1px solid rgba(0,229,255,0.22);border-radius:12px;background:rgba(13,14,18,0.85);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,229,255,0.12);"><div style="display:flex;align-items:center;gap:12px;"><div style="width:20px;height:20px;border:2px solid rgba(0,229,255,0.2);border-top-color:#00e5ff;border-radius:50%;animation:mh-spin 0.7s linear infinite;"></div><span style="font-weight:700;letter-spacing:2px;font-size:11px;color:#ebebeb;">INITIALIZING 3D ENVIRONMENT</span></div><div style="font-size:10px;color:#888;letter-spacing:1.5px;">MAHMUD HASAN // PORTFOLIO</div></div><style>@keyframes mh-spin{to{transform:rotate(360deg)}}</style>';
-      (document.body || document.documentElement).appendChild(fLoader);
-
-      const dismissFastLoader = () => {
-        const el = document.getElementById('mh-fast-init-loader');
-        if (el && el.style.opacity !== '0') {
-          el.style.transition = 'opacity 0.25s ease-out';
-          el.style.opacity = '0';
-          setTimeout(() => { try { el.remove(); } catch (_) {} }, 280);
-        }
-      };
-
-      const checkCanvasReady = setInterval(() => {
-        const cv = document.querySelector('canvas');
-        const landingScene = window.__mhScenes?.landing?.scene;
-        const landingReady = !!(landingScene && landingScene.visible);
-        if (cv && cv.offsetWidth > 0 && cv.offsetHeight > 0) {
-          forceInstantLandingReveal();
-          if (landingReady || (window.__mhScenes?.landing?.scene?.visible)) {
-            clearInterval(checkCanvasReady);
-            setTimeout(dismissFastLoader, 150);
-          }
-        }
-      }, 60);
-
-      // Failsafe timeout: keep visual initialization feedback active until 3D assets finish downloading
-      setTimeout(() => {
-        clearInterval(checkCanvasReady);
-        forceInstantLandingReveal();
-        dismissFastLoader();
-      }, 16000);
+      // Disabled to eliminate unwanted loading/processing screens on entry
+      forceInstantLandingReveal();
     }
 
     function unlockAndStartScroll() {
