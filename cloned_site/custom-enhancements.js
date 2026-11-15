@@ -1477,6 +1477,36 @@
           sessionStorage.removeItem('mh_target_scene');
         } catch (_) {}
         forceInstantLandingReveal();
+
+        let homeAttempts = 0;
+        const autoEnterHome = setInterval(() => {
+          homeAttempts++;
+          if (window.__mhScrollLockStore && typeof window.__mhScrollLockStore.getState === 'function') {
+            try {
+              const s = window.__mhScrollLockStore.getState();
+              if (s && s.owners && s.owners.has('loader')) s.unlock('loader');
+            } catch (_) {}
+          }
+          if (window.__mhLoaderStore && typeof window.__mhLoaderStore.getState === 'function') {
+            try {
+              const ls = window.__mhLoaderStore.getState();
+              if (!ls.hasLoaderExitStarted && typeof ls.setLoaderExitStarted === 'function') ls.setLoaderExitStarted(true);
+              if (!ls.hasLoaderUnmounted && typeof ls.setLoaderUnmounted === 'function') ls.setLoaderUnmounted(true);
+              if (!ls.isExperienceInteractive && typeof ls.setExperienceInteractive === 'function') ls.setExperienceInteractive(true);
+              if (!ls.hasArrivalSceneRevealed && typeof ls.setArrivalSceneRevealed === 'function') ls.setArrivalSceneRevealed(true);
+            } catch (_) {}
+          }
+          const cta = document.querySelector('button[data-testid="loader-enter"], .y9w63G_cta');
+          if (cta) {
+            cta.disabled = false;
+            cta.removeAttribute('disabled');
+            try { cta.click(); } catch (_) {}
+          }
+          forceInstantLandingReveal();
+          if (homeAttempts >= 12) {
+            clearInterval(autoEnterHome);
+          }
+        }, 60);
       }
     } catch (err) {
       console.warn('Glide handler notice:', err);
@@ -1490,6 +1520,9 @@
     function alignPortraitBelowPlate() {
       const plate = document.querySelector("._5tgptW_plate, [class*='_5tgptW_plate']");
       const pane = document.querySelector("._5tgptW_portraitPane, [class*='_5tgptW_portraitPane']");
+      if (pane && !pane.id) {
+        pane.id = 'mh-portrait-container';
+      }
       if (plate && pane) {
         const plateRect = plate.getBoundingClientRect();
         if (plateRect.bottom > 50) {
@@ -1503,16 +1536,18 @@
         let img = pane.querySelector("img");
         if (!img) {
           img = document.createElement("img");
+          img.id = "mh-portrait-img";
           img.className = "_5tgptW_portrait mh-portrait-img";
           img.alt = "Mahmud Hasan - Full Stack Developer & AI Automation Expert";
-          img.src = "/assets/mahmud.jpg";
+          img.src = "/assets/mahmud-hasan-about-portrait.jpg";
           pane.appendChild(img);
         } else {
+          img.id = "mh-portrait-img";
           if (img.hasAttribute("srcset")) {
             img.removeAttribute("srcset");
           }
-          if (!img.src || !img.src.includes("/assets/mahmud.jpg")) {
-            img.src = "/assets/mahmud.jpg";
+          if (!img.src || !img.src.includes("mahmud")) {
+            img.src = "/assets/mahmud-hasan-about-portrait.jpg";
           }
         }
         img.style.setProperty('display', 'block', 'important');
@@ -1533,8 +1568,6 @@
     let aboutObserver = null;
     function checkAndEnhanceAbout() {
       if (isEnhancing) return;
-      // Do not mutate DOM during initial loader & React hydration
-      if (document.querySelector('button[data-testid="loader-enter"]')) return;
 
       const aboutRoot = document.querySelector("._5tgptW_root, [class*='_5tgptW_root']");
       if (aboutRoot) {
@@ -1610,10 +1643,7 @@
             }
           }
           alignPortraitBelowPlate();
-          if (aboutObserver && document.getElementById('mh-about-skills-matrix')) {
-            aboutObserver.disconnect();
-            aboutObserver = null;
-          }
+          // Keep aboutObserver alive across route transitions
         } finally {
           isEnhancing = false;
         }
@@ -2103,6 +2133,15 @@
           forceInstantLandingReveal();
           setTimeout(forceInstantLandingReveal, 120);
           setTimeout(forceInstantLandingReveal, 350);
+        }
+        if (routeKey === 'ABOUT') {
+          if (typeof checkAndEnhanceAbout === 'function') {
+            checkAndEnhanceAbout();
+            setTimeout(checkAndEnhanceAbout, 150);
+            setTimeout(checkAndEnhanceAbout, 600);
+            setTimeout(checkAndEnhanceAbout, 1500);
+            setTimeout(checkAndEnhanceAbout, 3000);
+          }
         }
       };
 

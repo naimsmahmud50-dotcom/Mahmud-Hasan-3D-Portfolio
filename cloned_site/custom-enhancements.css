@@ -203,9 +203,10 @@ html[data-route*="lite"] .y9w63G_loaderContainer,
 }
 
 .y9w63G_loaderContainer {
-  transition: 
-    opacity 2.2s cubic-bezier(0.25, 0.1, 0.25, 1.0) 0ms, 
-    visibility 2.2s cubic-bezier(0.25, 0.1, 0.25, 1.0) 0ms !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .y9w63G_loaderContainer.y9w63G_exiting,
